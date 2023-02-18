@@ -2,13 +2,14 @@ import React, { Component, useState } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  // const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    console.log(email, password);
-    fetch("http://localhost:5000/login-user", {
+    // console.log(email, password);
+    fetch("http://localhost:3000/login", {
       method: "POST",
       crossDomain: true,
       headers: {
@@ -24,12 +25,12 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data, "userRegister");
-        if (data.status == "ok") {
+        if (data.message == "Login successful!") {
           alert("login successful");
           window.localStorage.setItem("token", data.data);
           window.localStorage.setItem("loggedIn", true);
 
-          window.location.href = "./userDetails";
+          // window.location.href = "./userDetails";
         }
       });
   }
@@ -43,9 +44,9 @@ export default function Login() {
           <div className="mb-3">
             <label>Email address</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
-              placeholder="Enter email"
+              placeholder="Enter email id"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
