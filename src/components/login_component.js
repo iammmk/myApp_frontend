@@ -1,22 +1,23 @@
-import React, { Component, useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { Context } from "../Context";
 
 export default function Login() {
+  const history = useNavigate();
   const [email, setEmail] = useState("");
+  const { ownerId, setOwnerId } = useContext(Context);
   // const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    // console.log(email, password);
     fetch("http://localhost:3000/login", {
       method: "POST",
-      crossDomain: true,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
+      credentials: "include",
       body: JSON.stringify({
         email,
         password,
@@ -24,13 +25,14 @@ export default function Login() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, "userRegister");
-        if (data.message == "Login successful!") {
+        if (data.message === "Login successful!") {
           alert("login successful");
           window.localStorage.setItem("token", data.data);
           window.localStorage.setItem("loggedIn", true);
-
-          // window.location.href = "./userDetails";
+          window.localStorage.setItem("profileId", data.data._id);
+          let ownerId = data.data._id;
+          setOwnerId(ownerId)
+          history(`/home`);
         }
       });
   }

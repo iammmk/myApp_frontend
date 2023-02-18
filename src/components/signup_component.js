@@ -2,22 +2,16 @@ import React, { Component, useState } from "react";
 
 export default function SignUp() {
   const [name, setName] = useState("");
-  // const [lname, setLname] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  // const [userType, setUserType] = useState("");
-  // const [secretKey, setSecretKey] = useState("");
+
 
   const handleSubmit = (e) => {
-    // if (userType == "Admin" && secretKey != "AdarshT") {
-    //   e.preventDefault();
-    //   alert("Invalid Admin");
-    // } else {
+
     e.preventDefault();
 
-    // console.log(fname, lname, email, password);
     fetch("http://localhost:3000/signup", {
       method: "POST",
       crossDomain: true,
@@ -30,16 +24,15 @@ export default function SignUp() {
         name,
         username,
         email,
-        // lname,
         password,
         confirmPassword
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, "userRegister");
         if (data.message === "Signup successful !") {
           alert("Registration Successful");
+          window.location.href= "./sign-in"
         } else {
           alert("Something went wrong");
         }
