@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Typography from "@mui/material/Typography";
 import { Context } from "../Context";
 
 const UserProfile = (props) => {
@@ -18,7 +19,7 @@ const UserProfile = (props) => {
         if (data.message === "Logout successful") {
           alert("logout successful");
           window.localStorage.clear();
-          history("/sign-in")
+          history("/sign-in");
         }
       });
   };
@@ -26,7 +27,7 @@ const UserProfile = (props) => {
     <div className="auth-wrapper">
       <div className="auth-inner">
         <div>
-          Name:
+          <Typography variant="h7">Name:</Typography>&nbsp;
           {props.userData._id !== localStorage.getItem("profileId") ? (
             <button
               className="btn btn-primary"
@@ -35,15 +36,19 @@ const UserProfile = (props) => {
               Follow
             </button>
           ) : (
-            <></>
+            <Typography variant="h8">(Me)</Typography>
           )}
-          <h2>
+          <Typography variant="h4">
             {props.userData.name}&nbsp;({props.userData.username})
-          </h2>
-          Email: <h2>{props.userData.email}</h2>
-          Status: <h2>{props.userData.totalStatus}</h2>
-          Followers: <h2>{props.userData.followersCount}</h2>
-          Following: <h2>{props.userData.followingCount}</h2>
+          </Typography>
+          <Typography variant="h7">Email:</Typography>{" "}
+          <Typography variant="h4">{props.userData.email}</Typography>
+          <Typography variant="h7">Status:</Typography>{" "}
+          <Typography variant="h4">{props.userData.totalStatus}</Typography>
+          <Typography variant="h7">Followers:</Typography>{" "}
+          <Typography variant="h4">{props.userData.followersCount}</Typography>
+          <Typography variant="h7">Following:</Typography>{" "}
+          <Typography variant="h4">{props.userData.followingCount}</Typography>
           <br />
           <div>
             <button onClick={getAllUsers} className="btn btn-primary">
