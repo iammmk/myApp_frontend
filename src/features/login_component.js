@@ -135,6 +135,7 @@ export default function Login() {
           window.localStorage.setItem("token", data.data);
           window.localStorage.setItem("loggedIn", true);
           window.localStorage.setItem("profileId", data.data._id);
+          window.localStorage.setItem("profileName", data.data.name);
           history(`/home`);
         }
       });

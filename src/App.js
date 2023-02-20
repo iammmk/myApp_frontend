@@ -3,11 +3,11 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import Login from "./components/login_component";
-import SignUp from "./components/signup_component";
-import UserDetails from "./components/userDetails";
-import AllUsers from "./components/users";
-import Home from "./components/home";
+import Login from "../src/features/login_component";
+import SignUp from "../src/features/signup_component";
+import UserDetails from "../src/features/userDetails";
+import AllUsers from "../src/features/users";
+import Home from "../src/features/home";
 
 function App() {
   const isLoggedIn = window.localStorage.getItem("loggedIn");
@@ -18,11 +18,11 @@ function App() {
           <Route
             exact
             path="/"
-            element={isLoggedIn === "true" ? <Home /> : <Login />} 
+            element={isLoggedIn === "true" ? <Home /> : <Login />}
           />
           <Route path="/sign-in" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/home" element={<Home/>} />
+          <Route path="/home" element={<Home />} />
           <Route path="/userDetails/:uId" element={<UserDetails />} />
           <Route path="/users" element={<AllUsers />} />
         </Routes>

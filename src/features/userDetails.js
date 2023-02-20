@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
+import Nav from "./Nav";
 
 const UserProfile = (props) => {
   const history = useNavigate();
@@ -9,20 +12,7 @@ const UserProfile = (props) => {
   const getAllUsers = () => {
     history("/users");
   };
-  const logOut = () => {
-    fetch("http://localhost:3000/user/logout", {
-      method: "GET",
-      credentials: "include", // include cookies in the request
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message === "Logout successful") {
-          alert("logout successful");
-          window.localStorage.clear();
-          history("/sign-in");
-        }
-      });
-  };
+
   return (
     <div className="auth-wrapper">
       <div className="auth-inner">
@@ -55,13 +45,6 @@ const UserProfile = (props) => {
               See All Users
             </button>
             &nbsp;
-            {props.userData._id === localStorage.getItem("profileId") ? (
-              <button onClick={logOut} className="btn btn-primary">
-                Log Out
-              </button>
-            ) : (
-              <></>
-            )}
           </div>
         </div>
       </div>
@@ -71,9 +54,11 @@ const UserProfile = (props) => {
 
 const UserDetails = () => {
   const [userData, setUserData] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   let { uId } = useParams();
 
-  useEffect(() => {
+  const getUserDetails = () => {
+    setIsLoading(true);
     fetch(`http://localhost:3000/user/userProfile/${uId}`, {
       method: "GET",
       credentials: "include",
@@ -81,10 +66,28 @@ const UserDetails = () => {
       .then((res) => res.json())
       .then((data) => {
         setUserData(data.data);
+        setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    getUserDetails();
   }, []);
 
-  return <UserProfile userData={userData} />;
+  return (
+    <>
+      <Nav />
+      <UserProfile userData={userData} />
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
+    </>
+  );
 };
 
 export default UserDetails;

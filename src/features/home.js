@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import EditStatusModal from "./layout/components/editStatusModal";
+import Nav from "./Nav";
 // import { Context } from "../Context";
 
 // function LikeButton(props) {
@@ -78,7 +80,10 @@ function Home() {
   const history = useNavigate();
   const [status, setStatus] = useState([]);
   // const { ownerId, setOwnerId } = useContext(Context);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState("");
+  const [currentStatusId, setCurrentStatusId] = useState("");
   const [newStatus, setNewStatus] = useState("");
 
   const addComment = () => {};
@@ -129,8 +134,6 @@ function Home() {
     setIsLoading(false);
   };
 
-  const editStatus = () => {};
-
   const deleteStatus = (e, statusId) => {
     e.preventDefault();
     fetch(`http://localhost:3000/status/${statusId}`, {
@@ -149,7 +152,6 @@ function Home() {
   function addLike(e, itemId) {
     e.preventDefault();
     setIsLoading(true);
-    console.log(itemId);
     fetch(`http://localhost:3000/like/${itemId}`, {
       method: "POST",
       credentials: "include",
@@ -177,7 +179,6 @@ function Home() {
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "Unliked") {
-          console.log("clicked");
           // alert("Status unliked !");
           getAllStatus();
           setIsLoading(false);
@@ -192,130 +193,151 @@ function Home() {
   }, []);
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        width: "60%",
-        margin: "0 auto",
-      }}
-    >
-      <Typography
-        variant="h4"
+    <div style={{ width: "100%" }}>
+      <Nav />
+      <div
         style={{
-          padding: "15px",
+          width: "60%",
+          margin: "0 auto",
         }}
       >
-        All Status
-      </Typography>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "45ch" },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          id="status"
-          label="What's Happening ?"
-          value={newStatus}
-          onChange={(e) => setNewStatus(e.target.value)}
-          variant="outlined"
-          multiline
-          minRows={3}
-          maxRows={4}
-        />
-      </Box>
-      <Button variant="contained" onClick={uploadStatus}>
-        Post
-      </Button>
-      <div style={{ padding: "15px" }}>
-        {status.length ? (
-          status
-            .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
-            .map((item) => (
-              <>
-                <div
-                  key={item._id}
-                  style={{ padding: "20px", background: "#e7e7c7" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <a
-                      href="/#"
-                      onClick={(e) => getUserProfile(e, item.userId)}
-                      style={{ textDecoration: "none" }}
+        <Typography
+          variant="h4"
+          style={{
+            marginTop: "80px",
+          }}
+        >
+          All Status
+        </Typography>
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "45ch" },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField
+            id="status"
+            label="What's Happening ?"
+            value={newStatus}
+            onChange={(e) => setNewStatus(e.target.value)}
+            variant="outlined"
+            multiline
+            minRows={3}
+            maxRows={4}
+          />
+        </Box>
+        <Button variant="contained" onClick={uploadStatus}>
+          Post
+        </Button>
+        <div style={{ padding: "15px" }}>
+          {status.length ? (
+            status
+              .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
+              .map((item) => (
+                <>
+                  <div
+                    key={item._id}
+                    style={{ padding: "20px", background: "#e7e7c7" }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <a
+                        href="/#"
+                        onClick={(e) => getUserProfile(e, item.userId)}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Typography>{item.uploadedBy}</Typography>
+                      </a>
+                      &nbsp;&nbsp;
+                      <Typography>
+                        ({new Date(item.uploadTime).toLocaleString()})
+                      </Typography>
+                      {item.userId === localStorage.getItem("profileId") ? (
+                        <div style={{ marginLeft: "auto" }}>
+                          {/* <IconButton onClick={(e) => editStatus(e, item._id)}> */}
+                          <IconButton
+                            onClick={() => {
+                              setEditModalOpen(true);
+                              setCurrentStatus(item.status);
+                              setCurrentStatusId(item._id);
+                            }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          {/* status edit modal */}
+                          <EditStatusModal
+                            modalOpen={editModalOpen}
+                            setModalOpen={setEditModalOpen}
+                            currentStatus={currentStatus}
+                            setIsLoading={setIsLoading}
+                            statusId={currentStatusId}
+                            getAllStatus={getAllStatus}
+                          />
+                          <IconButton
+                            onClick={(e) => deleteStatus(e, item._id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                      }}
                     >
-                      <Typography>{item.uploadedBy}</Typography>
-                    </a>
-                    &nbsp;&nbsp;
-                    <Typography>
-                      ({new Date(item.uploadTime).toLocaleString()})
-                    </Typography>
-                    {item.userId === localStorage.getItem("profileId") ? (
-                      <div style={{ marginLeft: "auto" }}>
-                        <IconButton onClick={(e) => editStatus(e, item._id)}>
-                          <EditIcon />
+                      <Typography>{"--->"}</Typography>
+                      <Typography>{item.status}</Typography>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {item.likedBy.includes(
+                        localStorage.getItem("profileId")
+                      ) ? (
+                        <IconButton onClick={(e) => unLike(e, item._id)}>
+                          <FavoriteIcon />
                         </IconButton>
-                        <IconButton onClick={(e) => deleteStatus(e, item._id)}>
-                          <DeleteIcon />
+                      ) : (
+                        <IconButton onClick={(e) => addLike(e, item._id)}>
+                          <FavoriteBorderIcon />
                         </IconButton>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
+                      )}
+                      &nbsp;
+                      <Typography>{item.totalLikes}</Typography>&nbsp;&nbsp;
+                      <IconButton onClick={addComment}>
+                        <CommentIcon />
+                      </IconButton>
+                      &nbsp;
+                      <Typography>{item.totalComments}</Typography>
+                    </div>
                   </div>
                   <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    <Typography>{"--->"}</Typography>
-                    <Typography>{item.status}</Typography>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    {item.likedBy.includes(
-                      localStorage.getItem("profileId")
-                    ) ? (
-                      <IconButton onClick={(e) => unLike(e, item._id)}>
-                        <FavoriteIcon />
-                      </IconButton>
-                    ) : (
-                      <IconButton onClick={(e) => addLike(e, item._id)}>
-                        <FavoriteBorderIcon />
-                      </IconButton>
-                    )}
-                    &nbsp;
-                    <Typography>{item.totalLikes}</Typography>&nbsp;&nbsp;
-                    <IconButton onClick={addComment}>
-                      <CommentIcon />
-                    </IconButton>
-                    &nbsp;
-                    <Typography>{item.totalComments}</Typography>
-                  </div>
-                </div>
-                <div
-                  style={{ border: "none", borderBottom: "1px solid black" }}
-                ></div>
-              </>
-            ))
-        ) : (
-          <>
-            <Typography>No status</Typography>
-          </>
+                    style={{ border: "none", borderBottom: "1px solid black" }}
+                  ></div>
+                </>
+              ))
+          ) : (
+            <>
+              <Typography>No status</Typography>
+            </>
+          )}
+        </div>
+
+        {isLoading && (
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={isLoading}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
         )}
       </div>
-      {isLoading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={isLoading}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
     </div>
   );
 }
