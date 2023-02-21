@@ -14,7 +14,8 @@ const Nav = () => {
         if (data.message === "Logout successful") {
           alert("logout successful");
           window.localStorage.clear();
-          history("/sign-in");
+          // history("/sign-in");
+          window.location.href = "http://localhost:8080/sign-in";
         }
       });
   };
@@ -35,16 +36,10 @@ const Nav = () => {
         <span className="navbar-toggler-icon"></span>
       </button> */}
 
-      <div
-        className="collapse navbar-collapse"
-        id="navbarSupportedContent"
-      >
-        <ul
-          className="navbar-nav mr-auto"
-
-        >
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
-            <a className="nav-link" href="/">
+            <a className="nav-link" href="/home">
               Home
             </a>
           </li>
@@ -53,10 +48,7 @@ const Nav = () => {
               Users
             </a>
           </li>
-          <li
-            className="nav-item dropdown "
-
-          >
+          <li className="nav-item dropdown ">
             <a
               className="nav-link dropdown-toggle"
               href="/#"
@@ -67,12 +59,9 @@ const Nav = () => {
               aria-expanded="false"
             >
               {localStorage.getItem("profileName")}
+              {/* <MoreHorizIcon/> */}
             </a>
-            <div
-              className="dropdown-menu"
-              aria-labelledby="navbarDropdown"
-
-            >
+            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
               <a
                 className="dropdown-item"
                 href={`/userDetails/${localStorage.getItem("profileId")}`}
@@ -80,7 +69,14 @@ const Nav = () => {
                 Go to Profile
               </a>
               <div className="dropdown-divider">l</div>
-              <a className="dropdown-item" href="/#" onClick={logOut}>
+              <a
+                className="dropdown-item"
+                href="/#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  logOut();
+                }}
+              >
                 Sign Out
               </a>
             </div>

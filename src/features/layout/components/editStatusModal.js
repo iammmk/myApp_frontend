@@ -8,7 +8,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  height: 330,
+  height: 370,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -56,31 +56,51 @@ const EditStatusModal = (props) => {
           <Typography id="modal-modal-title" variant="h5" component="h2">
             Edit Status
           </Typography>
-          <div style={{ padding: "25px" }}>
-            <Typography>Current Status: {props.currentStatus}</Typography>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "37.5ch" },
+          <Typography
+            style={{
+              paddingTop: "10px",
+              wordWrap: "break-word",
+              textAlign: "start",
+            }}
+          >
+            Current Status: {props.currentStatus}
+          </Typography>
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "46ch" },
+            }}
+            style={{
+              position: "absolute",
+              bottom: "80px",
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              id="editStatus"
+              label="Edit Status"
+              value={editedStatus}
+              onChange={(e) => {
+                setEditedStatus(e.target.value);
               }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField
-                id="editStatus"
-                label="Edit Status"
-                value={editedStatus}
-                onChange={(e) => {
-                  setEditedStatus(e.target.value);
-                }}
-                variant="outlined"
-                multiline
-                minRows={3}
-                maxRows={4}
-              />
-            </Box>
-          </div>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              variant="outlined"
+              multiline
+              minRows={3}
+              maxRows={4}
+            />
+          </Box>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              paddingBottom: "10px",
+              paddingRight: "10px",
+              position: "absolute",
+              right: "0",
+              bottom: "0",
+            }}
+          >
             <Button variant="contained" onClick={handleSave}>
               Save
             </Button>{" "}
