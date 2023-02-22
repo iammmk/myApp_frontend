@@ -7,9 +7,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
 import Tooltip from "@mui/material/Tooltip";
 import Divider from "@mui/material/Divider";
-import EditStatusModal from "./layout/components/editStatusModal";
+import EditStatusModal from "./editStatusModal";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import DeleteModal from "./layout/components/deleteModal";
+import DeleteModal from "./deleteModal";
+import ShowUsersModal from "./showUsersModal";
 
 const Status = (props) => {
   const history = useNavigate();
@@ -18,7 +19,8 @@ const Status = (props) => {
   const [currentStatus, setCurrentStatus] = useState("");
   const [currentStatusEditId, setCurrentStatusEditId] = useState("");
   const [currentStatusDeleteId, setCurrentStatusDeleteId] = useState("");
-
+  const [likedByUsersModalOpen, setLikedByUsersModalOpen] = useState("");
+  const [likeListByStatusId, setLikeListByStatusId] = useState([]);
   const getUserProfile = (e, uId) => {
     history(`/userDetails/${uId}`);
   };
@@ -62,11 +64,25 @@ const Status = (props) => {
     // Update the state variable to indicate that the item is not liked
   }
 
+  const getLikesByStatusId = (statusId) => {
+    fetch(`http://localhost:3000/like/status/${statusId}`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setLikeListByStatusId(data.data);
+      });
+  };
+
   const addComment = () => {};
 
   return (
     <>
-      <div key={props.item._id} style={{ padding: "20px" }}>
+      <div
+        key={props.item._id}
+        style={{ paddingTop: "8px", paddingLeft: "8px" }}
+      >
         <div style={{ display: "flex", alignItems: "center" }}>
           <a
             href="/#"
@@ -84,7 +100,7 @@ const Status = (props) => {
           </Typography>
           {props.item.userId === localStorage.getItem("profileId") && (
             <div style={{ marginLeft: "auto" }}>
-              <div class="dropdown">
+              <div className="dropdown">
                 <Tooltip title="More" placement="top-start">
                   <IconButton
                     className="secondary"
@@ -151,7 +167,24 @@ const Status = (props) => {
             </IconButton>
           )}
           &nbsp;
-          <Typography>{props.item.totalLikes}</Typography>&nbsp;&nbsp;
+          <a
+            href="/#"
+            onClick={(e) => {
+              e.preventDefault();
+              setLikedByUsersModalOpen(true);
+              getLikesByStatusId(props.item._id);
+            }}
+            style={{ textDecoration: "none" }}
+          >
+            <Typography>{props.item.totalLikes}</Typography>&nbsp;&nbsp;
+          </a>
+          <ShowUsersModal
+            title="Likes"
+            showUsersModalOpen={likedByUsersModalOpen}
+            setShowUsersModalOpen={setLikedByUsersModalOpen}
+            peopleList={likeListByStatusId}
+            count= {props.item.totalLikes}
+          />
           <IconButton onClick={addComment}>
             <CommentIcon />
           </IconButton>

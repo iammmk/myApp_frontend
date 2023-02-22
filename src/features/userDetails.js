@@ -3,31 +3,35 @@ import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import CakeIcon from "@mui/icons-material/Cake";
+import CelebrationIcon from "@mui/icons-material/Celebration";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Divider from "@mui/material/Divider";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
 import Nav from "./Nav";
-import Status from "./Status";
+import Status from "./layout/components/Status";
+import EditProfileModal from "./layout/components/editProfileModal";
+import ShowUsersModal from "./layout/components/showUsersModal";
 
 const UserProfile = (props) => {
+  const profileId = localStorage.getItem("profileId");
   const { ownerId, setOwnerId } = useContext(Context);
-  const [followingList, setFollowingList] = useState([]);
+  const [followingListByProfile, setFollowingListByProfile] = useState([]);
+  const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+  const [followingListByUser, setFollowingListByUser] = useState([]);
+  const [followersListByUser, setFollowersListByUser] = useState([]);
+  const [followingModalOpen, setFollowingModalOpen] = useState(false);
+  const [followersModalOpen, setFollowersModalOpen] = useState(false);
 
-  const getFollowingList = () => {
-    fetch(
-      `http://localhost:3000/user/${localStorage.getItem(
-        "profileId"
-      )}/followings`,
-      {
-        method: "GET",
-        credentials: "include",
-      }
-    )
+  const getFollowingListByProfile = () => {
+    fetch(`http://localhost:3000/user/${profileId}/followings`, {
+      method: "GET",
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
-        setFollowingList(data.data);
+        setFollowingListByProfile(data.data);
       });
   };
 
@@ -42,7 +46,7 @@ const UserProfile = (props) => {
       .then((data) => {
         if (data.message === "You started following the user") {
           // alert("follow done");
-          getFollowingList();
+          getFollowingListByProfile(profileId);
           props.updatePage();
         }
       });
@@ -59,14 +63,37 @@ const UserProfile = (props) => {
       .then((data) => {
         if (data.message === "You've unfollowed the user") {
           // alert("Unfollow done");
-          getFollowingList();
+          getFollowingListByProfile(profileId);
           props.updatePage();
         }
       });
   };
 
+  const getFollowingListByUserId = (userId) => {
+    fetch(`http://localhost:3000/user/${userId}/followings`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data.data);
+        setFollowingListByUser(data.data);
+      });
+  };
+
+  const getFollowersListByUserId = (userId) => {
+    fetch(`http://localhost:3000/user/${userId}/followers`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFollowersListByUser(data.data);
+      });
+  };
+
   useEffect(() => {
-    getFollowingList();
+    getFollowingListByProfile(profileId);
   }, []);
 
   return (
@@ -81,13 +108,16 @@ const UserProfile = (props) => {
       >
         <div>
           <Typography variant="h4">{props.userData.name}</Typography>
-          <Typography style={{ opacity: "70%", textAlign: "start" }}>
+          <Typography
+            style={{ opacity: "70%", textAlign: "start" }}
+            onClick={() => console.log(props.userData._id)}
+          >
             ({props.userData.username})
           </Typography>
         </div>
         <div>
-          {props.userData._id !== localStorage.getItem("profileId") &&
-            (followingList.some((o) => o._id === props.userData._id) ? (
+          {props.userData._id !== localStorage.getItem("profileId") ? (
+            followingListByProfile.some((o) => o._id === props.userData._id) ? (
               <Button
                 variant="contained"
                 style={{ float: "right", height: "35px", width: "92px" }}
@@ -103,7 +133,28 @@ const UserProfile = (props) => {
               >
                 Follow
               </Button>
-            ))}
+            )
+          ) : (
+            <Button
+              variant="contained"
+              style={{ float: "right", height: "35px", width: "133px" }}
+              onClick={(e) => {
+                e.preventDefault(); //wont redirect to href
+                setEditProfileModalOpen(true);
+              }}
+            >
+              Edit profile
+            </Button>
+          )}
+          <EditProfileModal
+            editProfileModalOpen={editProfileModalOpen}
+            setEditProfileModalOpen={setEditProfileModalOpen}
+            setIsLoading={props.setIsLoading}
+            getUserDetails={props.getUserDetails}
+            name={props.userData.name}
+            bio={props.userData.bio}
+            dob={props.userData.dob}
+          />
         </div>
       </div>
       <Typography
@@ -121,13 +172,21 @@ const UserProfile = (props) => {
           display: "flex",
           alignItems: "center",
           opacity: "0.75",
-          paddingBottom: "15px",
+          paddingBottom: "22px",
         }}
       >
         {props.userData.dob && (
           <div style={{ display: "flex", alignItems: "center" }}>
             <CakeIcon />
-            <Typography>Born {props.userData.dob}</Typography>
+            <Typography>
+              Born{" "}
+              {new Date(props.userData.dob).toLocaleString("default", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              })}
+            </Typography>{" "}
+            &ensp;&ensp;&ensp;&ensp;
           </div>
         )}
         {props.userData.joinedOn && (
@@ -135,7 +194,10 @@ const UserProfile = (props) => {
             <CalendarMonthIcon />
             <Typography>
               Joined&nbsp;
-              {/* {new Date(props.userData.joinedOn).toLocalString()} */}
+              {new Date(props.userData.joinedOn).toLocaleString("default", {
+                month: "short",
+              })}{" "}
+              {new Date(props.userData.joinedOn).getFullYear()}
             </Typography>
           </div>
         )}
@@ -148,18 +210,56 @@ const UserProfile = (props) => {
           paddingBottom: "10px",
         }}
       >
-        <div>
-          <Typography variant="h7">Status:</Typography>{" "}
-          <Typography variant="h4">{props.userData.totalStatus}</Typography>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="h6">Status:</Typography>{" "}
+          <Typography variant="h6">{props.userData.totalStatus}</Typography>
         </div>
-        <div>
-          <Typography variant="h7">Followers:</Typography>{" "}
-          <Typography variant="h4">{props.userData.followersCount}</Typography>
-        </div>
-        <div>
-          <Typography variant="h7">Following:</Typography>{" "}
-          <Typography variant="h4">{props.userData.followingCount}</Typography>
-        </div>
+        <a
+          href="/#"
+          onClick={(e) => {
+            e.preventDefault();
+            setFollowersModalOpen(true);
+            getFollowersListByUserId(props.userData._id);
+          }}
+          style={{textDecoration: "none"}}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="h6">Followers:</Typography>{" "}
+            <Typography variant="h6">
+              {props.userData.followersCount}
+            </Typography>
+          </div>
+        </a>
+        <ShowUsersModal
+          title="Followers"
+          showUsersModalOpen={followersModalOpen}
+          setShowUsersModalOpen={setFollowersModalOpen}
+          peopleList={followersListByUser}
+          count={props.userData.followersCount}
+        />
+        <a
+          href="/#"
+          onClick={(e) => {
+            e.preventDefault();
+            setFollowingModalOpen(true);
+            getFollowingListByUserId(props.userData._id);
+          }}
+          style={{textDecoration: "none"}}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="h6">Following:</Typography>{" "}
+            <Typography variant="h6">
+              {props.userData.followingCount}
+            </Typography>
+          </div>
+        </a>
+        <ShowUsersModal
+          title="Following"
+          showUsersModalOpen={followingModalOpen}
+          setShowUsersModalOpen={setFollowingModalOpen}
+          peopleList={followingListByUser}
+          count={props.userData.followingCount}
+        />
       </div>
       <Divider variant="middle" />
       <div>
@@ -198,6 +298,7 @@ const UserDetails = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        // console.log(data.data)
         setUserData(data.data);
         setIsLoading(false);
       });
@@ -238,7 +339,7 @@ const UserDetails = () => {
           margin: "57px auto",
           paddingLeft: "10px",
           paddingRight: "10px",
-          backgroundColor: "#faf2f2",
+          // backgroundColor: "#faf2f2",
         }}
       >
         <UserProfile
@@ -246,6 +347,7 @@ const UserDetails = () => {
           userStatus={status}
           setIsLoading={setIsLoading}
           updatePage={updatePage}
+          getUserDetails={getUserDetails}
         />
       </div>
       {/* {isLoading && (

@@ -107,7 +107,10 @@ const EditStatusModal = (props) => {
             &nbsp;
             <Button
               variant="contained"
-              onClick={() => props.setModalOpen(false)}
+              onClick={() => {
+                props.setModalOpen(false);
+                setEditedStatus("");
+              }}
             >
               Close
             </Button>

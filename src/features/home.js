@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
 import Nav from "./Nav";
-import Status from "./Status";
+import Status from "./layout/components/Status";
 // import { Context } from "../Context";
 
 function Home() {
@@ -14,6 +14,8 @@ function Home() {
   // const { ownerId, setOwnerId } = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
   const [newStatus, setNewStatus] = useState("");
+  const [showAllStatus, setShowAllStatus] = useState(true);
+  const [statusByFollowing, setStatusByFollowing] = useState([]);
 
   const getAllStatus = () => {
     setIsLoading(true);
@@ -25,6 +27,22 @@ function Home() {
       .then((data) => {
         if (data.message === "Got all status !!") {
           setStatus(data.data);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const getStatusByFollowing = () => {
+    setIsLoading(true);
+    fetch("http://localhost:3000/user/userProfile/status/Following", {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Fetched status from your following") {
+          setStatusByFollowing(data.data);
           setIsLoading(false);
         }
       })
@@ -58,6 +76,7 @@ function Home() {
 
   useEffect(() => {
     getAllStatus();
+    getStatusByFollowing();
   }, []);
 
   return (
@@ -67,7 +86,7 @@ function Home() {
         style={{
           width: "55%",
           margin: "0 auto",
-          backgroundColor: "#faf2f2",
+          // backgroundColor: "#faf2f2",
         }}
       >
         <Typography
@@ -103,9 +122,37 @@ function Home() {
             Post
           </Button>
         </div>
+        <div style={{ display: "flex", justifyContent: "space-around" }}>
+          <Button
+            variant="outlined"
+            disabled={showAllStatus}
+            style={{
+              width: "50%",
+            }}
+            onClick={() => {
+              setShowAllStatus(true);
+              // setShowStatusByFollowing(false);
+            }}
+          >
+            All Status
+          </Button>
+          <Button
+            variant="outlined"
+            style={{
+              width: "50%",
+            }}
+            disabled={!showAllStatus}
+            onClick={() => {
+              setShowAllStatus(false);
+              // setShowStatusByFollowing(true);
+            }}
+          >
+            Following
+          </Button>
+        </div>
         <Divider variant="middle" />
-        <div style={{ paddingTop: "15px" }}>
-          {status.length ? (
+        <div>
+          {showAllStatus && status.length ? (
             status
               .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
               .map((item) => (
@@ -115,10 +162,18 @@ function Home() {
                   getAllStatus={getAllStatus}
                 />
               ))
+          ) : !showAllStatus && statusByFollowing.length ? (
+            statusByFollowing
+              .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
+              .map((item) => (
+                <Status
+                  item={item}
+                  setIsLoading={setIsLoading}
+                  getAllStatus={getStatusByFollowing}
+                />
+              ))
           ) : (
-            <>
-              <Typography>No status</Typography>
-            </>
+            <Typography>No status</Typography>
           )}
         </div>
         {/* {isLoading && (
