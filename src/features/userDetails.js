@@ -14,6 +14,7 @@ import FollowButton from "./layout/components/FollowButton";
 import Status from "./layout/components/Status";
 import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
+import Navbar from "./SideNav";
 
 const UserProfile = (props) => {
   const profileId = localStorage.getItem("profileId");
@@ -391,13 +392,14 @@ const UserDetails = () => {
 
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
+      <Navbar/>
       <div
         style={{
           width: "55%",
-          margin: "57px auto",
-          paddingLeft: "10px",
-          paddingRight: "10px",
+          margin: "0px auto",
+          paddingLeft: "15px",
+          paddingRight: "15px",
           // backgroundColor: "#faf2f2",
         }}
       >

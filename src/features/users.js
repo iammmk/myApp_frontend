@@ -10,6 +10,7 @@ import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
 import FollowButton from "./layout/components/FollowButton";
+import Navbar from "./SideNav";
 
 const Users = () => {
   const history = useNavigate();
@@ -45,7 +46,8 @@ const Users = () => {
 
   return (
     <div style={{ width: "100%" }}>
-      <Nav />
+      {/* <Nav /> */}
+      <Navbar/>
       <div
         style={{
           width: "55%",

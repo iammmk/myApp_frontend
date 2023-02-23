@@ -1,0 +1,18 @@
+.followBtn {
+  float: "right";
+  height: "35px";
+  width: "92px";
+}
+
+.followBtn::before {
+    content: "Following";
+}
+.followBtn:hover {
+  background-color: rgb(241, 40, 40) !important;
+  color: white;
+}
+
+.followBtn:hover::before {
+  content: "Unfollow";
+}
+

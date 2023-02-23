@@ -7,6 +7,7 @@ import Divider from "@mui/material/Divider";
 import Nav from "./Nav";
 import Status from "./layout/components/Status";
 // import { Context } from "../Context";
+import Navbar from "./SideNav";
 
 function Home() {
   const history = useNavigate();
@@ -63,7 +64,8 @@ function Home() {
 
   return (
     <div style={{ width: "100%" }}>
-      <Nav />
+      {/* <Nav /> */}
+      <Navbar />
       <div
         style={{
           width: "55%",
@@ -74,7 +76,7 @@ function Home() {
         <Typography
           variant="h4"
           style={{
-            marginTop: "55px",
+            // marginTop: "55px",
             paddingTop: "15px",
           }}
         >
@@ -133,7 +135,7 @@ function Home() {
           </Button>
         </div> */}
         <Divider variant="middle" />
-        <div>
+        <div style={{ paddingLeft: "15px", paddingRight: "15px" }}>
           {status.length ? (
             status
               .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime

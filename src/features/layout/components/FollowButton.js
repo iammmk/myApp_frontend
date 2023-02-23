@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
+import "../../Style/Style.css";
 
 // to decide follow/unfollow btn depending upon the user
 const FollowButton = (props) => {
@@ -52,18 +53,19 @@ const FollowButton = (props) => {
 
   useEffect(() => {
     // getFollowingListByProfile(profileId);
-    getFollowingListByProfile(profileId)
+    getFollowingListByProfile(profileId);
   }, []);
 
   return props.userData._id === profileId ? (
     <></>
   ) : followingListByProfile.some((o) => o._id === props.userData._id) ? (
     <Button
+      className="followBtn"
       variant="outlined"
-      style={{ float: "right", height: "35px", width: "92px" }}
+      // style={{ float: "right", height: "35px", width: "92px" }}
       onClick={(e) => unfollowUser(e, props.userData._id)}
     >
-      Unfollow
+      {/* content inside Style.css */}
     </Button>
   ) : (
     <Button
