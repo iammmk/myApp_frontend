@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "./Nav";
-import Backdrop from "@mui/material/Backdrop";
+import { Backdrop, Button } from "@mui/material";
+import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
+import FollowButton from "./layout/components/FollowButton";
 
-function AllUsers() {
+const Users = () => {
   const history = useNavigate();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +22,7 @@ function AllUsers() {
     history(`/userDetails/${uId}`);
   };
 
+  // suggestion for users( whom user is not following)
   const getAllUsers = () => {
     setIsLoading(true);
     fetch("http://localhost:3000/user", {
@@ -25,7 +31,7 @@ function AllUsers() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.message === "Got all users !") {
+        if (data.message === "Suggestion list fetched") {
           setUsers(data.data);
           setIsLoading(false);
         }
@@ -40,51 +46,114 @@ function AllUsers() {
   return (
     <div style={{ width: "100%" }}>
       <Nav />
-      <div>
+      <div
+        style={{
+          width: "55%",
+          margin: "57px auto",
+          paddingLeft: "10px",
+          paddingRight: "10px",
+        }}
+      >
         <Typography
           variant="h4"
           style={{
             marginTop: "80px",
           }}
         >
-          Users
+          People You May Follow
         </Typography>
-        <div>
-          {users.length &&
+        <Divider variant="middle" />
+        <div
+          style={{
+            paddingTop: "20px",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-around",
+          }}
+        >
+          {users.length ?
             users.map((user) => (
-              <div key={user._id} style={{ padding: "20px" }}>
-                <a
-                  href="/#"
-                  onClick={(e) => getUserProfile(e, user._id)}
-                  style={{ textDecoration: "none" }}
+              <Card
+                sx={{
+                  position: "relative",
+                  width: "40%",
+                  height: "5cm",
+                  marginBottom: "20px",
+                  background: "#e7d1d1",
+                }}
+                variant="outlined"
+              >
+                <CardContent>
+                  <a
+                    href="/#"
+                    onClick={(e) => getUserProfile(e, user._id)}
+                    style={{ textAlign: "start", textDecoration: "none" }}
+                  >
+                    <Typography
+                      sx={{ fontSize: 20 }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      {user.name}
+                    </Typography>
+                    <Typography
+                      sx={{ mb: 2.8, opacity: "0.8" }}
+                      color="text.secondary"
+                    >
+                      ({user.username})
+                    </Typography>
+                    <Typography
+                      color="text.secondary"
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        opacity: "0.7",
+                        fontSize: "15px",
+                      }}
+                    >
+                      {user.bio}
+                    </Typography>
+                  </a>
+                </CardContent>
+
+                <Divider
+                  sx={{
+                    position: "absolute",
+                    bottom: "55px",
+                    left: "0",
+                    right: "0",
+                  }}
+                  variant="middle"
+                />
+
+                {/* follow btn */}
+                <CardActions
+                  sx={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                  }}
                 >
-                  {user.name} ({user.username}){" "}
-                  {user._id === localStorage.getItem("profileId") ? "-You" : ""}
-                </a>
-              </div>
-            ))}
-        </div>
-        <div style={{ padding: "20px" }}>
-          <button
-            onClick={(e) =>
-              getUserProfile(e, localStorage.getItem("profileId"))
+                  <FollowButton userData={user} updatePage={getAllUsers} />
+                </CardActions>
+              </Card>
+            )) :
+            <Typography variant="h6">No Users</Typography>
             }
-            className="btn btn-primary"
-          >
-            View My Profile
-          </button>
         </div>
       </div>
-      {isLoading && (
+      {/* {isLoading && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={isLoading}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-      )}
+      )} */}
     </div>
   );
-}
+};
 
-export default AllUsers;
+export default Users;

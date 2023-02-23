@@ -184,6 +184,7 @@ const Status = (props) => {
             setShowUsersModalOpen={setLikedByUsersModalOpen}
             peopleList={likeListByStatusId}
             count= {props.item.totalLikes}
+            message={"No Likes"}
           />
           <IconButton onClick={addComment}>
             <CommentIcon />

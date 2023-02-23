@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Login from "../src/features/login_component";
 import SignUp from "../src/features/signup_component";
 import UserDetails from "../src/features/userDetails";
-import AllUsers from "../src/features/users";
+import Users from "../src/features/users";
 import Home from "../src/features/home";
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/home" element={<Home />} />
           <Route path="/userDetails/:uId" element={<UserDetails />} />
-          <Route path="/users" element={<AllUsers />} />
+          <Route path="/users" element={<Users />} />
         </Routes>
       </div>
     </Router>

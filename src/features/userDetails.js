@@ -10,6 +10,7 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
 import Nav from "./Nav";
+import FollowButton from "./layout/components/FollowButton";
 import Status from "./layout/components/Status";
 import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
@@ -23,6 +24,8 @@ const UserProfile = (props) => {
   const [followersListByUser, setFollowersListByUser] = useState([]);
   const [followingModalOpen, setFollowingModalOpen] = useState(false);
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
+  const [showAllStatus, setShowAllStatus] = useState(true);
+  const [showLikedStatus, setShowLikedStatus] = useState(false);
 
   const getFollowingListByProfile = () => {
     fetch(`http://localhost:3000/user/${profileId}/followings`, {
@@ -116,24 +119,12 @@ const UserProfile = (props) => {
           </Typography>
         </div>
         <div>
+          {/* follow btn or edit profile btn */}
           {props.userData._id !== localStorage.getItem("profileId") ? (
-            followingListByProfile.some((o) => o._id === props.userData._id) ? (
-              <Button
-                variant="contained"
-                style={{ float: "right", height: "35px", width: "92px" }}
-                onClick={(e) => unfollowUser(e, props.userData._id)}
-              >
-                Unfollow
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                style={{ float: "right", height: "35px", width: "92px" }}
-                onClick={(e) => followUser(e, props.userData._id)}
-              >
-                Follow
-              </Button>
-            )
+            <FollowButton
+              userData={props.userData}
+              updatePage={props.updatePage}
+            />
           ) : (
             <Button
               variant="contained"
@@ -210,10 +201,7 @@ const UserProfile = (props) => {
           paddingBottom: "10px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="h6">Status:</Typography>{" "}
-          <Typography variant="h6">{props.userData.totalStatus}</Typography>
-        </div>
+        {/* following modal */}
         <a
           href="/#"
           onClick={(e) => {
@@ -221,7 +209,7 @@ const UserProfile = (props) => {
             setFollowersModalOpen(true);
             getFollowersListByUserId(props.userData._id);
           }}
-          style={{textDecoration: "none"}}
+          style={{ textDecoration: "none" }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h6">Followers:</Typography>{" "}
@@ -230,12 +218,16 @@ const UserProfile = (props) => {
             </Typography>
           </div>
         </a>
+
+        {/* Followers modal */}
         <ShowUsersModal
           title="Followers"
           showUsersModalOpen={followersModalOpen}
           setShowUsersModalOpen={setFollowersModalOpen}
           peopleList={followersListByUser}
           count={props.userData.followersCount}
+          message={"No Followers"}
+          updatePage={props.getUserDetails}
         />
         <a
           href="/#"
@@ -244,7 +236,7 @@ const UserProfile = (props) => {
             setFollowingModalOpen(true);
             getFollowingListByUserId(props.userData._id);
           }}
-          style={{textDecoration: "none"}}
+          style={{ textDecoration: "none" }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h6">Following:</Typography>{" "}
@@ -259,12 +251,57 @@ const UserProfile = (props) => {
           setShowUsersModalOpen={setFollowingModalOpen}
           peopleList={followingListByUser}
           count={props.userData.followingCount}
+          message={"No Following"}
+          updatePage={props.getUserDetails}
         />
       </div>
+
+      {/* Status/Liked btn */}
+      <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <Button
+          variant="outlined"
+          disabled={showAllStatus}
+          style={{
+            width: "50%",
+          }}
+          onClick={() => {
+            setShowAllStatus(true);
+            setShowLikedStatus(false);
+          }}
+        >
+          Status({props.userData.totalStatus})
+        </Button>
+        <Button
+          variant="outlined"
+          style={{
+            width: "50%",
+          }}
+          disabled={showLikedStatus}
+          onClick={() => {
+            setShowAllStatus(false);
+            setShowLikedStatus(true);
+          }}
+        >
+          Likes ({props.likedStatus.length})
+        </Button>
+      </div>
       <Divider variant="middle" />
+
+      {/* show status */}
       <div>
-        {props.userStatus.length ? (
+        {showAllStatus && props.userStatus.length ? (
           props.userStatus
+            .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
+            .map((item) => (
+              <Status
+                item={item}
+                setIsLoading={props.setIsLoading}
+                // getAllStatus={props.getStatusByUser(item.userId) props.getUserDetails}
+                getAllStatus={props.updatePage}
+              />
+            ))
+        ) : showLikedStatus && props.likedStatus.length ? (
+          props.likedStatus
             .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
             .map((item) => (
               <Status
@@ -276,7 +313,7 @@ const UserProfile = (props) => {
             ))
         ) : (
           <>
-            <Typography>No status</Typography>
+            <Typography variant="h5">No status</Typography>
           </>
         )}
       </div>
@@ -287,6 +324,7 @@ const UserProfile = (props) => {
 const UserDetails = () => {
   const [userData, setUserData] = useState("");
   const [status, setStatus] = useState([]);
+  const [statusLikedByUser, setStatusLikedByUser] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let { uId } = useParams();
 
@@ -304,6 +342,7 @@ const UserDetails = () => {
       });
   };
 
+  // status posted by uId
   const getStatusByUser = (uId) => {
     setIsLoading(true);
     fetch(`http://localhost:3000/status/${uId}`, {
@@ -313,7 +352,25 @@ const UserDetails = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.message === "Fetched status of the user") {
+          // console.log("hello")
           setStatus(data.data);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
+  // status liked by uId
+  const getStatusLikedByUser = (uId) => {
+    setIsLoading(true);
+    fetch(`http://localhost:3000/user/${uId}/like`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Liked content by user fetched successfully") {
+          setStatusLikedByUser(data.data);
           setIsLoading(false);
         }
       })
@@ -323,11 +380,13 @@ const UserDetails = () => {
   const updatePage = () => {
     getUserDetails();
     getStatusByUser(uId);
+    getStatusLikedByUser(uId);
   };
 
   useEffect(() => {
     getUserDetails();
     getStatusByUser(uId);
+    getStatusLikedByUser(uId);
   }, []);
 
   return (
@@ -345,6 +404,7 @@ const UserDetails = () => {
         <UserProfile
           userData={userData}
           userStatus={status}
+          likedStatus={statusLikedByUser}
           setIsLoading={setIsLoading}
           updatePage={updatePage}
           getUserDetails={getUserDetails}

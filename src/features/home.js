@@ -14,9 +14,8 @@ function Home() {
   // const { ownerId, setOwnerId } = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
   const [newStatus, setNewStatus] = useState("");
-  const [showAllStatus, setShowAllStatus] = useState(true);
-  const [statusByFollowing, setStatusByFollowing] = useState([]);
 
+  // status by following + own status
   const getAllStatus = () => {
     setIsLoading(true);
     fetch("http://localhost:3000/status", {
@@ -25,24 +24,8 @@ function Home() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.message === "Got all status !!") {
+        if (data.message === "Fetched all status") {
           setStatus(data.data);
-          setIsLoading(false);
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const getStatusByFollowing = () => {
-    setIsLoading(true);
-    fetch("http://localhost:3000/user/userProfile/status/Following", {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.message === "Fetched status from your following") {
-          setStatusByFollowing(data.data);
           setIsLoading(false);
         }
       })
@@ -76,7 +59,6 @@ function Home() {
 
   useEffect(() => {
     getAllStatus();
-    getStatusByFollowing();
   }, []);
 
   return (
@@ -122,7 +104,7 @@ function Home() {
             Post
           </Button>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        {/* <div style={{ display: "flex", justifyContent: "space-around" }}>
           <Button
             variant="outlined"
             disabled={showAllStatus}
@@ -149,10 +131,10 @@ function Home() {
           >
             Following
           </Button>
-        </div>
+        </div> */}
         <Divider variant="middle" />
         <div>
-          {showAllStatus && status.length ? (
+          {status.length ? (
             status
               .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
               .map((item) => (
@@ -162,18 +144,8 @@ function Home() {
                   getAllStatus={getAllStatus}
                 />
               ))
-          ) : !showAllStatus && statusByFollowing.length ? (
-            statusByFollowing
-              .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
-              .map((item) => (
-                <Status
-                  item={item}
-                  setIsLoading={setIsLoading}
-                  getAllStatus={getStatusByFollowing}
-                />
-              ))
           ) : (
-            <Typography>No status</Typography>
+            <Typography>No status to show.</Typography>
           )}
         </div>
         {/* {isLoading && (

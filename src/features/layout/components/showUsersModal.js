@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, Divider } from "@mui/material";
+import FollowButton from "./FollowButton";
 
 const style = {
   position: "absolute",
@@ -8,7 +9,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 390,
-  height: 350,
+  height: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -16,6 +17,7 @@ const style = {
   backdropFilter: "blur(5px)",
 };
 
+// modal to show who liked status/ whom you are following etc
 const showUsersModal = (props) => {
   const getUserProfile = (e, userId) => {
     e.preventDefault();
@@ -34,27 +36,48 @@ const showUsersModal = (props) => {
             {props.title}&nbsp;({props.count})
           </Typography>
           <Divider variant="middle" />
-          {props.peopleList.length ? (
-            props.peopleList.map((item) => (
-              <a
-                href="/#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  getUserProfile(e, item._id);
-                }}
-                style={{ textDecoration: "none", paddingTop: "15px" }}
-              >
-                <Typography>
-                  {item.name}&nbsp;({item.username})
-                </Typography>
-              </a>
-            ))
-          ) : (
-            <>
-              <Typography>No data</Typography>
-            </>
-          )}
-
+          <div style={{ maxHeight: "calc(100% - 60px)", overflowY: "auto" }}>
+            {props.peopleList.length ? (
+              props.peopleList.map((item) => (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    height: "50px",
+                    paddingTop: "15px",
+                  }}
+                >
+                  <a
+                    href="/#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      getUserProfile(e, item._id);
+                    }}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Typography>
+                      {item.name}&nbsp;({item.username})
+                    </Typography>
+                  </a>
+                  <FollowButton userData={item} updatePage={props.updatePage} />
+                </div>
+              ))
+            ) : (
+              <>
+                <Typography>{props.message}</Typography>
+              </>
+            )}
+          </div>
+          <Divider
+            variant="middle"
+            sx={{
+              position: "absolute",
+              bottom: "55px",
+              left: "0",
+              right: "0",
+            }}
+          />
           <Button
             variant="contained"
             onClick={() => {
