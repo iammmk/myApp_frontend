@@ -7,6 +7,8 @@ import Login from "../src/features/login_component";
 import SignUp from "../src/features/signup_component";
 import UserDetails from "../src/features/userDetails";
 import Users from "../src/features/users";
+import Status from "../src/features/Status";
+import Comment from "../src/features/Comment";
 import Home from "../src/features/home";
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/home" element={<Home />} />
           <Route path="/userDetails/:uId" element={<UserDetails />} />
+          <Route path="/status/:statusId" element={<Status />} />
+          <Route path="/comment/:commentId" element={<Comment />} />
           <Route path="/users" element={<Users />} />
         </Routes>
       </div>

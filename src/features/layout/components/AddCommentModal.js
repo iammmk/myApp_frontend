@@ -7,7 +7,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
+  width: 450,
   height: 370,
   bgcolor: "background.paper",
   border: "2px solid #000",
@@ -16,32 +16,28 @@ const style = {
   backdropFilter: "blur(5px)",
 };
 
-
-// to edit status or comment
-const EditStatusModal = (props) => {
-  const [editedStatus, setEditedStatus] = useState("");
+const AddCommentsModal = (props) => {
+  const [newComment, setNewComment] = useState("");
 
   const handleSave = () => {
     props.setIsLoading(true);
-    const reqData =
-      props.type === "Status"
-        ? { status: editedStatus }
-        : { comment: editedStatus };
 
-    fetch(`http://localhost:3000/status/${props.contentId}`, {
-      method: "PUT",
+    fetch(`http://localhost:3000/status/${props.status._id}/comment`, {
+      method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(reqData),
+      body: JSON.stringify({
+        comment: newComment,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.message === "Content updated successfully") {
+        if (data.message === "Added new comment") {
           // alert("Status updated !");
-          setEditedStatus("");
+          setNewComment("");
           props.setModalOpen(false);
           props.getAllStatus();
           props.setIsLoading(false);
@@ -58,7 +54,7 @@ const EditStatusModal = (props) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" component="h2">
-            Edit {props.type}
+            Add Comment
           </Typography>
           <Typography
             style={{
@@ -67,12 +63,15 @@ const EditStatusModal = (props) => {
               textAlign: "start",
             }}
           >
-            Current {props.type}: {props.currentStatus}
+            {props.status.uploadedBy}:{" "}
+            {props.parentType === "Status"
+              ? props.status.status
+              : props.status.comment}
           </Typography>
           <Box
             component="form"
             sx={{
-              "& .MuiTextField-root": { m: 1, width: "46ch" },
+              "& .MuiTextField-root": { m: 1, width: "42ch" },
             }}
             style={{
               position: "absolute",
@@ -82,11 +81,11 @@ const EditStatusModal = (props) => {
             autoComplete="off"
           >
             <TextField
-              id="editStatus"
-              label="Edit Status"
-              value={editedStatus}
+              id="addComment"
+              label="Add Comment"
+              value={newComment}
               onChange={(e) => {
-                setEditedStatus(e.target.value);
+                setNewComment(e.target.value);
               }}
               variant="outlined"
               multiline
@@ -106,14 +105,14 @@ const EditStatusModal = (props) => {
             }}
           >
             <Button variant="contained" onClick={handleSave}>
-              Save
+              Add
             </Button>{" "}
             &nbsp;
             <Button
               variant="contained"
               onClick={() => {
                 props.setModalOpen(false);
-                setEditedStatus("");
+                setNewComment("");
               }}
             >
               Close
@@ -125,4 +124,4 @@ const EditStatusModal = (props) => {
   );
 };
 
-export default EditStatusModal;
+export default AddCommentsModal;

@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
 import Nav from "./Nav";
-import Status from "./layout/components/Status";
+import ShowStatus from "./layout/components/ShowStatus";
 // import { Context } from "../Context";
 import Navbar from "./SideNav";
 
@@ -65,7 +65,7 @@ function Home() {
   return (
     <div style={{ width: "100%" }}>
       {/* <Nav /> */}
-      <Navbar />
+      <Navbar getAllStatus={getAllStatus} />
       <div
         style={{
           width: "55%",
@@ -76,7 +76,6 @@ function Home() {
         <Typography
           variant="h4"
           style={{
-            // marginTop: "55px",
             paddingTop: "15px",
           }}
         >
@@ -92,7 +91,7 @@ function Home() {
         >
           <TextField
             id="status"
-            label="What's Happening ?"
+            label="What's up ?"
             value={newStatus}
             onChange={(e) => setNewStatus(e.target.value)}
             variant="outlined"
@@ -106,41 +105,13 @@ function Home() {
             Post
           </Button>
         </div>
-        {/* <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <Button
-            variant="outlined"
-            disabled={showAllStatus}
-            style={{
-              width: "50%",
-            }}
-            onClick={() => {
-              setShowAllStatus(true);
-              // setShowStatusByFollowing(false);
-            }}
-          >
-            All Status
-          </Button>
-          <Button
-            variant="outlined"
-            style={{
-              width: "50%",
-            }}
-            disabled={!showAllStatus}
-            onClick={() => {
-              setShowAllStatus(false);
-              // setShowStatusByFollowing(true);
-            }}
-          >
-            Following
-          </Button>
-        </div> */}
         <Divider variant="middle" />
         <div style={{ paddingLeft: "15px", paddingRight: "15px" }}>
           {status.length ? (
             status
               .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
               .map((item) => (
-                <Status
+                <ShowStatus
                   item={item}
                   setIsLoading={setIsLoading}
                   getAllStatus={getAllStatus}

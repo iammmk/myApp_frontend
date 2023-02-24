@@ -11,7 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
 import Nav from "./Nav";
 import FollowButton from "./layout/components/FollowButton";
-import Status from "./layout/components/Status";
+import ShowStatus from "./layout/components/ShowStatus";
 import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
 import Navbar from "./SideNav";
@@ -19,7 +19,6 @@ import Navbar from "./SideNav";
 const UserProfile = (props) => {
   const profileId = localStorage.getItem("profileId");
   const { ownerId, setOwnerId } = useContext(Context);
-  const [followingListByProfile, setFollowingListByProfile] = useState([]);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
   const [followingListByUser, setFollowingListByUser] = useState([]);
   const [followersListByUser, setFollowersListByUser] = useState([]);
@@ -27,51 +26,6 @@ const UserProfile = (props) => {
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [showAllStatus, setShowAllStatus] = useState(true);
   const [showLikedStatus, setShowLikedStatus] = useState(false);
-
-  const getFollowingListByProfile = () => {
-    fetch(`http://localhost:3000/user/${profileId}/followings`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setFollowingListByProfile(data.data);
-      });
-  };
-
-  const followUser = (e, userId) => {
-    e.preventDefault();
-
-    fetch(`http://localhost:3000/follow/${userId}`, {
-      method: "POST",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message === "You started following the user") {
-          // alert("follow done");
-          getFollowingListByProfile(profileId);
-          props.updatePage();
-        }
-      });
-  };
-
-  const unfollowUser = (e, userId) => {
-    e.preventDefault();
-
-    fetch(`http://localhost:3000/follow/${userId}`, {
-      method: "DELETE",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message === "You've unfollowed the user") {
-          // alert("Unfollow done");
-          getFollowingListByProfile(profileId);
-          props.updatePage();
-        }
-      });
-  };
 
   const getFollowingListByUserId = (userId) => {
     fetch(`http://localhost:3000/user/${userId}/followings`, {
@@ -97,7 +51,7 @@ const UserProfile = (props) => {
   };
 
   useEffect(() => {
-    getFollowingListByProfile(profileId);
+    getFollowingListByUserId(profileId);
   }, []);
 
   return (
@@ -294,7 +248,7 @@ const UserProfile = (props) => {
           props.userStatus
             .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
             .map((item) => (
-              <Status
+              <ShowStatus
                 item={item}
                 setIsLoading={props.setIsLoading}
                 // getAllStatus={props.getStatusByUser(item.userId) props.getUserDetails}
@@ -305,7 +259,7 @@ const UserProfile = (props) => {
           props.likedStatus
             .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
             .map((item) => (
-              <Status
+              <ShowStatus
                 item={item}
                 setIsLoading={props.setIsLoading}
                 // getAllStatus={props.getStatusByUser(item.userId) props.getUserDetails}
@@ -346,7 +300,7 @@ const UserDetails = () => {
   // status posted by uId
   const getStatusByUser = (uId) => {
     setIsLoading(true);
-    fetch(`http://localhost:3000/status/${uId}`, {
+    fetch(`http://localhost:3000/user/${uId}/status`, {
       method: "GET",
       credentials: "include",
     })
@@ -393,7 +347,7 @@ const UserDetails = () => {
   return (
     <>
       {/* <Nav /> */}
-      <Navbar/>
+      <Navbar getAllStatus={updatePage} />
       <div
         style={{
           width: "55%",

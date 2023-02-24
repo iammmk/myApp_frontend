@@ -1,6 +1,6 @@
+import React, { useState } from "react";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -11,18 +11,25 @@ import EditStatusModal from "./editStatusModal";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteModal from "./deleteModal";
 import ShowUsersModal from "./showUsersModal";
+import AddCommentModal from "./AddCommentModal";
 
-const Status = (props) => {
+const ShowStatus = (props) => {
   const history = useNavigate();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [commentModalOpen, setCommentModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("");
   const [currentStatusEditId, setCurrentStatusEditId] = useState("");
   const [currentStatusDeleteId, setCurrentStatusDeleteId] = useState("");
   const [likedByUsersModalOpen, setLikedByUsersModalOpen] = useState("");
   const [likeListByStatusId, setLikeListByStatusId] = useState([]);
+
   const getUserProfile = (e, uId) => {
     history(`/userDetails/${uId}`);
+  };
+
+  const goToStatus = (e, statusId) => {
+    history(`/status/${statusId}`);
   };
 
   function addLike(e, itemId) {
@@ -74,8 +81,6 @@ const Status = (props) => {
         setLikeListByStatusId(data.data);
       });
   };
-
-  const addComment = () => {};
 
   return (
     <>
@@ -157,7 +162,7 @@ const Status = (props) => {
           {props.item.status}
         </Typography>
         <div style={{ display: "flex", alignItems: "center" }}>
-          {props.item.likedBy.includes(localStorage.getItem("profileId")) ? (
+          {props.item.likedBy?.includes(localStorage.getItem("profileId")) ? (
             <IconButton onClick={(e) => unLike(e, props.item._id)}>
               <FavoriteIcon />
             </IconButton>
@@ -176,33 +181,57 @@ const Status = (props) => {
             }}
             style={{ textDecoration: "none" }}
           >
-            <Typography>{props.item.totalLikes}</Typography>&nbsp;&nbsp;
+            <Typography>{props.item.totalLikes}</Typography>
           </a>
           <ShowUsersModal
             title="Likes"
             showUsersModalOpen={likedByUsersModalOpen}
             setShowUsersModalOpen={setLikedByUsersModalOpen}
             peopleList={likeListByStatusId}
-            count= {props.item.totalLikes}
+            count={props.item.totalLikes}
             message={"No Likes"}
           />
-          <IconButton onClick={addComment}>
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              setCommentModalOpen(true);
+            }}
+          >
             <CommentIcon />
           </IconButton>
           &nbsp;
-          <Typography>{props.item.totalComments}</Typography>
+          <a
+            href="/#"
+            onClick={(e) => {
+              e.preventDefault();
+              goToStatus(e, props.item._id);
+            }}
+            style={{ textDecoration: "none" }}
+          >
+            <Typography>{props.item.totalComments}</Typography>
+          </a>
+          <AddCommentModal
+            parentType={"Status"}
+            modalOpen={commentModalOpen}
+            setModalOpen={setCommentModalOpen}
+            status={props.item}
+            getAllStatus={props.getAllStatus}
+            setIsLoading={props.setIsLoading}
+          />
         </div>
       </div>
       <Divider variant="middle" />
       <EditStatusModal
+        type="Status"
         modalOpen={editModalOpen}
         setModalOpen={setEditModalOpen}
         currentStatus={currentStatus}
         setIsLoading={props.setIsLoading}
-        statusId={currentStatusEditId}
+        contentId={currentStatusEditId}
         getAllStatus={props.getAllStatus}
       />
       <DeleteModal
+        type="Status"
         modalOpen={deleteModalOpen}
         setModalOpen={setDeleteModalOpen}
         message={"Do you want to delete the status ?"}
@@ -214,4 +243,4 @@ const Status = (props) => {
   );
 };
 
-export default Status;
+export default ShowStatus;

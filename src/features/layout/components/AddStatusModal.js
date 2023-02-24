@@ -8,7 +8,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  height: 370,
+  height: 300,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -16,35 +16,31 @@ const style = {
   backdropFilter: "blur(5px)",
 };
 
-
-// to edit status or comment
-const EditStatusModal = (props) => {
-  const [editedStatus, setEditedStatus] = useState("");
+const AddStatusModal = (props) => {
+  const [newStatus, setNewStatus] = useState("");
 
   const handleSave = () => {
-    props.setIsLoading(true);
-    const reqData =
-      props.type === "Status"
-        ? { status: editedStatus }
-        : { comment: editedStatus };
+    // props.setIsLoading(true);
 
-    fetch(`http://localhost:3000/status/${props.contentId}`, {
-      method: "PUT",
+    fetch("http://localhost:3000/status", {
+      method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(reqData),
+      body: JSON.stringify({
+        status: newStatus,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.message === "Content updated successfully") {
+        if (data.message === "Added new status !!") {
           // alert("Status updated !");
-          setEditedStatus("");
+          setNewStatus("");
           props.setModalOpen(false);
           props.getAllStatus();
-          props.setIsLoading(false);
+          //   props.setIsLoading(false);
         }
       });
   };
@@ -58,17 +54,9 @@ const EditStatusModal = (props) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" component="h2">
-            Edit {props.type}
+            Add Status
           </Typography>
-          <Typography
-            style={{
-              paddingTop: "10px",
-              wordWrap: "break-word",
-              textAlign: "start",
-            }}
-          >
-            Current {props.type}: {props.currentStatus}
-          </Typography>
+
           <Box
             component="form"
             sx={{
@@ -82,11 +70,11 @@ const EditStatusModal = (props) => {
             autoComplete="off"
           >
             <TextField
-              id="editStatus"
-              label="Edit Status"
-              value={editedStatus}
+              id="newStatus"
+              label="New Status"
+              value={newStatus}
               onChange={(e) => {
-                setEditedStatus(e.target.value);
+                setNewStatus(e.target.value);
               }}
               variant="outlined"
               multiline
@@ -106,14 +94,14 @@ const EditStatusModal = (props) => {
             }}
           >
             <Button variant="contained" onClick={handleSave}>
-              Save
+              Post
             </Button>{" "}
             &nbsp;
             <Button
               variant="contained"
               onClick={() => {
                 props.setModalOpen(false);
-                setEditedStatus("");
+                setNewStatus("");
               }}
             >
               Close
@@ -125,4 +113,4 @@ const EditStatusModal = (props) => {
   );
 };
 
-export default EditStatusModal;
+export default AddStatusModal;

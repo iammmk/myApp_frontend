@@ -51,16 +51,16 @@ const Users = () => {
       <div
         style={{
           width: "55%",
-          margin: "57px auto",
+          margin: "15px auto",
           paddingLeft: "10px",
           paddingRight: "10px",
         }}
       >
         <Typography
           variant="h4"
-          style={{
-            marginTop: "80px",
-          }}
+          // style={{
+          //   marginTop: "80px",
+          // }}
         >
           People You May Follow
         </Typography>

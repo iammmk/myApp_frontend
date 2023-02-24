@@ -20,13 +20,18 @@ const DeleteModal = (props) => {
   const handleDelete = () => {
     props.setIsLoading(true);
 
-    fetch(`http://localhost:3000/status/${props.statusId}`, {
+    let deleteAPI =
+      props.type === "Status"
+        ? `http://localhost:3000/status/${props.statusId}`
+        : `http://localhost:3000/comment/${props.statusId}`;
+
+    fetch(deleteAPI, {
       method: "DELETE",
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.message === "status deleted successfully") {
+        if (data.message === "Deleted") {
           // alert("status deleted !");
           props.setModalOpen(false);
           props.getAllStatus();
@@ -44,7 +49,7 @@ const DeleteModal = (props) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" component="h2">
-            Delete
+            Delete {props.type}
           </Typography>
           <div style={{ padding: "25px" }}>
             <Typography>{props.message}</Typography>

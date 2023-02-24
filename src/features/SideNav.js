@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -7,10 +7,12 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import MenuIcon from "@mui/icons-material/Menu";
 import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DraftsIcon from "@mui/icons-material/Drafts";
@@ -19,9 +21,11 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
 import { WindowRounded } from "@mui/icons-material";
+import AddStatusModal from "./layout/components/AddStatusModal";
 
-const Navbar = () => {
-  const [open, setOpen] = React.useState(true);
+const Navbar = (props) => {
+  const [open, setOpen] = useState(true);
+  const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
 
   const signOut = () => {
     fetch("http://localhost:3000/user/logout", {
@@ -52,7 +56,7 @@ const Navbar = () => {
           top: 0,
           bottom: 0,
           width: "22.4%",
-        //   maxWidth: 360,
+          //   maxWidth: 360,
           bgcolor: "#faf2f2",
           zIndex: 1,
         }}
@@ -60,6 +64,15 @@ const Navbar = () => {
         aria-labelledby="nested-list-subheader"
       >
         <ListItemButton
+          sx={{ height: "60px", pl: "38%" }}
+          onClick={() => {
+            window.location.href = "http://localhost:8080/home";
+          }}
+        >
+          <ListItemText primary={<Typography variant="h5">myApp</Typography>} />
+        </ListItemButton>
+        <ListItemButton
+          sx={{ height: "50px" }}
           onClick={() => {
             window.location.href = "http://localhost:8080/home";
           }}
@@ -70,6 +83,7 @@ const Navbar = () => {
           <ListItemText primary="Home" />
         </ListItemButton>
         <ListItemButton
+          sx={{ height: "50px" }}
           onClick={() => {
             window.location.href = "http://localhost:8080/users";
           }}
@@ -79,7 +93,23 @@ const Navbar = () => {
           </ListItemIcon>
           <ListItemText primary="Users" />
         </ListItemButton>
-        <ListItemButton onClick={handleClick}>
+        <ListItemButton
+          sx={{ height: "50px" }}
+          onClick={() => {
+            setAddStatusModalOpen(true);
+          }}
+        >
+          <ListItemIcon>
+            <PostAddIcon />
+          </ListItemIcon>
+          <ListItemText primary="Add Status" />
+        </ListItemButton>
+        <AddStatusModal
+          modalOpen={addStatusModalOpen}
+          setModalOpen={setAddStatusModalOpen}
+          getAllStatus={props.getAllStatus}
+        />
+        <ListItemButton sx={{ height: "50px" }} onClick={handleClick}>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
@@ -89,7 +119,7 @@ const Navbar = () => {
         <Collapse in={!open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <ListItemButton
-              sx={{ pl: 4 }}
+              sx={{ pl: 4, height: "50px" }}
               onClick={() => {
                 window.location.href = `http://localhost:8080/userDetails/${localStorage.getItem(
                   "profileId"
@@ -101,7 +131,7 @@ const Navbar = () => {
               </ListItemIcon>
               <ListItemText primary="Go to Profile" />
             </ListItemButton>
-            <ListItemButton sx={{ pl: 4 }} onClick={signOut}>
+            <ListItemButton sx={{ pl: 4, height: "50px" }} onClick={signOut}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
@@ -125,7 +155,7 @@ const Navbar = () => {
           width: "1px",
           position: "fixed",
           top: 0,
-          right:"22.5%",
+          right: "22.5%",
           bottom: 0,
           borderLeft: "1px solid #ccc",
         }}
