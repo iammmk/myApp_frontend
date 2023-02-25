@@ -19,7 +19,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { BASE_URL } from "./helper";
+import { BASE_URL } from "../Services/helper";
 
 // MUI login template
 const Login = () => {

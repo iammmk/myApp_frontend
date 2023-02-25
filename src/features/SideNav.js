@@ -22,7 +22,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
 import { WindowRounded } from "@mui/icons-material";
 import AddStatusModal from "./layout/components/AddStatusModal";
-import { BASE_URL } from "./helper";
+import { BASE_URL } from "../Services/helper";
 
 const Navbar = (props) => {
   const [open, setOpen] = useState(true);
