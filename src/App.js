@@ -4,7 +4,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import Login from "../src/features/login_component";
-import SignUp from "../src/features/signup_component";
+// import SignUp from "../src/features/signup_component";
 import UserDetails from "../src/features/userDetails";
 import Users from "../src/features/users";
 import Status from "../src/features/Status";
@@ -23,7 +23,7 @@ function App() {
             element={isLoggedIn === "true" ? <Home /> : <Login />}
           />
           <Route path="/sign-in" element={<Login />} />
-          <Route path="/sign-up" element={<SignUp />} />
+          {/* <Route path="/sign-up" element={<SignUp />} /> */}
           <Route path="/home" element={<Home />} />
           <Route path="/userDetails/:uId" element={<UserDetails />} />
           <Route path="/status/:statusId" element={<Status />} />

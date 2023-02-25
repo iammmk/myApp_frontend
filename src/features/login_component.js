@@ -1,121 +1,48 @@
-// import React, { useState, useContext } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { Context } from "../Context";
-
-// export default function Login() {
-//   const history = useNavigate();
-//   const [email, setEmail] = useState("");
-//   const { ownerId, setOwnerId } = useContext(Context);
-//   // const [username, setUsername] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   function handleSubmit(e) {
-//     e.preventDefault();
-//     fetch("http://localhost:3000/login", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Accept: "application/json",
-//       },
-//       credentials: "include",
-//       body: JSON.stringify({
-//         email,
-//         password,
-//       }),
-//     })
-//       .then((res) => res.json())
-//       .then((data) => {
-//         if (data.message === "Login successful!") {
-//           alert("login successful");
-//           window.localStorage.setItem("token", data.data);
-//           window.localStorage.setItem("loggedIn", true);
-//           window.localStorage.setItem("profileId", data.data._id);
-//           let ownerId = data.data._id;
-//           setOwnerId(ownerId)
-//           history(`/home`);
-//         }
-//       });
-//   }
-
-//   return (
-//     <div className="auth-wrapper">
-//       <div className="auth-inner">
-//         <form onSubmit={handleSubmit}>
-//           <h3>Sign In</h3>
-
-//           <div className="mb-3">
-//             <label>Email address</label>
-//             <input
-//               type="text"
-//               className="form-control"
-//               placeholder="Enter email id"
-//               onChange={(e) => setEmail(e.target.value)}
-//             />
-//           </div>
-
-//           <div className="mb-3">
-//             <label>Password</label>
-//             <input
-//               type="password"
-//               className="form-control"
-//               placeholder="Enter password"
-//               onChange={(e) => setPassword(e.target.value)}
-//             />
-//           </div>
-
-//           <div className="mb-3">
-//             <div className="custom-control custom-checkbox">
-//               <input
-//                 type="checkbox"
-//                 className="custom-control-input"
-//                 id="customCheck1"
-//               />
-//               <label className="custom-control-label" htmlFor="customCheck1">
-//                 Remember me
-//               </label>
-//             </div>
-//           </div>
-
-//           <div className="d-grid">
-//             <button type="submit" className="btn btn-primary">
-//               Submit
-//             </button>
-//           </div>
-//           <p className="forgot-password text-right">
-//             <a href="/sign-up">Sign Up</a>
-//           </p>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
-
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import SignupModal from "./layout/components/SignupModal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-const theme = createTheme();
-
-export default function Login() {
-  const history = useNavigate();
+// MUI login template
+const Login = () => {
   const [email, setEmail] = useState("");
-  // const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isEmailSelected, setIsEmailSelected] = useState(true);
+
+  const [signupModalOpen, setSignupModalOpen] = useState(false);
+
+  //password visibilty
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  // signin
   const handleSubmit = (e) => {
     e.preventDefault();
+    let reqData = isEmailSelected
+      ? { email: email, password: password }
+      : { username: username, password: password };
     fetch("http://localhost:3000/login", {
       method: "POST",
       headers: {
@@ -123,10 +50,7 @@ export default function Login() {
         Accept: "application/json",
       },
       credentials: "include",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      body: JSON.stringify(reqData),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -138,111 +62,154 @@ export default function Login() {
           window.localStorage.setItem("profileName", data.data.name);
           // history(`/home`);
           window.location.href = "/home";
-
         }
       });
   };
 
+  const theme = createTheme();
+
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={7}
+        <Box
           sx={{
-            backgroundImage: "url(/images/applogo.jpg)",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
-        />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
-            </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <br />
+          <div>
+            <Typography sx={{ fontSize: "12px" }}>With</Typography>
+            <Button
+              variant="outlined"
+              disabled={isEmailSelected}
+              onClick={() => setIsEmailSelected(true)}
             >
+              Email
+            </Button>
+            &nbsp;
+            <Button
+              variant="outlined"
+              disabled={!isEmailSelected}
+              onClick={() => setIsEmailSelected(false)}
+            >
+              Username
+            </Button>
+          </div>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            {isEmailSelected ? (
               <TextField
                 margin="normal"
                 required
-                fullWidth
+                sx={{ m: 1, width: "50ch" }}
                 id="email"
                 label="Email Address"
                 name="email"
+                value={email}
                 autoComplete="email"
                 onChange={(e) => setEmail(e.target.value)}
                 autoFocus
               />
+            ) : (
               <TextField
                 margin="normal"
                 required
-                fullWidth
-                name="password"
+                sx={{ m: 1, width: "50ch" }}
+                // fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoFocus
+              />
+            )}
+            <FormControl sx={{ m: 1, width: "50ch" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
                 label="Password"
-                type="password"
-                id="password"
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-              <Grid container justifyContent="flex-end" alignItems="center">
-                {/* <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid> */}
-                <Grid item style={{ display: "flex" }}>
-                  <Typography style={{ fontSize: "15px" }}>
-                    Don't have an account?
-                  </Typography>
-                  &nbsp;
-                  <Link
-                    href="./sign-up"
-                    variant="body2"
-                    style={{ textDecoration: "none", fontSize: "15px" }}
-                  >
-                    {" Sign Up"}
-                  </Link>
-                </Grid>
+            </FormControl>
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              {/* <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid> */}
+              <Grid item style={{ display: "flex" }}>
+                <Typography style={{ fontSize: "15px" }}>
+                  Don't have an account?
+                </Typography>
+                &nbsp;
+                <a
+                  href="/#"
+                  style={{ textDecoration: "none" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSignupModalOpen(true);
+                  }}
+                >
+                  <Typography>Sign Up</Typography>
+                </a>
+                <SignupModal
+                  modalOpen={signupModalOpen}
+                  setModalOpen={setSignupModalOpen}
+                />
               </Grid>
-            </Box>
+            </Grid>
           </Box>
-        </Grid>
-      </Grid>
+        </Box>
+      </Container>
     </ThemeProvider>
   );
-}
+};
+
+export default Login;

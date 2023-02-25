@@ -8,6 +8,7 @@ import Nav from "./Nav";
 import ShowStatus from "./layout/components/ShowStatus";
 // import { Context } from "../Context";
 import Navbar from "./SideNav";
+import Headers from "./layout/components/Headers";
 
 function Home() {
   const history = useNavigate();
@@ -73,14 +74,23 @@ function Home() {
           // backgroundColor: "#faf2f2",
         }}
       >
-        <Typography
+        <Headers title="Home" isHome={true} />
+      </div>
+      {/* <Typography
           variant="h4"
           style={{
             paddingTop: "15px",
           }}
         >
-          Status
-        </Typography>
+          Home
+        </Typography> */}
+      <div
+        style={{
+          width: "55%",
+          margin: "0px auto",
+          paddingTop: "60px",
+        }}
+      >
         <Box
           component="form"
           sx={{
@@ -96,8 +106,7 @@ function Home() {
             onChange={(e) => setNewStatus(e.target.value)}
             variant="outlined"
             multiline
-            minRows={3}
-            maxRows={4}
+            rows={3}
           />
         </Box>
         <div style={{ paddingBottom: "15px" }}>
@@ -121,7 +130,8 @@ function Home() {
             <Typography>No status to show.</Typography>
           )}
         </div>
-        {/* {isLoading && (
+      </div>
+      {/* {isLoading && (
           <Backdrop
             sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={isLoading}
@@ -129,7 +139,6 @@ function Home() {
             <CircularProgress color="inherit" />
           </Backdrop>
         )} */}
-      </div>
     </div>
   );
 }

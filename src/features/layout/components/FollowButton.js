@@ -62,7 +62,7 @@ const FollowButton = (props) => {
     <Button
       className="followBtn"
       variant="outlined"
-      // style={{ float: "right", height: "35px", width: "92px" }}
+      sx={{ float: "right", height: "35px", width: "92px" }}
       onClick={(e) => unfollowUser(e, props.userData._id)}
     >
       {/* content inside Style.css */}
@@ -70,7 +70,7 @@ const FollowButton = (props) => {
   ) : (
     <Button
       variant="contained"
-      style={{ float: "right", height: "35px", width: "92px" }}
+      sx={{ float: "right", height: "35px", width: "92px" }}
       onClick={(e) => followUser(e, props.userData._id)}
     >
       Follow

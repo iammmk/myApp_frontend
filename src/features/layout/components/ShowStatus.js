@@ -12,12 +12,14 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteModal from "./deleteModal";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
+import ViewEditModal from "./ViewEditModal";
 
 const ShowStatus = (props) => {
   const history = useNavigate();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [commentModalOpen, setCommentModalOpen] = useState(false);
+  const [viewEdit, setViewEdit] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("");
   const [currentStatusEditId, setCurrentStatusEditId] = useState("");
   const [currentStatusDeleteId, setCurrentStatusDeleteId] = useState("");
@@ -28,7 +30,7 @@ const ShowStatus = (props) => {
     history(`/userDetails/${uId}`);
   };
 
-  const goToStatus = (e, statusId) => {
+  const goToStatus = (statusId) => {
     history(`/status/${statusId}`);
   };
 
@@ -97,12 +99,35 @@ const ShowStatus = (props) => {
             }}
             style={{ textDecoration: "none" }}
           >
-            <Typography>{props.item.uploadedBy}</Typography>
+            <Typography sx={{ fontSize: "20px" }}>
+              {props.item.uploadedBy}
+            </Typography>
           </a>
-          &nbsp;&nbsp;
+          &nbsp;
           <Typography>
             ({new Date(props.item.uploadTime).toLocaleString()})
           </Typography>
+          &nbsp; &nbsp;
+          {props.item.isEdited ? (
+            <a
+              href="/#"
+              style={{ textDecoration: "none" }}
+              onClick={(e) => {
+                e.preventDefault(); // page wont redirect to '/#'
+                setViewEdit(true);
+              }}
+            >
+              <Typography sx={{ fontSize: "14px" }}>(Edited)</Typography>
+            </a>
+          ) : (
+            <></>
+          )}
+          <ViewEditModal
+            modalOpen={viewEdit}
+            setModalOpen={setViewEdit}
+            current={props.item.status}
+            prev={props.item.lastEdit}
+          />
           {props.item.userId === localStorage.getItem("profileId") && (
             <div style={{ marginLeft: "auto" }}>
               <div className="dropdown">
@@ -157,6 +182,11 @@ const ShowStatus = (props) => {
             textAlign: "start",
             paddingTop: "15px",
             paddingBottom: "15px",
+            cursor: "pointer",
+          }}
+          onClick={(e) => {
+            e.preventDefault();
+            goToStatus(props.item._id);
           }}
         >
           {props.item.status}
@@ -200,16 +230,18 @@ const ShowStatus = (props) => {
             <CommentIcon />
           </IconButton>
           &nbsp;
-          <a
-            href="/#"
-            onClick={(e) => {
-              e.preventDefault();
-              goToStatus(e, props.item._id);
-            }}
-            style={{ textDecoration: "none" }}
-          >
-            <Typography>{props.item.totalComments}</Typography>
-          </a>
+          <Tooltip title="View status" placement="right">
+            <a
+              href="/#"
+              onClick={(e) => {
+                e.preventDefault();
+                goToStatus(e, props.item._id);
+              }}
+              style={{ textDecoration: "none" }}
+            >
+              <Typography>{props.item.totalComments}</Typography>
+            </a>
+          </Tooltip>
           <AddCommentModal
             parentType={"Status"}
             modalOpen={commentModalOpen}

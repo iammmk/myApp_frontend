@@ -15,6 +15,7 @@ import ShowStatus from "./layout/components/ShowStatus";
 import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
 import Navbar from "./SideNav";
+import Headers from "./layout/components/Headers";
 
 const UserProfile = (props) => {
   const profileId = localStorage.getItem("profileId");
@@ -214,7 +215,7 @@ const UserProfile = (props) => {
       {/* Status/Liked btn */}
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         <Button
-          variant="outlined"
+          variant="contained"
           disabled={showAllStatus}
           style={{
             width: "50%",
@@ -227,7 +228,7 @@ const UserProfile = (props) => {
           Status({props.userData.totalStatus})
         </Button>
         <Button
-          variant="outlined"
+          variant="contained"
           style={{
             width: "50%",
           }}
@@ -352,9 +353,19 @@ const UserDetails = () => {
         style={{
           width: "55%",
           margin: "0px auto",
+        }}
+      >
+        <Headers
+          title={`${userData.name} (${userData.followersCount} followers)`}
+        />
+      </div>
+      <div
+        style={{
+          width: "55%",
+          margin: "0px auto",
           paddingLeft: "15px",
           paddingRight: "15px",
-          // backgroundColor: "#faf2f2",
+          paddingTop: "50px"
         }}
       >
         <UserProfile

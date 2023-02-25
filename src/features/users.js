@@ -11,6 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
 import FollowButton from "./layout/components/FollowButton";
 import Navbar from "./SideNav";
+import Headers from "./layout/components/Headers";
 
 const Users = () => {
   const history = useNavigate();
@@ -46,25 +47,33 @@ const Users = () => {
 
   return (
     <div style={{ width: "100%" }}>
-      {/* <Nav /> */}
-      <Navbar/>
+      <Navbar />
       <div
         style={{
           width: "55%",
-          margin: "15px auto",
-          paddingLeft: "10px",
-          paddingRight: "10px",
+          margin: "0 auto",
         }}
       >
-        <Typography
+        <Headers title="People you may follow"/>
+      </div>
+      <div
+        style={{
+          width: "55%",
+          margin: "0px auto",
+          paddingLeft: "10px",
+          paddingRight: "10px",
+          paddingTop: "50px"
+        }}
+      >
+        {/* <Typography
           variant="h4"
           // style={{
           //   marginTop: "80px",
           // }}
         >
           People You May Follow
-        </Typography>
-        <Divider variant="middle" />
+        </Typography> */}
+        {/* <Divider variant="middle" /> */}
         <div
           style={{
             paddingTop: "20px",
@@ -73,7 +82,7 @@ const Users = () => {
             justifyContent: "space-around",
           }}
         >
-          {users.length ?
+          {users.length ? (
             users.map((user) => (
               <Card
                 sx={{
@@ -81,7 +90,9 @@ const Users = () => {
                   width: "40%",
                   height: "5cm",
                   marginBottom: "20px",
-                  background: "#e7d1d1",
+                  background: "rgb(144 137 137)",
+                  // backgroundColor: "rgb(166 142 142)",
+                  color: "white",
                 }}
                 variant="outlined"
               >
@@ -93,19 +104,19 @@ const Users = () => {
                   >
                     <Typography
                       sx={{ fontSize: 20 }}
-                      color="text.secondary"
+                      color="white"
                       gutterBottom
                     >
                       {user.name}
                     </Typography>
                     <Typography
                       sx={{ mb: 2.8, opacity: "0.8" }}
-                      color="text.secondary"
+                      color="white"
                     >
                       ({user.username})
                     </Typography>
                     <Typography
-                      color="text.secondary"
+                      color="white"
                       style={{
                         whiteSpace: "nowrap",
                         overflow: "hidden",
@@ -141,9 +152,10 @@ const Users = () => {
                   <FollowButton userData={user} updatePage={getAllUsers} />
                 </CardActions>
               </Card>
-            )) :
+            ))
+          ) : (
             <Typography variant="h6">No Users</Typography>
-            }
+          )}
         </div>
       </div>
       {/* {isLoading && (

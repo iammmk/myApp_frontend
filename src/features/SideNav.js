@@ -57,7 +57,8 @@ const Navbar = (props) => {
           bottom: 0,
           width: "22.4%",
           //   maxWidth: 360,
-          bgcolor: "#faf2f2",
+          // bgcolor: "#faf2f2",
+          bgcolor: "#ffffff",
           zIndex: 1,
         }}
         component="nav"

@@ -1,9 +1,3 @@
-.followBtn {
-  float: "right";
-  height: "35px";
-  width: "92px";
-}
-
 .followBtn::before {
     content: "Following";
 }

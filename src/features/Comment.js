@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Box, Typography, Button, TextField, Divider } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Divider,
+  IconButton,
+} from "@mui/material";
 import ShowStatus from "./layout/components/ShowStatus";
 import ShowComments from "./layout/components/ShowComments";
+import { ArrowBack } from "@mui/icons-material";
 import Navbar from "./SideNav";
+import Headers from "./layout/components/Headers";
 
 const Comment = () => {
+  const history = useNavigate();
   const { commentId } = useParams();
   const [parentComment, setParentComment] = useState({});
   const [comments, setComments] = useState([]);
@@ -24,7 +34,7 @@ const Comment = () => {
           setParentComment(data.data);
         } else {
           // page should redirect to prev page
-        window.location.href = document.referrer
+          window.location.href = document.referrer;
         }
       })
       .catch((error) => console.error(error));
@@ -90,6 +100,9 @@ const Comment = () => {
           margin: "0 auto",
         }}
       >
+        <Headers title="Comments" />
+      </div>
+      <div style={{ width: "55%", margin: "0 auto", paddingTop: "50px" }}>
         <ShowComments
           item={parentComment}
           setIsLoading={setIsLoading}

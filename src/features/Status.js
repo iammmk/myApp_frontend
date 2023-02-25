@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Box, Typography, Button, TextField,Divider } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Divider,
+  IconButton,
+} from "@mui/material";
 import ShowStatus from "./layout/components/ShowStatus";
 import ShowComments from "./layout/components/ShowComments";
+import { ArrowBack } from "@mui/icons-material";
 import Navbar from "./SideNav";
+import Headers from "./layout/components/Headers";
 
 const Status = () => {
+  const history = useNavigate();
   const { statusId } = useParams();
   const [status, setStatus] = useState({});
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment]= useState("")
+  const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const getStatus = () => {
@@ -45,7 +55,7 @@ const Status = () => {
       .catch((error) => console.error(error));
   };
 
-  const uploadComment=()=>{
+  const uploadComment = () => {
     // e.preventDefault();
     // props.setIsLoading(true);
     fetch(`http://localhost:3000/status/${statusId}/comment`, {
@@ -68,7 +78,7 @@ const Status = () => {
         }
       });
     setIsLoading(false);
-  }
+  };
 
   const updatePage = () => {
     getStatus();
@@ -89,36 +99,39 @@ const Status = () => {
           margin: "0 auto",
         }}
       >
+        <Headers title="Status" />
+      </div>
+      <div style={{ width: "55%", margin: "0 auto", paddingTop: "50px" }}>
         <ShowStatus
           item={status}
           setIsLoading={setIsLoading}
           getAllStatus={updatePage}
         />
         <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "45ch" },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          id="comment"
-          label="Post Your Reply.."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          variant="outlined"
-          multiline
-          minRows={3}
-          maxRows={4}
-        />
-      </Box>
-      <div style={{ paddingBottom: "15px" }}>
-        <Button variant="contained" onClick={uploadComment}>
-          Comment
-        </Button>
-      </div>
-      <Divider variant="middle" />
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "45ch" },
+          }}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField
+            id="comment"
+            label="Post Your Reply.."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            variant="outlined"
+            multiline
+            minRows={3}
+            maxRows={4}
+          />
+        </Box>
+        <div style={{ paddingBottom: "15px" }}>
+          <Button variant="contained" onClick={uploadComment}>
+            Comment
+          </Button>
+        </div>
+        <Divider variant="middle" />
         <div style={{ paddingLeft: "15px", paddingRight: "15px" }}>
           {comments.length ? (
             comments
