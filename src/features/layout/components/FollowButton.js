@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import "../../Style/Style.css";
+import { BASE_URL } from "../helper";
 
 // to decide follow/unfollow btn depending upon the user
 const FollowButton = (props) => {
@@ -8,7 +9,7 @@ const FollowButton = (props) => {
   const [followingListByProfile, setFollowingListByProfile] = useState([]);
 
   const getFollowingListByProfile = () => {
-    fetch(`http://localhost:3000/user/${profileId}/followings`, {
+    fetch(`${BASE_URL}/user/${profileId}/followings`, {
       method: "GET",
       credentials: "include",
     })
@@ -20,7 +21,7 @@ const FollowButton = (props) => {
 
   const followUser = (e, userId) => {
     e.preventDefault();
-    fetch(`http://localhost:3000/follow/${userId}`, {
+    fetch(`${BASE_URL}/follow/${userId}`, {
       method: "POST",
       credentials: "include",
     })
@@ -37,7 +38,7 @@ const FollowButton = (props) => {
   const unfollowUser = (e, userId) => {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/follow/${userId}`, {
+    fetch(`${BASE_URL}/follow/${userId}`, {
       method: "DELETE",
       credentials: "include",
     })

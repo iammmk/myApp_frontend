@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
+import { BASE_URL } from "../helper";
 
 const style = {
   position: "absolute",
@@ -16,7 +17,6 @@ const style = {
   backdropFilter: "blur(5px)",
 };
 
-
 // to edit status or comment
 const EditStatusModal = (props) => {
   const [editedStatus, setEditedStatus] = useState("");
@@ -28,7 +28,7 @@ const EditStatusModal = (props) => {
         ? { status: editedStatus }
         : { comment: editedStatus };
 
-    fetch(`http://localhost:3000/status/${props.contentId}`, {
+    fetch(`${BASE_URL}/status/${props.contentId}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -66,8 +66,9 @@ const EditStatusModal = (props) => {
               wordWrap: "break-word",
               textAlign: "start",
             }}
+            variant="h6"
           >
-            Current {props.type}: {props.currentStatus}
+            {props.currentStatus}
           </Typography>
           <Box
             component="form"

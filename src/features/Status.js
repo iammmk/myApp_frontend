@@ -11,8 +11,10 @@ import {
 import ShowStatus from "./layout/components/ShowStatus";
 import ShowComments from "./layout/components/ShowComments";
 import { ArrowBack } from "@mui/icons-material";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
+import { BASE_URL } from "../helper";
 
 const Status = () => {
   const history = useNavigate();
@@ -24,7 +26,7 @@ const Status = () => {
 
   const getStatus = () => {
     // setIsLoading(true);
-    fetch(`http://localhost:3000/status/${statusId}`, {
+    fetch(`${BASE_URL}/status/${statusId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -41,7 +43,7 @@ const Status = () => {
 
   const getComments = () => {
     // setIsLoading(true);
-    fetch(`http://localhost:3000/status/${statusId}/comment`, {
+    fetch(`${BASE_URL}/status/${statusId}/comment`, {
       method: "GET",
       credentials: "include",
     })
@@ -58,7 +60,7 @@ const Status = () => {
   const uploadComment = () => {
     // e.preventDefault();
     // props.setIsLoading(true);
-    fetch(`http://localhost:3000/status/${statusId}/comment`, {
+    fetch(`${BASE_URL}/status/${statusId}/comment`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -128,10 +130,34 @@ const Status = () => {
         </Box>
         <div style={{ paddingBottom: "15px" }}>
           <Button variant="contained" onClick={uploadComment}>
-            Comment
+            Post
           </Button>
         </div>
         <Divider variant="middle" />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            paddingLeft: "15px",
+            paddingTop: "5px",
+          }}
+        >
+          <Typography variant="h5">Replies</Typography>
+          <IconButton>
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </div>
+        <hr
+          style={{
+            border: "none",
+            height: "1px",
+            backgroundColor: "black",
+            width: "100%",
+            marginTop: "5px",
+            marginBottom: "5px",
+          }}
+        />
         <div style={{ paddingLeft: "15px", paddingRight: "15px" }}>
           {comments.length ? (
             comments
@@ -144,7 +170,7 @@ const Status = () => {
                 />
               ))
           ) : (
-            <Typography>No Comments to show.</Typography>
+            <Typography>No replies to show.</Typography>
           )}
         </div>
       </div>

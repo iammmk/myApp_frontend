@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
+import { BASE_URL } from "../helper";
 
 import IconButton from "@mui/material/IconButton";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -49,7 +50,7 @@ const SignupModal = (props) => {
 
   // signup
   const handleCreate = () => {
-    fetch("http://localhost:3000/signup", {
+    fetch(`${BASE_URL}/signup`, {
       method: "POST",
       crossDomain: true,
       headers: {

@@ -13,6 +13,7 @@ import DeleteModal from "./deleteModal";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
+import { BASE_URL } from "../helper";
 
 const ShowComments = (props) => {
   const history = useNavigate();
@@ -27,7 +28,7 @@ const ShowComments = (props) => {
   const [likedByUsersModalOpen, setLikedByUsersModalOpen] = useState(false);
   const [likeListByCommentId, setLikeListByCommentId] = useState([]);
 
-  const getUserProfile = (e, uId) => {
+  const getUserProfile = ( uId) => {
     history(`/userDetails/${uId}`);
   };
 
@@ -38,7 +39,7 @@ const ShowComments = (props) => {
   function addLike(e, itemId) {
     e.preventDefault();
     props.setIsLoading(true);
-    fetch(`http://localhost:3000/like/${itemId}`, {
+    fetch(`${BASE_URL}/like/${itemId}`, {
       method: "POST",
       credentials: "include",
     })
@@ -58,7 +59,7 @@ const ShowComments = (props) => {
     e.preventDefault();
 
     // setIsLoading(true);
-    fetch(`http://localhost:3000/like/${itemId}`, {
+    fetch(`${BASE_URL}/like/${itemId}`, {
       method: "DELETE",
       credentials: "include",
     })
@@ -75,7 +76,7 @@ const ShowComments = (props) => {
   }
 
   const getLikesByCommentId = (commentId) => {
-    fetch(`http://localhost:3000/like/status/${commentId}`, {
+    fetch(`${BASE_URL}/like/status/${commentId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -246,7 +247,7 @@ const ShowComments = (props) => {
               href="/#"
               onClick={(e) => {
                 e.preventDefault();
-                goToComment(e, props.item._id);
+                goToComment(props.item._id);
               }}
               style={{ textDecoration: "none" }}
             >

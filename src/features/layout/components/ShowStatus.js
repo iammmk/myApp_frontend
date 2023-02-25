@@ -13,6 +13,7 @@ import DeleteModal from "./deleteModal";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
+import { BASE_URL } from "../helper";
 
 const ShowStatus = (props) => {
   const history = useNavigate();
@@ -37,7 +38,7 @@ const ShowStatus = (props) => {
   function addLike(e, itemId) {
     e.preventDefault();
     props.setIsLoading(true);
-    fetch(`http://localhost:3000/like/${itemId}`, {
+    fetch(`${BASE_URL}/like/${itemId}`, {
       method: "POST",
       credentials: "include",
     })
@@ -57,7 +58,7 @@ const ShowStatus = (props) => {
     e.preventDefault();
 
     // setIsLoading(true);
-    fetch(`http://localhost:3000/like/${itemId}`, {
+    fetch(`${BASE_URL}/like/${itemId}`, {
       method: "DELETE",
       credentials: "include",
     })
@@ -74,7 +75,7 @@ const ShowStatus = (props) => {
   }
 
   const getLikesByStatusId = (statusId) => {
-    fetch(`http://localhost:3000/like/status/${statusId}`, {
+    fetch(`${BASE_URL}/like/status/${statusId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -235,7 +236,7 @@ const ShowStatus = (props) => {
               href="/#"
               onClick={(e) => {
                 e.preventDefault();
-                goToStatus(e, props.item._id);
+                goToStatus(props.item._id);
               }}
               style={{ textDecoration: "none" }}
             >

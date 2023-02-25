@@ -12,6 +12,7 @@ import { Context } from "../Context";
 import FollowButton from "./layout/components/FollowButton";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
+import { BASE_URL } from "../helper";
 
 const Users = () => {
   const history = useNavigate();
@@ -27,7 +28,7 @@ const Users = () => {
   // suggestion for users( whom user is not following)
   const getAllUsers = () => {
     setIsLoading(true);
-    fetch("http://localhost:3000/user", {
+    fetch(`${BASE_URL}/user`, {
       method: "GET",
       credentials: "include",
     })

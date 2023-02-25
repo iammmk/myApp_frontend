@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button } from "@mui/material";
+import { BASE_URL } from "../helper";
 
 const style = {
   position: "absolute",
@@ -22,8 +23,8 @@ const DeleteModal = (props) => {
 
     let deleteAPI =
       props.type === "Status"
-        ? `http://localhost:3000/status/${props.statusId}`
-        : `http://localhost:3000/comment/${props.statusId}`;
+        ? `${BASE_URL}/status/${props.statusId}`
+        : `${BASE_URL}/comment/${props.statusId}`;
 
     fetch(deleteAPI, {
       method: "DELETE",

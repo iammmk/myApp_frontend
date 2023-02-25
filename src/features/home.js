@@ -8,6 +8,7 @@ import Nav from "./Nav";
 import ShowStatus from "./layout/components/ShowStatus";
 // import { Context } from "../Context";
 import Navbar from "./SideNav";
+import { BASE_URL } from "../helper";
 import Headers from "./layout/components/Headers";
 
 function Home() {
@@ -20,7 +21,7 @@ function Home() {
   // status by following + own status
   const getAllStatus = () => {
     setIsLoading(true);
-    fetch("http://localhost:3000/status", {
+    fetch(`${BASE_URL}/status`, {
       method: "GET",
       credentials: "include",
     })
@@ -37,7 +38,7 @@ function Home() {
   const uploadStatus = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    fetch("http://localhost:3000/status", {
+    fetch(`${BASE_URL}/status`, {
       method: "POST",
       credentials: "include",
       headers: {

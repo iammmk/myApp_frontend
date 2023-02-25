@@ -4,6 +4,7 @@ import { Box, Typography, Button, TextField } from "@mui/material";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { BASE_URL } from "../helper";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
 const style = {
@@ -31,7 +32,7 @@ const EditProfileModal = (props) => {
   const handleSave = () => {
     props.setIsLoading(true);
 
-    fetch(`http://localhost:3000/user/myProfile`, {
+    fetch(`${BASE_URL}/user/myProfile`, {
       method: "PUT",
       credentials: "include",
       headers: {

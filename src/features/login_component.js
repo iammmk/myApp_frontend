@@ -19,6 +19,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { BASE_URL } from "../helper";
 
 // MUI login template
 const Login = () => {
@@ -43,7 +44,7 @@ const Login = () => {
     let reqData = isEmailSelected
       ? { email: email, password: password }
       : { username: username, password: password };
-    fetch("http://localhost:3000/login", {
+    fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

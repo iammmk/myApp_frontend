@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, Divider } from "@mui/material";
 import FollowButton from "./FollowButton";
+import { BASE_URL } from "../helper";
 
 const style = {
   position: "absolute",

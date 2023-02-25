@@ -22,13 +22,14 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
 import { WindowRounded } from "@mui/icons-material";
 import AddStatusModal from "./layout/components/AddStatusModal";
+import { BASE_URL } from "../helper";
 
 const Navbar = (props) => {
   const [open, setOpen] = useState(true);
   const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
 
   const signOut = () => {
-    fetch("http://localhost:3000/user/logout", {
+    fetch(`${BASE_URL}/user/logout`, {
       method: "GET",
       credentials: "include", // include cookies in the request
     })

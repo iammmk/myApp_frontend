@@ -10,9 +10,11 @@ import {
 } from "@mui/material";
 import ShowStatus from "./layout/components/ShowStatus";
 import ShowComments from "./layout/components/ShowComments";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ArrowBack } from "@mui/icons-material";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
+import { BASE_URL } from "../helper";
 
 const Comment = () => {
   const history = useNavigate();
@@ -24,7 +26,7 @@ const Comment = () => {
 
   const getParentComment = () => {
     // setIsLoading(true);
-    fetch(`http://localhost:3000/comment/${commentId}`, {
+    fetch(`${BASE_URL}/comment/${commentId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -42,7 +44,7 @@ const Comment = () => {
 
   const getComments = () => {
     // setIsLoading(true);
-    fetch(`http://localhost:3000/comment/${commentId}/childComments`, {
+    fetch(`${BASE_URL}/comment/${commentId}/childComments`, {
       method: "GET",
       credentials: "include",
     })
@@ -59,7 +61,7 @@ const Comment = () => {
   const uploadComment = () => {
     // e.preventDefault();
     // props.setIsLoading(true);
-    fetch(`http://localhost:3000/status/${commentId}/comment`, {
+    fetch(`${BASE_URL}/status/${commentId}/comment`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -129,10 +131,34 @@ const Comment = () => {
         </Box>
         <div style={{ paddingBottom: "15px" }}>
           <Button variant="contained" onClick={uploadComment}>
-            Comment
+            Post
           </Button>
         </div>
         <Divider variant="middle" />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            paddingLeft: "15px",
+            paddingTop: "5px"
+          }}
+        >
+          <Typography variant="h5">Replies</Typography>
+          <IconButton>
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </div>
+        <hr
+          style={{
+            border: "none",
+            height: "1px",
+            backgroundColor: "black",
+            width: "100%",
+            marginTop: "5px",
+            marginBottom: "5px",
+          }}
+        />
         <div style={{ paddingLeft: "15px", paddingRight: "15px" }}>
           {comments.length ? (
             comments
@@ -145,7 +171,7 @@ const Comment = () => {
                 />
               ))
           ) : (
-            <Typography>No Comments to show.</Typography>
+            <Typography>No replies to show.</Typography>
           )}
         </div>
       </div>

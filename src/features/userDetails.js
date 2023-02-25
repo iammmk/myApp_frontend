@@ -16,6 +16,7 @@ import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
+import { BASE_URL } from "../helper";
 
 const UserProfile = (props) => {
   const profileId = localStorage.getItem("profileId");
@@ -29,7 +30,7 @@ const UserProfile = (props) => {
   const [showLikedStatus, setShowLikedStatus] = useState(false);
 
   const getFollowingListByUserId = (userId) => {
-    fetch(`http://localhost:3000/user/${userId}/followings`, {
+    fetch(`${BASE_URL}/user/${userId}/followings`, {
       method: "GET",
       credentials: "include",
     })
@@ -41,7 +42,7 @@ const UserProfile = (props) => {
   };
 
   const getFollowersListByUserId = (userId) => {
-    fetch(`http://localhost:3000/user/${userId}/followers`, {
+    fetch(`${BASE_URL}/user/${userId}/followers`, {
       method: "GET",
       credentials: "include",
     })
@@ -241,8 +242,17 @@ const UserProfile = (props) => {
           Likes ({props.likedStatus.length})
         </Button>
       </div>
-      <Divider variant="middle" />
-
+      {/* <Divider variant="middle" /> */}
+      <hr
+        style={{
+          border: "none",
+          height: "1px",
+          backgroundColor: "black",
+          width: "100%",
+          marginTop: "5px",
+          marginBottom: "5px",
+        }}
+      />
       {/* show status */}
       <div>
         {showAllStatus && props.userStatus.length ? (
@@ -286,7 +296,7 @@ const UserDetails = () => {
 
   const getUserDetails = () => {
     setIsLoading(true);
-    fetch(`http://localhost:3000/user/userProfile/${uId}`, {
+    fetch(`${BASE_URL}/user/userProfile/${uId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -301,7 +311,7 @@ const UserDetails = () => {
   // status posted by uId
   const getStatusByUser = (uId) => {
     setIsLoading(true);
-    fetch(`http://localhost:3000/user/${uId}/status`, {
+    fetch(`${BASE_URL}/user/${uId}/status`, {
       method: "GET",
       credentials: "include",
     })
@@ -319,7 +329,7 @@ const UserDetails = () => {
   // status liked by uId
   const getStatusLikedByUser = (uId) => {
     setIsLoading(true);
-    fetch(`http://localhost:3000/user/${uId}/like`, {
+    fetch(`${BASE_URL}/user/${uId}/like`, {
       method: "GET",
       credentials: "include",
     })
@@ -365,7 +375,7 @@ const UserDetails = () => {
           margin: "0px auto",
           paddingLeft: "15px",
           paddingRight: "15px",
-          paddingTop: "50px"
+          paddingTop: "50px",
         }}
       >
         <UserProfile

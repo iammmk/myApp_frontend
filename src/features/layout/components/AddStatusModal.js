@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
+import { BASE_URL } from "../helper";
 
 const style = {
   position: "absolute",
@@ -22,7 +23,7 @@ const AddStatusModal = (props) => {
   const handleSave = () => {
     // props.setIsLoading(true);
 
-    fetch("http://localhost:3000/status", {
+    fetch(`${BASE_URL}/status`, {
       method: "POST",
       credentials: "include",
       headers: {
