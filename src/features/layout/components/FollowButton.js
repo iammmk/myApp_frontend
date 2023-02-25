@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import "../../Style/Style.css";
-import { BASE_URL } from "../helper";
+import { BASE_URL } from "../../../Services/helper";
 
 // to decide follow/unfollow btn depending upon the user
 const FollowButton = (props) => {

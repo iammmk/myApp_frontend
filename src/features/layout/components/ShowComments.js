@@ -13,7 +13,7 @@ import DeleteModal from "./deleteModal";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
-import { BASE_URL } from "../helper";
+import { BASE_URL } from "../../../Services/helper";
 
 const ShowComments = (props) => {
   const history = useNavigate();

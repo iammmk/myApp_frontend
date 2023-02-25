@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, Divider } from "@mui/material";
 import FollowButton from "./FollowButton";
-import { BASE_URL } from "../helper";
+import { BASE_URL, BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const style = {
   position: "absolute",
@@ -22,7 +22,7 @@ const style = {
 const showUsersModal = (props) => {
   const getUserProfile = (e, userId) => {
     e.preventDefault();
-    window.location.href = `http://localhost:8080/userDetails/${userId}`;
+    window.location.href = `${BASE_URL_FRONTEND}/userDetails/${userId}`;
   };
 
   return (

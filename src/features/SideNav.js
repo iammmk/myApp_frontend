@@ -22,7 +22,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
 import { WindowRounded } from "@mui/icons-material";
 import AddStatusModal from "./layout/components/AddStatusModal";
-import { BASE_URL } from "../Services/helper";
+import { BASE_URL,BASE_URL_FRONTEND } from "../Services/helper";
 
 const Navbar = (props) => {
   const [open, setOpen] = useState(true);
@@ -39,7 +39,7 @@ const Navbar = (props) => {
           alert("logout successful");
           window.localStorage.clear();
           // history("/sign-in");
-          window.location.href = "http://localhost:8080/sign-in";
+          window.location.href = `${BASE_URL_FRONTEND}/sign-in`;
         }
       });
   };
@@ -68,7 +68,7 @@ const Navbar = (props) => {
         <ListItemButton
           sx={{ height: "60px", pl: "38%" }}
           onClick={() => {
-            window.location.href = "http://localhost:8080/home";
+            window.location.href = `${BASE_URL_FRONTEND}/home`;
           }}
         >
           <ListItemText primary={<Typography variant="h5">myApp</Typography>} />
@@ -76,7 +76,7 @@ const Navbar = (props) => {
         <ListItemButton
           sx={{ height: "50px" }}
           onClick={() => {
-            window.location.href = "http://localhost:8080/home";
+            window.location.href = `${BASE_URL_FRONTEND}/home`;
           }}
         >
           <ListItemIcon>
@@ -87,7 +87,7 @@ const Navbar = (props) => {
         <ListItemButton
           sx={{ height: "50px" }}
           onClick={() => {
-            window.location.href = "http://localhost:8080/users";
+            window.location.href = `${BASE_URL_FRONTEND}/users`;
           }}
         >
           <ListItemIcon>
@@ -123,7 +123,7 @@ const Navbar = (props) => {
             <ListItemButton
               sx={{ pl: 4, height: "50px" }}
               onClick={() => {
-                window.location.href = `http://localhost:8080/userDetails/${localStorage.getItem(
+                window.location.href = `${BASE_URL_FRONTEND}/userDetails/${localStorage.getItem(
                   "profileId"
                 )}`;
               }}

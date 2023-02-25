@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
-import { BASE_URL } from "../helper";
-
+import { BASE_URL } from "../../../Services/helper";
 const style = {
   position: "absolute",
   top: "50%",
