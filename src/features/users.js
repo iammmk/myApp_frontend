@@ -12,7 +12,7 @@ import { Context } from "../Context";
 import FollowButton from "./layout/components/FollowButton";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
-import { BASE_URL } from "../helper";
+import { BASE_URL } from "./helper";
 
 const Users = () => {
   const history = useNavigate();

@@ -14,7 +14,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ArrowBack } from "@mui/icons-material";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
-import { BASE_URL } from "../helper";
+import { BASE_URL } from "./helper";
 
 const Comment = () => {
   const history = useNavigate();

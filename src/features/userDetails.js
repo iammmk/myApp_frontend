@@ -16,7 +16,7 @@ import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
-import { BASE_URL } from "../helper";
+import { BASE_URL } from "./helper";
 
 const UserProfile = (props) => {
   const profileId = localStorage.getItem("profileId");

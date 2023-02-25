@@ -8,7 +8,7 @@ import Nav from "./Nav";
 import ShowStatus from "./layout/components/ShowStatus";
 // import { Context } from "../Context";
 import Navbar from "./SideNav";
-import { BASE_URL } from "../helper";
+import { BASE_URL } from "./helper";
 import Headers from "./layout/components/Headers";
 
 function Home() {
