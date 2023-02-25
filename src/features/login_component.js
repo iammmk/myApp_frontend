@@ -19,7 +19,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { BASE_URL } from "../Services/helper";
+import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 // MUI login template
 const Login = () => {
@@ -62,7 +62,7 @@ const Login = () => {
           window.localStorage.setItem("profileId", data.data._id);
           window.localStorage.setItem("profileName", data.data.name);
           // history(`/home`);
-          window.location.href = "/home";
+          window.location.href = `${BASE_URL_FRONTEND}/home`;
         }
       });
   };

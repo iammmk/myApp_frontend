@@ -13,7 +13,7 @@ import DeleteModal from "./deleteModal";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
-import { BASE_URL } from "../../../Services/helper";
+import { BASE_URL, BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const ShowComments = (props) => {
   const history = useNavigate();
@@ -33,7 +33,7 @@ const ShowComments = (props) => {
   };
 
   const goToComment = (commentId) => {
-    window.location.href = `/comment/${commentId}`;
+    window.location.href = `${BASE_URL_FRONTEND}/comment/${commentId}`;
   };
 
   function addLike(e, itemId) {

@@ -14,7 +14,7 @@ import { ArrowBack } from "@mui/icons-material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
-import { BASE_URL } from "../Services/helper";
+import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 const Status = () => {
   const history = useNavigate();
@@ -35,7 +35,7 @@ const Status = () => {
         if (data.message === "Status Fetched" && data.data) {
           setStatus(data.data);
         } else {
-          window.location.href = "/home";
+          window.location.href = `${BASE_URL_FRONTEND}/home`;
         }
       })
       .catch((error) => console.error(error));

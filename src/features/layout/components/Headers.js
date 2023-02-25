@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography, IconButton } from "@mui/material";
 import { ArrowBack, Home } from "@mui/icons-material";
+import { BASE_URL_FRONTEND } from "../Services/helper";
 
 const Headers = (props) => {
   return (
@@ -18,7 +19,7 @@ const Headers = (props) => {
       }}
     >
       {props.isHome ? (
-        <IconButton onClick={() => (window.location.href = "./home")}>
+        <IconButton onClick={() => (window.location.href = `${BASE_URL_FRONTEND}/home`)}>
           <Home />
         </IconButton>
       ) : (
