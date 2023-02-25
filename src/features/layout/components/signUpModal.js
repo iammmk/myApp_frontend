@@ -51,7 +51,8 @@ const SignupModal = (props) => {
   const handleCreate = () => {
     fetch(`${BASE_URL}/signup`, {
       method: "POST",
-      crossDomain: true,
+      credentials: "include",
+    //   crossDomain: true,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
