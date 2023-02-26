@@ -57,7 +57,7 @@ const ShowStatus = (props) => {
   function unLike(e, itemId) {
     e.preventDefault();
 
-    // setIsLoading(true);
+    props.setIsLoading(true);
     fetch(`${BASE_URL}/like/${itemId}`, {
       method: "DELETE",
       credentials: "include",
@@ -67,7 +67,7 @@ const ShowStatus = (props) => {
         if (data.message === "Unliked") {
           // alert("Status unliked !");
           props.getAllStatus();
-          // setIsLoading(false);
+          props.setIsLoading(false);
         }
       })
       .catch((error) => console.error(error));
@@ -75,6 +75,7 @@ const ShowStatus = (props) => {
   }
 
   const getLikesByStatusId = (statusId) => {
+    props.setIsLoading(true)
     fetch(`${BASE_URL}/like/status/${statusId}`, {
       method: "GET",
       credentials: "include",
@@ -82,6 +83,7 @@ const ShowStatus = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setLikeListByStatusId(data.data);
+        props.setIsLoading(false)
       });
   };
 
@@ -221,6 +223,7 @@ const ShowStatus = (props) => {
             peopleList={likeListByStatusId}
             count={props.item.totalLikes}
             message={"No Likes"}
+            setIsLoading={props.setIsLoading}
           />
           <IconButton
             onClick={(e) => {

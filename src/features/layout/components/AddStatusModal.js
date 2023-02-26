@@ -20,8 +20,8 @@ const AddStatusModal = (props) => {
   const [newStatus, setNewStatus] = useState("");
 
   const handleSave = () => {
-    // props.setIsLoading(true);
-
+    props.setModalOpen(false);
+    props.setIsLoading(true);
     fetch(`${BASE_URL}/status`, {
       method: "POST",
       credentials: "include",
@@ -38,9 +38,8 @@ const AddStatusModal = (props) => {
         if (data.message === "Added new status !!") {
           // alert("Status updated !");
           setNewStatus("");
-          props.setModalOpen(false);
           props.getAllStatus();
-          //   props.setIsLoading(false);
+          props.setIsLoading(false);
         }
       });
   };

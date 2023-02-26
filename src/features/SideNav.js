@@ -22,13 +22,17 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
 import { WindowRounded } from "@mui/icons-material";
 import AddStatusModal from "./layout/components/AddStatusModal";
-import { BASE_URL,BASE_URL_FRONTEND } from "../Services/helper";
+import { Backdrop } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 const Navbar = (props) => {
   const [open, setOpen] = useState(true);
   const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const signOut = () => {
+    setIsLoading(true);
     fetch(`${BASE_URL}/user/logout`, {
       method: "GET",
       credentials: "include", // include cookies in the request
@@ -36,10 +40,11 @@ const Navbar = (props) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "Logout successful") {
-          alert("logout successful");
+          // alert("logout successful");
           window.localStorage.clear();
           // history("/sign-in");
           window.location.href = `${BASE_URL_FRONTEND}/sign-in`;
+          setIsLoading(false);
         }
       });
   };
@@ -110,6 +115,7 @@ const Navbar = (props) => {
           modalOpen={addStatusModalOpen}
           setModalOpen={setAddStatusModalOpen}
           getAllStatus={props.getAllStatus}
+          setIsLoading={props.setIsLoading}
         />
         <ListItemButton sx={{ height: "50px" }} onClick={handleClick}>
           <ListItemIcon>
@@ -162,6 +168,14 @@ const Navbar = (props) => {
           borderLeft: "1px solid #ccc",
         }}
       ></div>
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </>
   );
 };

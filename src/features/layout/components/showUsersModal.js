@@ -61,7 +61,11 @@ const showUsersModal = (props) => {
                       {item.name}&nbsp;({item.username})
                     </Typography>
                   </a>
-                  <FollowButton userData={item} updatePage={props.updatePage} />
+                  <FollowButton
+                    userData={item}
+                    updatePage={props.updatePage}
+                    setIsLoading={props.setIsLoading}
+                  />
                 </div>
               ))
             ) : (

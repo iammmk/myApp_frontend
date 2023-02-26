@@ -22,6 +22,7 @@ const EditStatusModal = (props) => {
   const [editedStatus, setEditedStatus] = useState("");
 
   const handleSave = () => {
+    props.setModalOpen(false);
     props.setIsLoading(true);
     const reqData =
       props.type === "Status"
@@ -42,7 +43,6 @@ const EditStatusModal = (props) => {
         if (data.message === "Content updated successfully") {
           // alert("Status updated !");
           setEditedStatus("");
-          props.setModalOpen(false);
           props.getAllStatus();
           props.setIsLoading(false);
         }

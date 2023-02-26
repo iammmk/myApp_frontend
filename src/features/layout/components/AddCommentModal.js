@@ -20,6 +20,7 @@ const AddCommentsModal = (props) => {
   const [newComment, setNewComment] = useState("");
 
   const handleSave = () => {
+    props.setModalOpen(false);
     props.setIsLoading(true);
 
     fetch(`${BASE_URL}/status/${props.status._id}/comment`, {
@@ -38,7 +39,6 @@ const AddCommentsModal = (props) => {
         if (data.message === "Added new comment") {
           // alert("Status updated !");
           setNewComment("");
-          props.setModalOpen(false);
           props.getAllStatus();
           props.setIsLoading(false);
         }

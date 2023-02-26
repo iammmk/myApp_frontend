@@ -18,6 +18,7 @@ const style = {
 
 const DeleteModal = (props) => {
   const handleDelete = () => {
+    props.setModalOpen(false);
     props.setIsLoading(true);
 
     let deleteAPI =
@@ -33,7 +34,6 @@ const DeleteModal = (props) => {
       .then((data) => {
         if (data.message === "Deleted") {
           // alert("status deleted !");
-          props.setModalOpen(false);
           props.getAllStatus();
           props.setIsLoading(false);
         }

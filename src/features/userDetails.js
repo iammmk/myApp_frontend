@@ -30,6 +30,7 @@ const UserProfile = (props) => {
   const [showLikedStatus, setShowLikedStatus] = useState(false);
 
   const getFollowingListByUserId = (userId) => {
+    props.setIsLoading(true)
     fetch(`${BASE_URL}/user/${userId}/followings`, {
       method: "GET",
       credentials: "include",
@@ -38,10 +39,12 @@ const UserProfile = (props) => {
       .then((data) => {
         // console.log(data.data);
         setFollowingListByUser(data.data);
+        props.setIsLoading(false)
       });
   };
 
   const getFollowersListByUserId = (userId) => {
+    props.setIsLoading(true)
     fetch(`${BASE_URL}/user/${userId}/followers`, {
       method: "GET",
       credentials: "include",
@@ -49,6 +52,7 @@ const UserProfile = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setFollowersListByUser(data.data);
+        props.setIsLoading(false)
       });
   };
 
@@ -81,6 +85,7 @@ const UserProfile = (props) => {
             <FollowButton
               userData={props.userData}
               updatePage={props.updatePage}
+              setIsLoading={props.setIsLoading}
             />
           ) : (
             <Button
@@ -185,6 +190,7 @@ const UserProfile = (props) => {
           count={props.userData.followersCount}
           message={"No Followers"}
           updatePage={props.getUserDetails}
+          setIsLoading={props.setIsLoading}
         />
         <a
           href="/#"
@@ -210,6 +216,7 @@ const UserProfile = (props) => {
           count={props.userData.followingCount}
           message={"No Following"}
           updatePage={props.getUserDetails}
+          setIsLoading={props.setIsLoading}
         />
       </div>
 
@@ -344,9 +351,11 @@ const UserDetails = () => {
   };
 
   const updatePage = () => {
+    setIsLoading(true)
     getUserDetails();
     getStatusByUser(uId);
     getStatusLikedByUser(uId);
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -358,7 +367,7 @@ const UserDetails = () => {
   return (
     <>
       {/* <Nav /> */}
-      <Navbar getAllStatus={updatePage} />
+      <Navbar getAllStatus={updatePage} setIsLoading={setIsLoading} />
       <div
         style={{
           width: "55%",
@@ -387,14 +396,14 @@ const UserDetails = () => {
           getUserDetails={getUserDetails}
         />
       </div>
-      {/* {isLoading && (
+      {isLoading && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={isLoading}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-      )} */}
+      )}
     </>
   );
 };

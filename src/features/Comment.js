@@ -13,6 +13,8 @@ import ShowComments from "./layout/components/ShowComments";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ArrowBack } from "@mui/icons-material";
 import Navbar from "./SideNav";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import Headers from "./layout/components/Headers";
 import { BASE_URL } from "../Services/helper";
 
@@ -25,7 +27,7 @@ const Comment = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const getParentComment = () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     fetch(`${BASE_URL}/comment/${commentId}`, {
       method: "GET",
       credentials: "include",
@@ -34,6 +36,7 @@ const Comment = () => {
       .then((data) => {
         if (data.message === "Got the comment" && data.data) {
           setParentComment(data.data);
+          setIsLoading(false);
         } else {
           // page should redirect to prev page
           window.location.href = document.referrer;
@@ -43,7 +46,7 @@ const Comment = () => {
   };
 
   const getComments = () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     fetch(`${BASE_URL}/comment/${commentId}/childComments`, {
       method: "GET",
       credentials: "include",
@@ -52,7 +55,7 @@ const Comment = () => {
       .then((data) => {
         if (data.message === "Fetched comments") {
           setComments(data.data);
-          //   setIsLoading(false);
+          setIsLoading(false);
         }
       })
       .catch((error) => console.error(error));
@@ -60,7 +63,7 @@ const Comment = () => {
 
   const uploadComment = () => {
     // e.preventDefault();
-    // props.setIsLoading(true);
+    setIsLoading(true);
     fetch(`${BASE_URL}/status/${commentId}/comment`, {
       method: "POST",
       credentials: "include",
@@ -78,14 +81,16 @@ const Comment = () => {
           // alert("Status added !");
           updatePage();
           setNewComment("");
+          setIsLoading(false);
         }
       });
-    setIsLoading(false);
   };
 
   const updatePage = () => {
+    setIsLoading(true)
     getParentComment();
     getComments();
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -95,7 +100,7 @@ const Comment = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar setIsLoading={setIsLoading} />
       <div
         style={{
           width: "55%",
@@ -141,7 +146,7 @@ const Comment = () => {
             alignItems: "center",
             justifyContent: "flex-start",
             paddingLeft: "15px",
-            paddingTop: "5px"
+            paddingTop: "5px",
           }}
         >
           <Typography variant="h5">Replies</Typography>
@@ -175,6 +180,14 @@ const Comment = () => {
           )}
         </div>
       </div>
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </>
   );
 };

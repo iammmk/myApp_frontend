@@ -48,14 +48,14 @@ const Users = () => {
 
   return (
     <div style={{ width: "100%" }}>
-      <Navbar />
+      <Navbar setIsLoading={setIsLoading}  />
       <div
         style={{
           width: "55%",
           margin: "0 auto",
         }}
       >
-        <Headers title="People you may follow"/>
+        <Headers title="People you may follow" />
       </div>
       <div
         style={{
@@ -63,7 +63,7 @@ const Users = () => {
           margin: "0px auto",
           paddingLeft: "10px",
           paddingRight: "10px",
-          paddingTop: "50px"
+          paddingTop: "50px",
         }}
       >
         {/* <Typography
@@ -110,10 +110,7 @@ const Users = () => {
                     >
                       {user.name}
                     </Typography>
-                    <Typography
-                      sx={{ mb: 2.8, opacity: "0.8" }}
-                      color="white"
-                    >
+                    <Typography sx={{ mb: 2.8, opacity: "0.8" }} color="white">
                       ({user.username})
                     </Typography>
                     <Typography
@@ -150,7 +147,11 @@ const Users = () => {
                     transform: "translateX(-50%)",
                   }}
                 >
-                  <FollowButton userData={user} updatePage={getAllUsers} />
+                  <FollowButton
+                    userData={user}
+                    updatePage={getAllUsers}
+                    setIsLoading={setIsLoading}
+                  />
                 </CardActions>
               </Card>
             ))
@@ -159,14 +160,14 @@ const Users = () => {
           )}
         </div>
       </div>
-      {/* {isLoading && (
+      {isLoading && (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={isLoading}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-      )} */}
+      )}
     </div>
   );
 };

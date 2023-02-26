@@ -49,6 +49,8 @@ const SignupModal = (props) => {
 
   // signup
   const handleCreate = () => {
+    props.setModalOpen(false);
+    props.setIsLoading(true)
     fetch(`${BASE_URL}/signup`, {
       method: "POST",
       credentials: "include",
@@ -72,7 +74,7 @@ const SignupModal = (props) => {
           alert("Registration Successful");
           // window.location.href = "./sign-in";
           setAllFieldsClear();
-          props.setModalOpen(false);
+          props.setIsLoading(false)
         } else {
           alert("Something went wrong");
         }

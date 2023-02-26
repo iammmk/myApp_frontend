@@ -58,7 +58,7 @@ const ShowComments = (props) => {
   function unLike(e, itemId) {
     e.preventDefault();
 
-    // setIsLoading(true);
+    props.setIsLoading(true);
     fetch(`${BASE_URL}/like/${itemId}`, {
       method: "DELETE",
       credentials: "include",
@@ -68,7 +68,7 @@ const ShowComments = (props) => {
         if (data.message === "Unliked") {
           // alert("Status unliked !");
           props.getAllStatus();
-          // setIsLoading(false);
+          props.setIsLoading(false);
         }
       })
       .catch((error) => console.error(error));
@@ -97,7 +97,7 @@ const ShowComments = (props) => {
             href="/#"
             onClick={(e) => {
               e.preventDefault();
-              getUserProfile(e, props.item.userId);
+              getUserProfile(props.item.userId);
             }}
             style={{ textDecoration: "none" }}
           >
@@ -232,6 +232,7 @@ const ShowComments = (props) => {
             peopleList={likeListByCommentId}
             count={props.item.totalLikes}
             message={"No Likes"}
+            setIsLoading={props.setIsLoading}
           />
           <IconButton
             onClick={(e) => {

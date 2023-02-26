@@ -21,6 +21,7 @@ const FollowButton = (props) => {
 
   const followUser = (e, userId) => {
     e.preventDefault();
+    props.setIsLoading(true)
     fetch(`${BASE_URL}/follow/${userId}`, {
       method: "POST",
       credentials: "include",
@@ -31,13 +32,14 @@ const FollowButton = (props) => {
           // alert("follow done");
           getFollowingListByProfile(profileId); //to update follow <=> unfollow btn
           props.updatePage(); //to update follow count
+          props.setIsLoading(false)
         }
       });
   };
 
   const unfollowUser = (e, userId) => {
     e.preventDefault();
-
+    props.setIsLoading(true)
     fetch(`${BASE_URL}/follow/${userId}`, {
       method: "DELETE",
       credentials: "include",
@@ -48,6 +50,7 @@ const FollowButton = (props) => {
           // alert("Unfollow done");
           getFollowingListByProfile(profileId); //to update follow <=> unfollow btn
           props.updatePage(); //to update follow count
+          props.setIsLoading(false)
         }
       });
   };

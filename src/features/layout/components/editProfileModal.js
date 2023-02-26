@@ -30,6 +30,7 @@ const EditProfileModal = (props) => {
   const [editedDOB, setEditedDOB] = useState("");
 
   const handleSave = () => {
+    props.setEditProfileModalOpen(false);
     props.setIsLoading(true);
 
     fetch(`${BASE_URL}/user/myProfile`, {
@@ -49,7 +50,6 @@ const EditProfileModal = (props) => {
       .then((data) => {
         if (data.message === "User updated successfully !") {
           // alert("Profile updated !");
-          props.setEditProfileModalOpen(false);
           props.getUserDetails();
           props.setIsLoading(false);
         } else {

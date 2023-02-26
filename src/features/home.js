@@ -9,6 +9,8 @@ import ShowStatus from "./layout/components/ShowStatus";
 // import { Context } from "../Context";
 import Navbar from "./SideNav";
 import { BASE_URL } from "../Services/helper";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 import Headers from "./layout/components/Headers";
 
 function Home() {
@@ -55,9 +57,9 @@ function Home() {
           // alert("Status added !");
           getAllStatus();
           setNewStatus("");
+          setIsLoading(false);
         }
       });
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -67,7 +69,7 @@ function Home() {
   return (
     <div style={{ width: "100%" }}>
       {/* <Nav /> */}
-      <Navbar getAllStatus={getAllStatus} />
+      <Navbar setIsLoading={setIsLoading}  getAllStatus={getAllStatus} />
       <div
         style={{
           width: "55%",
@@ -132,14 +134,14 @@ function Home() {
           )}
         </div>
       </div>
-      {/* {isLoading && (
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={isLoading}
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        )} */}
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </div>
   );
 }

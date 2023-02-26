@@ -14,6 +14,8 @@ import { ArrowBack } from "@mui/icons-material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
+import { Backdrop} from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 const Status = () => {
@@ -25,7 +27,7 @@ const Status = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const getStatus = () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     fetch(`${BASE_URL}/status/${statusId}`, {
       method: "GET",
       credentials: "include",
@@ -34,6 +36,7 @@ const Status = () => {
       .then((data) => {
         if (data.message === "Status Fetched" && data.data) {
           setStatus(data.data);
+          setIsLoading(false)
         } else {
           window.location.href = `${BASE_URL_FRONTEND}/home`;
         }
@@ -42,7 +45,7 @@ const Status = () => {
   };
 
   const getComments = () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     fetch(`${BASE_URL}/status/${statusId}/comment`, {
       method: "GET",
       credentials: "include",
@@ -51,7 +54,7 @@ const Status = () => {
       .then((data) => {
         if (data.message === "Fetched comments") {
           setComments(data.data);
-          //   setIsLoading(false);
+            setIsLoading(false);
         }
       })
       .catch((error) => console.error(error));
@@ -59,7 +62,7 @@ const Status = () => {
 
   const uploadComment = () => {
     // e.preventDefault();
-    // props.setIsLoading(true);
+    setIsLoading(true);
     fetch(`${BASE_URL}/status/${statusId}/comment`, {
       method: "POST",
       credentials: "include",
@@ -77,14 +80,16 @@ const Status = () => {
           // alert("Status added !");
           updatePage();
           setNewComment("");
+          setIsLoading(false)
         }
       });
-    setIsLoading(false);
   };
 
   const updatePage = () => {
+    setIsLoading(true)
     getStatus();
     getComments();
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -94,7 +99,7 @@ const Status = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar setIsLoading={setIsLoading}  />
       <div
         style={{
           width: "55%",
@@ -174,6 +179,14 @@ const Status = () => {
           )}
         </div>
       </div>
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </>
   );
 };
