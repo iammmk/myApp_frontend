@@ -28,8 +28,9 @@ const ShowComments = (props) => {
   const [likedByUsersModalOpen, setLikedByUsersModalOpen] = useState(false);
   const [likeListByCommentId, setLikeListByCommentId] = useState([]);
 
-  const getUserProfile = ( uId) => {
-    history(`/userDetails/${uId}`);
+  const getUserProfile = (uId) => {
+    // history(`/userDetails/${uId}`);
+    window.location.href = `${BASE_URL_FRONTEND}/userDetails/${uId}`;
   };
 
   const goToComment = (commentId) => {
@@ -101,7 +102,9 @@ const ShowComments = (props) => {
             }}
             style={{ textDecoration: "none" }}
           >
-            <Typography sx={{ fontSize: "20px" }}>{props.item.uploadedBy}</Typography>
+            <Typography sx={{ fontSize: "20px" }}>
+              {props.item.uploadedBy}
+            </Typography>
           </a>
           &nbsp;&nbsp;
           <Typography>

@@ -13,7 +13,7 @@ import DeleteModal from "./deleteModal";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
-import { BASE_URL } from "../../../Services/helper";
+import { BASE_URL, BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const ShowStatus = (props) => {
   const history = useNavigate();
@@ -28,7 +28,8 @@ const ShowStatus = (props) => {
   const [likeListByStatusId, setLikeListByStatusId] = useState([]);
 
   const getUserProfile = (e, uId) => {
-    history(`/userDetails/${uId}`);
+    // history(`/userDetails/${uId}`);
+    window.location.href = `${BASE_URL_FRONTEND}/userDetails/${uId}`;
   };
 
   const goToStatus = (statusId) => {
@@ -75,7 +76,7 @@ const ShowStatus = (props) => {
   }
 
   const getLikesByStatusId = (statusId) => {
-    props.setIsLoading(true)
+    props.setIsLoading(true);
     fetch(`${BASE_URL}/like/status/${statusId}`, {
       method: "GET",
       credentials: "include",
@@ -83,7 +84,7 @@ const ShowStatus = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setLikeListByStatusId(data.data);
-        props.setIsLoading(false)
+        props.setIsLoading(false);
       });
   };
 

@@ -12,6 +12,7 @@ import { Context } from "../Context";
 import Nav from "./Nav";
 import FollowButton from "./layout/components/FollowButton";
 import ShowStatus from "./layout/components/ShowStatus";
+import ShowComments from "./layout/components/ShowComments";
 import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
 import Navbar from "./SideNav";
@@ -30,7 +31,7 @@ const UserProfile = (props) => {
   const [showLikedStatus, setShowLikedStatus] = useState(false);
 
   const getFollowingListByUserId = (userId) => {
-    props.setIsLoading(true)
+    props.setIsLoading(true);
     fetch(`${BASE_URL}/user/${userId}/followings`, {
       method: "GET",
       credentials: "include",
@@ -39,12 +40,12 @@ const UserProfile = (props) => {
       .then((data) => {
         // console.log(data.data);
         setFollowingListByUser(data.data);
-        props.setIsLoading(false)
+        props.setIsLoading(false);
       });
   };
 
   const getFollowersListByUserId = (userId) => {
-    props.setIsLoading(true)
+    props.setIsLoading(true);
     fetch(`${BASE_URL}/user/${userId}/followers`, {
       method: "GET",
       credentials: "include",
@@ -52,7 +53,7 @@ const UserProfile = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setFollowersListByUser(data.data);
-        props.setIsLoading(false)
+        props.setIsLoading(false);
       });
   };
 
@@ -276,14 +277,22 @@ const UserProfile = (props) => {
         ) : showLikedStatus && props.likedStatus.length ? (
           props.likedStatus
             .sort((a, b) => b.uploadTime - a.uploadTime) //status in desc oreder of uploadTime
-            .map((item) => (
-              <ShowStatus
-                item={item}
-                setIsLoading={props.setIsLoading}
-                // getAllStatus={props.getStatusByUser(item.userId) props.getUserDetails}
-                getAllStatus={props.updatePage}
-              />
-            ))
+            .map((item) =>
+              item.status ? (
+                <ShowStatus
+                  item={item}
+                  setIsLoading={props.setIsLoading}
+                  // getAllStatus={props.getStatusByUser(item.userId) props.getUserDetails}
+                  getAllStatus={props.updatePage}
+                />
+              ) : (
+                <ShowComments
+                  item={item}
+                  setIsLoading={props.setIsLoading}
+                  getAllStatus={props.updatePage}
+                />
+              )
+            )
         ) : (
           <>
             <Typography variant="h5">No status</Typography>
@@ -351,11 +360,11 @@ const UserDetails = () => {
   };
 
   const updatePage = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     getUserDetails();
     getStatusByUser(uId);
     getStatusLikedByUser(uId);
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
