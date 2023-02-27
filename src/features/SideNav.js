@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -14,6 +14,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DraftsIcon from "@mui/icons-material/Drafts";
 import SendIcon from "@mui/icons-material/Send";
@@ -28,8 +29,22 @@ import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 const Navbar = (props) => {
   const [open, setOpen] = useState(true);
+  const [notificationCount, setNotificationCount] = useState(0);
   const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const newNotificationCount = () => {
+    setIsLoading(true);
+    fetch(`${BASE_URL}/user/myProfile`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setNotificationCount(data.data.newNotificationCount);
+        setIsLoading(false);
+      });
+  };
 
   const signOut = () => {
     setIsLoading(true);
@@ -52,6 +67,12 @@ const Navbar = (props) => {
   const handleClick = () => {
     setOpen(!open);
   };
+
+  let count = `${props.count === undefined ? notificationCount : props.count}`;
+
+  useEffect(() => {
+    newNotificationCount();
+  }, []);
 
   return (
     <>
@@ -100,6 +121,21 @@ const Navbar = (props) => {
           </ListItemIcon>
           <ListItemText primary="Users" />
         </ListItemButton>
+        <ListItemButton
+          sx={{ height: "50px" }}
+          onClick={() => {
+            window.location.href = `${BASE_URL_FRONTEND}/notifications`;
+          }}
+        >
+          <ListItemIcon>
+            <NotificationsNoneIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={`Notifications${count !== "0" ? ` (${count})` : ""}`}
+            style={{ color: count !== "0" ? "blue" : "inherit" }}
+          />
+        </ListItemButton>
+
         <ListItemButton
           sx={{ height: "50px" }}
           onClick={() => {
