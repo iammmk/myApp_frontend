@@ -16,7 +16,7 @@ import ShowComments from "./layout/components/ShowComments";
 import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
 import Navbar from "./SideNav";
-import "../../src/features/Style/Style.css"
+import "../../src/features/Style/Style.css";
 import Headers from "./layout/components/Headers";
 import { BASE_URL } from "../Services/helper";
 
@@ -72,12 +72,12 @@ const UserProfile = (props) => {
           alignItems: "end",
           justifyContent: "space-between",
           paddingTop: "15px",
-          paddingBottom: "15px"
+          paddingBottom: "15px",
         }}
       >
         {/* profile pic */}
         <div class="circle">
-          <img src={props.userData.pImage} alt="dp" />
+          <img src={props.userData.pImage} alt="profilePic" />
         </div>
         <div>
           {/* follow btn or edit profile btn */}
@@ -128,7 +128,7 @@ const UserProfile = (props) => {
       </div>
       <Typography
         style={{
-          paddingTop: "15px",
+          paddingTop: "10px",
           paddingBottom: "10px",
           wordWrap: "break-word",
           textAlign: "start",
@@ -141,7 +141,7 @@ const UserProfile = (props) => {
           display: "flex",
           alignItems: "center",
           opacity: "0.75",
-          paddingBottom: "15px",
+          paddingBottom: "10px",
         }}
       >
         {props.userData.dob && (
@@ -401,13 +401,26 @@ const UserDetails = () => {
           title={`${userData.name} (${userData.followersCount} followers)`}
         />
       </div>
+      <div>
+        <img
+          src={userData.coverPhoto}
+          alt="coverPic"
+          style={{
+            width: "55%",
+            height: "270px",
+            objectFit: "cover",
+            paddingTop: "50px"
+          }}
+        />
+      </div>
       <div
         style={{
+          position:"relative",
           width: "55%",
           margin: "0px auto",
           paddingLeft: "15px",
           paddingRight: "15px",
-          paddingTop: "50px",
+          top: "-90px",
         }}
       >
         <UserProfile

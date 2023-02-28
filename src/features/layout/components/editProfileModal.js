@@ -33,7 +33,7 @@ const EditProfileModal = (props) => {
   const [isBioEdited, setIsBioEdited] = useState(false);
   const [isDOBEdited, setIsDOBEdited] = useState(false);
   const [editedDOB, setEditedDOB] = useState("");
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState("");
 
   const handleSave = () => {
     props.setEditProfileModalOpen(false);
@@ -48,7 +48,7 @@ const EditProfileModal = (props) => {
       },
       body: JSON.stringify({
         name: isNameEdited ? editedName : props.name,
-        pImage: image.length?image : props.pImage,
+        pImage: image?image : props.pImage,
         bio: isBioEdited ? editedBio : props.bio,
         dob: isDOBEdited ? editedDOB : props.dob,
       }),
@@ -56,7 +56,6 @@ const EditProfileModal = (props) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "User updated successfully !") {
-          console.log(data.data.pImage);
           // alert("Profile updated !");
           props.getUserDetails();
           props.setIsLoading(false);

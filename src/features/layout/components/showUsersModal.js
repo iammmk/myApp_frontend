@@ -9,7 +9,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 390,
+  width: 465,
   height: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
@@ -20,8 +20,7 @@ const style = {
 
 // modal to show who liked status/ whom you are following etc
 const showUsersModal = (props) => {
-  const getUserProfile = (e, userId) => {
-    e.preventDefault();
+  const getUserProfile = (userId) => {
     window.location.href = `${BASE_URL_FRONTEND}/userDetails/${userId}`;
   };
 
@@ -43,29 +42,51 @@ const showUsersModal = (props) => {
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    height: "50px",
-                    paddingTop: "15px",
+                    flexDirection: "column",
+                    height: "80px",
                   }}
                 >
-                  <a
-                    href="/#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      getUserProfile(e, item._id);
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "45px",
+                      flex: "1",
                     }}
-                    style={{ textDecoration: "none" }}
                   >
-                    <Typography>
-                      {item.name}&nbsp;({item.username})
+                    <div class="smallCircle">
+                      <img
+                        src={item.pImage}
+                        alt="dp"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          getUserProfile(item._id);
+                        }}
+                      />
+                    </div>
+                    <Typography
+                      onClick={(e) => {
+                        e.preventDefault();
+                        getUserProfile(item._id);
+                      }}
+                      style={{
+                        textDecoration: "none",
+                        cursor: "pointer",
+                        color: "blue",
+                        flex: "1",
+                      }}
+                    >
+                      {item.name}
                     </Typography>
-                  </a>
-                  <FollowButton
-                    userData={item}
-                    updatePage={props.updatePage}
-                    setIsLoading={props.setIsLoading}
-                  />
+                    <FollowButton
+                      userData={item}
+                      updatePage={props.updatePage}
+                      setIsLoading={props.setIsLoading}
+                      style={{
+                        flex: "0 0 auto",
+                      }}
+                    />
+                  </div>
                 </div>
               ))
             ) : (

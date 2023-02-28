@@ -1,6 +1,7 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
+import "../../Style/Style.css"
 import { BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const ShowNotifications = (props) => {
@@ -30,6 +31,17 @@ const ShowNotifications = (props) => {
             alignItems: "center",
           }}
         >
+          <div class="smallCircle">
+            <img
+              src={props.notification.fromImage}
+              alt="dp"
+              onClick={(e) => {
+                e.preventDefault();
+                getUserProfile(props.notification.fromId);
+              }}
+            />
+          </div>
+          &nbsp;
           <Typography
             onClick={(e) => {
               e.preventDefault();

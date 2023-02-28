@@ -24,12 +24,14 @@ import StarBorder from "@mui/icons-material/StarBorder";
 import { WindowRounded } from "@mui/icons-material";
 import AddStatusModal from "./layout/components/AddStatusModal";
 import { Backdrop } from "@mui/material";
+import "../../src/features/Style/Style.css";
 import CircularProgress from "@mui/material/CircularProgress";
 import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 const Navbar = (props) => {
   const [open, setOpen] = useState(true);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [image, setImage] = useState("");
   const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,6 +44,7 @@ const Navbar = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setNotificationCount(data.data.newNotificationCount);
+        setImage(data.data.pImage);
         setIsLoading(false);
       });
   };
@@ -153,10 +156,11 @@ const Navbar = (props) => {
           getAllStatus={props.getAllStatus}
           setIsLoading={props.setIsLoading}
         />
-        <ListItemButton sx={{ height: "50px" }} onClick={handleClick}>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
+        <ListItemButton sx={{ height: "50px",pl:"10px" }} onClick={handleClick}>
+          <div class="navCircle">
+            <img src={image} alt="dp" />
+          </div>
+          &ensp;&ensp;&nbsp;
           <ListItemText primary={localStorage.getItem("profileName")} />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
