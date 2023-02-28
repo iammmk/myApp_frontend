@@ -105,6 +105,7 @@ const Notifications = () => {
         }}
       >
         <div style={{ float: "right" }}>
+          {/* mark all as read icon */}
           <Tooltip title="Mark as read" placement="top-start">
             <IconButton
               variant="contained"
@@ -119,6 +120,7 @@ const Notifications = () => {
             </IconButton>
           </Tooltip>
           &nbsp;
+          {/* clear notifications icon */}
           <Tooltip title="Clear" placement="top-start">
             <IconButton
               variant="contained"
@@ -136,6 +138,7 @@ const Notifications = () => {
         <div style={{ paddingTop: "40px" }}>
           {notifications.length ? (
             <>
+              {/* #notificationCount new notifications */}
               {notifications
                 .sort((a, b) => b.time - a.time)
                 .slice(0, notificationCount)
@@ -147,6 +150,7 @@ const Notifications = () => {
                     />
                   </div>
                 ))}
+              {/* old notifications */}
               {notifications
                 .sort((a, b) => b.time - a.time)
                 .slice(notificationCount)
