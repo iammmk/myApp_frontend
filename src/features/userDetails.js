@@ -16,6 +16,7 @@ import ShowComments from "./layout/components/ShowComments";
 import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
 import Navbar from "./SideNav";
+import "../../src/features/Style/Style.css"
 import Headers from "./layout/components/Headers";
 import { BASE_URL } from "../Services/helper";
 
@@ -29,6 +30,8 @@ const UserProfile = (props) => {
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [showAllStatus, setShowAllStatus] = useState(true);
   const [showLikedStatus, setShowLikedStatus] = useState(false);
+
+  // const defaultDP = "https://cdn-icons-png.flaticon.com/128/552/552721.png";
 
   const getFollowingListByUserId = (userId) => {
     props.setIsLoading(true);
@@ -66,19 +69,15 @@ const UserProfile = (props) => {
       <div
         style={{
           display: "flex",
-          alignItems: "center",
+          alignItems: "end",
           justifyContent: "space-between",
           paddingTop: "15px",
+          paddingBottom: "15px"
         }}
       >
-        <div>
-          <Typography variant="h4">{props.userData.name}</Typography>
-          <Typography
-            style={{ opacity: "70%", textAlign: "start" }}
-            onClick={() => console.log(props.userData._id)}
-          >
-            ({props.userData.username})
-          </Typography>
+        {/* profile pic */}
+        <div class="circle">
+          <img src={props.userData.pImage} alt="dp" />
         </div>
         <div>
           {/* follow btn or edit profile btn */}
@@ -108,13 +107,29 @@ const UserProfile = (props) => {
             name={props.userData.name}
             bio={props.userData.bio}
             dob={props.userData.dob}
+            pImage={props.userData.pImage}
           />
         </div>
       </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+        }}
+      >
+        <Typography variant="h4">{props.userData.name}</Typography>
+        <Typography
+          style={{ opacity: "70%", textAlign: "start" }}
+          onClick={() => console.log(props.userData._id)}
+        >
+          ({props.userData.username})
+        </Typography>
+      </div>
       <Typography
         style={{
-          paddingTop: "25px",
-          paddingBottom: "15px",
+          paddingTop: "15px",
+          paddingBottom: "10px",
           wordWrap: "break-word",
           textAlign: "start",
         }}
@@ -126,7 +141,7 @@ const UserProfile = (props) => {
           display: "flex",
           alignItems: "center",
           opacity: "0.75",
-          paddingBottom: "22px",
+          paddingBottom: "15px",
         }}
       >
         {props.userData.dob && (
@@ -318,7 +333,6 @@ const UserDetails = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data.data)
         setUserData(data.data);
         setIsLoading(false);
       });

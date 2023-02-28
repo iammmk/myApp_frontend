@@ -10,6 +10,7 @@ import Divider from "@mui/material/Divider";
 import EditStatusModal from "./editStatusModal";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteModal from "./deleteModal";
+import "../../Style/Style.css";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
@@ -95,6 +96,17 @@ const ShowStatus = (props) => {
         style={{ paddingTop: "8px", paddingLeft: "8px" }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
+          <div class="smallCircle">
+            <img
+              src={props.item.userImage}
+              alt="dp"
+              onClick={(e) => {
+                e.preventDefault();
+                getUserProfile(e, props.item.userId);
+              }}
+            />
+          </div>{" "}
+          &ensp;
           <a
             href="/#"
             onClick={(e) => {
@@ -103,7 +115,7 @@ const ShowStatus = (props) => {
             }}
             style={{ textDecoration: "none" }}
           >
-            <Typography sx={{ fontSize: "20px" }}>
+            <Typography sx={{ fontSize: "25px" }}>
               {props.item.uploadedBy}
             </Typography>
           </a>
@@ -184,9 +196,9 @@ const ShowStatus = (props) => {
           style={{
             wordWrap: "break-word",
             textAlign: "start",
-            paddingTop: "15px",
-            paddingBottom: "15px",
             cursor: "pointer",
+            fontSize: "18px",
+            paddingLeft: "69px",
           }}
           onClick={(e) => {
             e.preventDefault();
@@ -195,7 +207,9 @@ const ShowStatus = (props) => {
         >
           {props.item.status}
         </Typography>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{ display: "flex", alignItems: "center", paddingLeft: "57px" }}
+        >
           {props.item.likedBy?.includes(localStorage.getItem("profileId")) ? (
             <IconButton onClick={(e) => unLike(e, props.item._id)}>
               <FavoriteIcon />
