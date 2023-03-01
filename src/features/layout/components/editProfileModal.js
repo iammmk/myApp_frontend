@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
 import dayjs from "dayjs";
+import Tooltip from "@mui/material/Tooltip";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import IconButton from "@mui/material/IconButton";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BASE_URL } from "../../../Services/helper";
@@ -13,7 +17,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  height: 380,
+  height: 460,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -22,12 +26,14 @@ const style = {
 };
 
 const EditProfileModal = (props) => {
+  // const defaultDP = "https://cdn-icons-png.flaticon.com/128/552/552721.png";
   const [editedName, setEditedName] = useState("");
   const [editedBio, setEditedBio] = useState("");
   const [isNameEdited, setIsNameEdited] = useState(false);
   const [isBioEdited, setIsBioEdited] = useState(false);
   const [isDOBEdited, setIsDOBEdited] = useState(false);
   const [editedDOB, setEditedDOB] = useState("");
+  const [image, setImage] = useState("");
 
   const handleSave = () => {
     props.setEditProfileModalOpen(false);
@@ -42,8 +48,9 @@ const EditProfileModal = (props) => {
       },
       body: JSON.stringify({
         name: isNameEdited ? editedName : props.name,
+        pImage: image?image : props.pImage,
         bio: isBioEdited ? editedBio : props.bio,
-        dob: isDOBEdited? editedDOB: props.dob
+        dob: isDOBEdited ? editedDOB : props.dob,
       }),
     })
       .then((res) => res.json())
@@ -58,6 +65,21 @@ const EditProfileModal = (props) => {
       });
   };
 
+  //handle and convert it in base 64
+  const handleImage = (e) => {
+    console.log(props.pImage)
+    const file = e.target.files[0];
+    setFileToBase(file);
+  };
+
+  const setFileToBase = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+  };
+
   return (
     <div>
       <Modal
@@ -69,7 +91,6 @@ const EditProfileModal = (props) => {
           <Typography id="modal-modal-title" variant="h5" component="h2">
             Edit Profile
           </Typography>
-
           <Box
             component="form"
             sx={{
@@ -78,54 +99,70 @@ const EditProfileModal = (props) => {
             style={{
               position: "absolute",
               bottom: "80px",
+              // overflow: "auto",
             }}
             noValidate
             autoComplete="off"
           >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Typography>Name:</Typography>
-              <TextField
-                id="editName"
-                label="Edit Name"
-                value={isNameEdited ? editedName : props.name}
-                onChange={(e) => {
-                  setIsNameEdited(true);
-                  setEditedName(e.target.value);
-                }}
-                variant="outlined"
-                multiline
-                rows={1}
-              />
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Typography>Bio:</Typography>&ensp;&ensp;&nbsp;
-              <TextField
-                id="editBio"
-                label="Edit Bio"
-                value={isBioEdited ? editedBio : props.bio}
-                onChange={(e) => {
-                  setIsBioEdited(true);
-                  setEditedBio(e.target.value);
-                }}
-                variant="outlined"
-                multiline
-                rows={2}
-              />
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Typography>DOB:</Typography>&ensp;
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DesktopDatePicker
-                  label="Date desktop"
-                  inputFormat="MM/DD/YYYY"
-                  value={isDOBEdited ? editedDOB : props.dob}
-                  onChange={(newValue) => {
-                    setIsDOBEdited(true)
-                    setEditedDOB(newValue)
-                }}
-                  renderInput={(params) => <TextField {...params} />}
+            <div style={{ overflowY: "auto" }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Typography>Name:</Typography>
+                <TextField
+                  id="editName"
+                  label="Edit Name"
+                  value={isNameEdited ? editedName : props.name}
+                  onChange={(e) => {
+                    setIsNameEdited(true);
+                    setEditedName(e.target.value);
+                  }}
+                  variant="outlined"
+                  multiline
+                  rows={1}
                 />
-              </LocalizationProvider>
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Typography>Image:</Typography> &ensp;
+                <div className="form-outline " style={{ width: "360px" }}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="formupload"
+                    name="image"
+                    className="form-control"
+                    onChange={handleImage}
+                  />
+                </div>
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Typography>Bio:</Typography>&ensp;&ensp;&nbsp;
+                <TextField
+                  id="editBio"
+                  label="Edit Bio"
+                  value={isBioEdited ? editedBio : props.bio}
+                  onChange={(e) => {
+                    setIsBioEdited(true);
+                    setEditedBio(e.target.value);
+                  }}
+                  variant="outlined"
+                  multiline
+                  rows={2}
+                />
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Typography>DOB:</Typography>&ensp;
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DesktopDatePicker
+                    label="Date desktop"
+                    inputFormat="MM/DD/YYYY"
+                    value={isDOBEdited ? editedDOB : props.dob}
+                    onChange={(newValue) => {
+                      setIsDOBEdited(true);
+                      setEditedDOB(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              </div>
             </div>
           </Box>
           <div
@@ -150,7 +187,7 @@ const EditProfileModal = (props) => {
                 // setEditedDOB(defaultDate);
                 setEditedName(props.name);
                 setEditedBio(props.bio);
-                setEditedDOB(props.dob)
+                setEditedDOB(props.dob);
               }}
             >
               Close

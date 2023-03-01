@@ -13,6 +13,7 @@ import DeleteModal from "./deleteModal";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
+import "../../Style/Style.css";
 import { BASE_URL, BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const ShowComments = (props) => {
@@ -91,9 +92,20 @@ const ShowComments = (props) => {
     <>
       <div
         key={props.item._id}
-        style={{ paddingTop: "8px", paddingLeft: "15px" }}
+        style={{ paddingTop: "8px", paddingLeft: "8px" }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
+          <div class="smallCircle">
+            <img
+              src={props.item.userImage}
+              alt="dp"
+              onClick={(e) => {
+                e.preventDefault();
+                getUserProfile(props.item.userId);
+              }}
+            />
+          </div>{" "}
+          &ensp;
           <a
             href="/#"
             onClick={(e) => {
@@ -192,9 +204,8 @@ const ShowComments = (props) => {
           style={{
             wordWrap: "break-word",
             textAlign: "start",
-            paddingTop: "15px",
-            paddingBottom: "15px",
             cursor: "pointer",
+            paddingLeft: "69px",
           }}
           onClick={(e) => {
             e.preventDefault();
@@ -203,10 +214,10 @@ const ShowComments = (props) => {
         >
           {props.item.comment}
         </Typography>
-
         {/* likes and comments on comments to be implemented */}
-
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{ display: "flex", alignItems: "center", paddingLeft: "57px" }}
+        >
           {props.item.likedBy?.includes(localStorage.getItem("profileId")) ? (
             <IconButton onClick={(e) => unLike(e, props.item._id)}>
               <FavoriteIcon />

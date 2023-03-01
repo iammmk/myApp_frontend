@@ -10,3 +10,50 @@
   content: "Unfollow";
 }
 
+
+.circle {
+  width: 150px; /* set the width and height of the div to match the size of your image */
+  height: 150px;
+  border-radius: 50%; /* set the border-radius property to 50% to create a circular shape */
+  overflow: hidden; /* use overflow hidden to clip any parts of the image that go outside the div */
+}
+
+.circle img {
+  width: 100%; /* make sure the image fills the entire circle */
+  height: 100%;
+  object-fit: cover; /* use object-fit to scale the image without distorting its aspect ratio */
+}
+
+
+.smallCircle {
+  width: 60px; /* set the width and height of the div to match the size of your image */
+  height: 60px;
+  border-radius: 50%; /* set the border-radius property to 50% to create a circular shape */
+  overflow: hidden; /* use overflow hidden to clip any parts of the image that go outside the div */
+  cursor: pointer;
+}
+
+.smallCircle img {
+  width: 100%; /* make sure the image fills the entire circle */
+  height: 100%;
+  object-fit: cover; /* use object-fit to scale the image without distorting its aspect ratio */
+}
+
+.navCircle {
+  width: 35px; /* set the width and height of the div to match the size of your image */
+  height: 35px;
+  border-radius: 50%; /* set the border-radius property to 50% to create a circular shape */
+  overflow: hidden; /* use overflow hidden to clip any parts of the image that go outside the div */
+  cursor: pointer;
+}
+
+.navCircle img {
+  width: 100%; /* make sure the image fills the entire circle */
+  height: 100%;
+  object-fit: cover; /* use object-fit to scale the image without distorting its aspect ratio */
+}
+
+
+
+
+
