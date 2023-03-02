@@ -33,7 +33,8 @@ const EditProfileModal = (props) => {
   const [isBioEdited, setIsBioEdited] = useState(false);
   const [isDOBEdited, setIsDOBEdited] = useState(false);
   const [editedDOB, setEditedDOB] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(props.pImage);
+  
 
   const handleSave = () => {
     props.setEditProfileModalOpen(false);
@@ -48,13 +49,15 @@ const EditProfileModal = (props) => {
       },
       body: JSON.stringify({
         name: isNameEdited ? editedName : props.name,
-        pImage: image?image : props.pImage,
+        pImage: image ,
         bio: isBioEdited ? editedBio : props.bio,
         dob: isDOBEdited ? editedDOB : props.dob,
+        coverPhoto: props.coverPhoto
       }),
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         if (data.message === "User updated successfully !") {
           // alert("Profile updated !");
           props.getUserDetails();
@@ -67,16 +70,19 @@ const EditProfileModal = (props) => {
 
   //handle and convert it in base 64
   const handleImage = (e) => {
-    console.log(props.pImage)
+    // console.log(props.pImage)
     const file = e.target.files[0];
+    // console.log(file)
     setFileToBase(file);
   };
 
-  const setFileToBase = (file) => {
+  const setFileToBase = async(file) => {
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    // sometimes this readAsDataURL takes time so image doesnt chage.. should work on this
+    await reader.readAsDataURL(file);
     reader.onloadend = () => {
       setImage(reader.result);
+      console.log(reader.result);
     };
   };
 
