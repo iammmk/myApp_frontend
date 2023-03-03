@@ -108,6 +108,7 @@ const UserProfile = (props) => {
             bio={props.userData.bio}
             dob={props.userData.dob}
             pImage={props.userData.pImage}
+            coverPhoto={props.userData.coverPhoto}
           />
         </div>
       </div>
@@ -323,7 +324,9 @@ const UserDetails = () => {
   const [status, setStatus] = useState([]);
   const [statusLikedByUser, setStatusLikedByUser] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [cp, setCp] = useState(userData.coverPhoto);
   let { uId } = useParams();
+  const profileId = localStorage.getItem("profileId");
 
   const getUserDetails = () => {
     setIsLoading(true);
@@ -373,6 +376,49 @@ const UserDetails = () => {
       .catch((error) => console.error(error));
   };
 
+  const handleCoverPhotoClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      await reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        //cp not gets selected immediately
+        // setCp(reader.result);
+
+        setIsLoading(true);
+        fetch(`${BASE_URL}/user/myProfile`, {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            coverPhoto: reader.result,
+            name: userData.name,
+            pImage: userData.pImage,
+            bio: userData.bio,
+            dob: userData.dob,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message === "User updated successfully !") {
+              // alert("Profile updated !");
+              getUserDetails();
+              setIsLoading(false);
+            } else {
+              alert("Error occured");
+            }
+          });
+      };
+    };
+    input.click();
+  };
+
   const updatePage = () => {
     setIsLoading(true);
     getUserDetails();
@@ -390,7 +436,11 @@ const UserDetails = () => {
   return (
     <>
       {/* <Nav /> */}
-      <Navbar getAllStatus={updatePage} setIsLoading={setIsLoading} />
+      <Navbar
+        getAllStatus={updatePage}
+        setIsLoading={setIsLoading}
+        dp={userData.pImage}
+      />
       <div
         style={{
           width: "55%",
@@ -406,16 +456,19 @@ const UserDetails = () => {
           src={userData.coverPhoto}
           alt="coverPic"
           style={{
+            position: "relative",
             width: "55%",
             height: "270px",
             objectFit: "cover",
-            paddingTop: "50px"
+            paddingTop: "50px",
+            cursor: "pointer",
           }}
+          onClick={profileId === userData._id ? handleCoverPhotoClick : null}
         />
       </div>
       <div
         style={{
-          position:"relative",
+          position: "relative",
           width: "55%",
           margin: "0px auto",
           paddingLeft: "15px",

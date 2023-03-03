@@ -72,6 +72,7 @@ const Navbar = (props) => {
   };
 
   let count = `${props.count === undefined ? notificationCount : props.count}`;
+  let dp = `${props.dp === undefined ? image : props.dp}`;
 
   useEffect(() => {
     newNotificationCount();
@@ -158,7 +159,7 @@ const Navbar = (props) => {
         />
         <ListItemButton sx={{ height: "50px",pl:"10px" }} onClick={handleClick}>
           <div class="navCircle">
-            <img src={image} alt="dp" />
+            <img src={dp} alt="dp" />
           </div>
           &ensp;&ensp;&nbsp;
           <ListItemText primary={localStorage.getItem("profileName")} />
