@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
-import dayjs from "dayjs";
-import Tooltip from "@mui/material/Tooltip";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import IconButton from "@mui/material/IconButton";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BASE_URL } from "../../../Services/helper";
@@ -17,12 +12,13 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  height: 460,
+  height: 550,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
   backdropFilter: "blur(5px)",
+  borderRadius: 5,
 };
 
 const EditProfileModal = (props) => {
@@ -33,13 +29,12 @@ const EditProfileModal = (props) => {
   const [isBioEdited, setIsBioEdited] = useState(false);
   const [isDOBEdited, setIsDOBEdited] = useState(false);
   const [editedDOB, setEditedDOB] = useState("");
-  const [image, setImage] = useState(props.pImage);
-  
+  const [profilePic, setProfilePic] = useState(null);
+  const [coverPic, setCoverPic] = useState(null);
 
   const handleSave = () => {
     props.setEditProfileModalOpen(false);
     props.setIsLoading(true);
-
     fetch(`${BASE_URL}/user/myProfile`, {
       method: "PUT",
       credentials: "include",
@@ -49,15 +44,14 @@ const EditProfileModal = (props) => {
       },
       body: JSON.stringify({
         name: isNameEdited ? editedName : props.name,
-        pImage: image ,
+        pImage: profilePic || props.pImage,
         bio: isBioEdited ? editedBio : props.bio,
         dob: isDOBEdited ? editedDOB : props.dob,
-        coverPhoto: props.coverPhoto
+        coverPhoto: coverPic || props.coverPhoto,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if (data.message === "User updated successfully !") {
           // alert("Profile updated !");
           props.getUserDetails();
@@ -69,20 +63,24 @@ const EditProfileModal = (props) => {
   };
 
   //handle and convert it in base 64
-  const handleImage = (e) => {
-    // console.log(props.pImage)
+  const handleCoverPic = async (e) => {
     const file = e.target.files[0];
-    // console.log(file)
-    setFileToBase(file);
-  };
-
-  const setFileToBase = async(file) => {
     const reader = new FileReader();
     // sometimes this readAsDataURL takes time so image doesnt chage.. should work on this
     await reader.readAsDataURL(file);
     reader.onloadend = () => {
-      setImage(reader.result);
-      console.log(reader.result);
+      setCoverPic(reader.result);
+    };
+  };
+
+  //handle and convert it in base 64
+  const handleProfilePic = async (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    // sometimes this readAsDataURL takes time so image doesnt chage.. should work on this
+    await reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setProfilePic(reader.result);
     };
   };
 
@@ -100,75 +98,78 @@ const EditProfileModal = (props) => {
           <Box
             component="form"
             sx={{
-              "& .MuiTextField-root": { m: 1, width: "42ch" },
+              "& .MuiTextField-root": { m: 1, width: "49ch" },
             }}
             style={{
               position: "absolute",
               bottom: "80px",
-              // overflow: "auto",
             }}
             noValidate
             autoComplete="off"
           >
-            <div style={{ overflowY: "auto" }}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Typography>Name:</Typography>
-                <TextField
-                  id="editName"
-                  label="Edit Name"
-                  value={isNameEdited ? editedName : props.name}
-                  onChange={(e) => {
-                    setIsNameEdited(true);
-                    setEditedName(e.target.value);
-                  }}
-                  variant="outlined"
-                  multiline
-                  rows={1}
+            <div>
+              <TextField
+                id="editName"
+                label="Edit Name"
+                value={isNameEdited ? editedName : props.name}
+                onChange={(e) => {
+                  setIsNameEdited(true);
+                  setEditedName(e.target.value);
+                }}
+                variant="outlined"
+                multiline
+                rows={1}
+              />
+              <div className="form-outline " style={{ width: "440px" }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="formupload"
+                  name="image"
+                  className="form-control"
+                  onChange={handleCoverPic}
                 />
+                <label htmlFor="formupload" className="custom-file-upload">
+                  Cover Pic
+                </label>
               </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Typography>Image:</Typography> &ensp;
-                <div className="form-outline " style={{ width: "360px" }}>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="formupload"
-                    name="image"
-                    className="form-control"
-                    onChange={handleImage}
-                  />
-                </div>
-              </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Typography>Bio:</Typography>&ensp;&ensp;&nbsp;
-                <TextField
-                  id="editBio"
-                  label="Edit Bio"
-                  value={isBioEdited ? editedBio : props.bio}
-                  onChange={(e) => {
-                    setIsBioEdited(true);
-                    setEditedBio(e.target.value);
-                  }}
-                  variant="outlined"
-                  multiline
-                  rows={2}
+              <div className="form-outline " style={{ width: "440px" }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="formupload"
+                  name="image"
+                  className="form-control"
+                  onChange={handleProfilePic}
                 />
+                <label htmlFor="formupload" className="custom-file-upload">
+                  Profile Pic
+                </label>
               </div>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Typography>DOB:</Typography>&ensp;
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DesktopDatePicker
-                    label="Date desktop"
-                    inputFormat="MM/DD/YYYY"
-                    value={isDOBEdited ? editedDOB : props.dob}
-                    onChange={(newValue) => {
-                      setIsDOBEdited(true);
-                      setEditedDOB(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-              </div>
+              <TextField
+                id="editBio"
+                label="Edit Bio"
+                value={isBioEdited ? editedBio : props.bio}
+                onChange={(e) => {
+                  setIsBioEdited(true);
+                  setEditedBio(e.target.value);
+                }}
+                variant="outlined"
+                multiline
+                rows={2}
+              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DesktopDatePicker
+                  label="Date desktop"
+                  inputFormat="MM/DD/YYYY"
+                  value={isDOBEdited ? editedDOB : props.dob}
+                  onChange={(newValue) => {
+                    setIsDOBEdited(true);
+                    setEditedDOB(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </div>
           </Box>
           <div

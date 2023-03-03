@@ -25,6 +25,7 @@
 }
 
 
+
 .smallCircle {
   width: 60px; /* set the width and height of the div to match the size of your image */
   height: 60px;
@@ -51,6 +52,16 @@
   width: 100%; /* make sure the image fills the entire circle */
   height: 100%;
   object-fit: cover; /* use object-fit to scale the image without distorting its aspect ratio */
+}
+
+
+.statusImage {
+  display: block; /* This ensures the image is a block element and takes up the full width of its container */
+  max-width: 95%; /* This ensures the image doesn't exceed the width of its container */
+  height: auto; /* This ensures the image maintains its aspect ratio */
+  margin: 0 auto; /* This centers the image horizontally within its container */
+  border-radius: 5px; /* This adds a rounded border to the image */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* This adds a subtle shadow to the image */
 }
 
 

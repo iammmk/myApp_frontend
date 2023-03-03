@@ -324,9 +324,7 @@ const UserDetails = () => {
   const [status, setStatus] = useState([]);
   const [statusLikedByUser, setStatusLikedByUser] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [cp, setCp] = useState(userData.coverPhoto);
   let { uId } = useParams();
-  const profileId = localStorage.getItem("profileId");
 
   const getUserDetails = () => {
     setIsLoading(true);
@@ -376,49 +374,6 @@ const UserDetails = () => {
       .catch((error) => console.error(error));
   };
 
-  const handleCoverPhotoClick = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.onchange = async (event) => {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      await reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        //cp not gets selected immediately
-        // setCp(reader.result);
-
-        setIsLoading(true);
-        fetch(`${BASE_URL}/user/myProfile`, {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            coverPhoto: reader.result,
-            name: userData.name,
-            pImage: userData.pImage,
-            bio: userData.bio,
-            dob: userData.dob,
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.message === "User updated successfully !") {
-              // alert("Profile updated !");
-              getUserDetails();
-              setIsLoading(false);
-            } else {
-              alert("Error occured");
-            }
-          });
-      };
-    };
-    input.click();
-  };
-
   const updatePage = () => {
     setIsLoading(true);
     getUserDetails();
@@ -439,7 +394,11 @@ const UserDetails = () => {
       <Navbar
         getAllStatus={updatePage}
         setIsLoading={setIsLoading}
-        dp={userData.pImage}
+        dp={
+          userData._id === localStorage.getItem("profileId")
+            ? userData.pImage
+            : undefined
+        }
       />
       <div
         style={{
@@ -461,9 +420,7 @@ const UserDetails = () => {
             height: "270px",
             objectFit: "cover",
             paddingTop: "50px",
-            cursor: "pointer",
           }}
-          onClick={profileId === userData._id ? handleCoverPhotoClick : null}
         />
       </div>
       <div
@@ -487,7 +444,7 @@ const UserDetails = () => {
       </div>
       {isLoading && (
         <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 999 }}
           open={isLoading}
         >
           <CircularProgress color="inherit" />

@@ -48,7 +48,7 @@ const Users = () => {
 
   return (
     <div style={{ width: "100%" }}>
-      <Navbar setIsLoading={setIsLoading}  />
+      <Navbar setIsLoading={setIsLoading} />
       <div
         style={{
           width: "55%",
@@ -89,11 +89,9 @@ const Users = () => {
                 sx={{
                   position: "relative",
                   width: "40%",
-                  height: "5cm",
+                  height: "6.5cm",
                   marginBottom: "20px",
-                  background: "rgb(144 137 137)",
-                  // backgroundColor: "rgb(166 142 142)",
-                  color: "white",
+                  border: "1px solid black",
                 }}
                 variant="outlined"
               >
@@ -103,18 +101,21 @@ const Users = () => {
                     onClick={(e) => getUserProfile(e, user._id)}
                     style={{ textAlign: "start", textDecoration: "none" }}
                   >
+                    <div class="smallCircle">
+                      <img src={user.pImage} alt="dp" />
+                    </div>
                     <Typography
                       sx={{ fontSize: 20 }}
-                      color="white"
                       gutterBottom
+                      color="black"
                     >
                       {user.name}
                     </Typography>
-                    <Typography sx={{ mb: 2.8, opacity: "0.8" }} color="white">
+                    <Typography sx={{ opacity: "0.8" }} color="black">
                       ({user.username})
                     </Typography>
                     <Typography
-                      color="white"
+                      color="black"
                       style={{
                         whiteSpace: "nowrap",
                         overflow: "hidden",
@@ -131,7 +132,6 @@ const Users = () => {
                 <Divider
                   sx={{
                     position: "absolute",
-                    bottom: "55px",
                     left: "0",
                     right: "0",
                   }}

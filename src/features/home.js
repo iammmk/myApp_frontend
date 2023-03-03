@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import Nav from "./Nav";
 import ShowStatus from "./layout/components/ShowStatus";
 // import { Context } from "../Context";
@@ -19,6 +22,8 @@ function Home() {
   // const { ownerId, setOwnerId } = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
   const [newStatus, setNewStatus] = useState("");
+  const [statusPic, setStatusPic] = useState(null);
+  const [photoAdd, setPhotoAdd] = useState(false);
 
   // status by following + own status
   const getAllStatus = () => {
@@ -49,6 +54,7 @@ function Home() {
       },
       body: JSON.stringify({
         status: newStatus,
+        statusImage: statusPic,
       }),
     })
       .then((res) => res.json())
@@ -57,9 +63,21 @@ function Home() {
           // alert("Status added !");
           getAllStatus();
           setNewStatus("");
+          setPhotoAdd(false)
+          document.getElementById("formupload").value = "";
           setIsLoading(false);
         }
       });
+  };
+
+  //handle and convert it in base 64
+  const handleStatusPic = async (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    await reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setStatusPic(reader.result);
+    };
   };
 
   useEffect(() => {
@@ -69,24 +87,15 @@ function Home() {
   return (
     <div style={{ width: "100%" }}>
       {/* <Nav /> */}
-      <Navbar setIsLoading={setIsLoading}  getAllStatus={getAllStatus} />
+      <Navbar setIsLoading={setIsLoading} getAllStatus={getAllStatus} />
       <div
         style={{
           width: "55%",
           margin: "0 auto",
-          // backgroundColor: "#faf2f2",
         }}
       >
         <Headers title="Home" isHome={true} />
       </div>
-      {/* <Typography
-          variant="h4"
-          style={{
-            paddingTop: "15px",
-          }}
-        >
-          Home
-        </Typography> */}
       <div
         style={{
           width: "55%",
@@ -97,7 +106,7 @@ function Home() {
         <Box
           component="form"
           sx={{
-            "& .MuiTextField-root": { m: 1, width: "45ch" },
+            "& .MuiTextField-root": { m: 1, width: "60ch" },
           }}
           noValidate
           autoComplete="off"
@@ -112,8 +121,41 @@ function Home() {
             rows={3}
           />
         </Box>
-        <div style={{ paddingBottom: "15px" }}>
-          <Button variant="contained" onClick={uploadStatus}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Tooltip title="Add a photo" placement="top-start">
+              <IconButton
+                style={{ cursor: "pointer" }}
+                onClick={() => setPhotoAdd(!photoAdd)}
+              >
+                <AddAPhotoIcon />
+              </IconButton>
+            </Tooltip>
+            {photoAdd && (
+              <input
+                type="file"
+                accept="image/*"
+                id="formupload"
+                name="image"
+                className="form-control"
+                onChange={handleStatusPic}
+                style={{ width: "300px", marginLeft: "10px" }}
+              />
+            )}
+          </div>
+        </div>
+        <div style={{ paddingBottom: "10px", paddingTop: "10px" }}>
+          <Button
+            variant="contained"
+            onClick={uploadStatus}
+            disabled={!newStatus}
+          >
             Post
           </Button>
         </div>
@@ -136,7 +178,7 @@ function Home() {
       </div>
       {isLoading && (
         <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 999 }}
           open={isLoading}
         >
           <CircularProgress color="inherit" />

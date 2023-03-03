@@ -15,6 +15,7 @@ const style = {
   boxShadow: 24,
   p: 4,
   backdropFilter: "blur(5px)",
+  borderRadius: 5,
 };
 
 // to edit status or comment

@@ -14,6 +14,7 @@ import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
 import "../../Style/Style.css";
+import { timeAgo } from "../../Utils/Utils";
 import { BASE_URL, BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const ShowComments = (props) => {
@@ -78,6 +79,7 @@ const ShowComments = (props) => {
   }
 
   const getLikesByCommentId = (commentId) => {
+    props.setIsLoading(true);
     fetch(`${BASE_URL}/like/status/${commentId}`, {
       method: "GET",
       credentials: "include",
@@ -85,6 +87,7 @@ const ShowComments = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setLikeListByCommentId(data.data);
+        props.setIsLoading(false);
       });
   };
 
@@ -119,9 +122,7 @@ const ShowComments = (props) => {
             </Typography>
           </a>
           &nbsp;&nbsp;
-          <Typography>
-            ({new Date(props.item.uploadTime).toLocaleString()})
-          </Typography>
+          <Typography>({timeAgo(props.item.uploadTime)})</Typography>
           &nbsp; &nbsp;
           {props.item.isEdited ? (
             <a

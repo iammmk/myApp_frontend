@@ -12,7 +12,7 @@ const Headers = (props) => {
         alignItems: "center",
         justifyContent: "flex-start",
         width: "55%",
-        backgroundColor: "rgb(144 137 137)",
+        backgroundColor: "#1976d2",
         color: "#fff",
         zIndex: "100",
         padding: "5px",

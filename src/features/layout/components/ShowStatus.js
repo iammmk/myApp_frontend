@@ -14,6 +14,7 @@ import "../../Style/Style.css";
 import ShowUsersModal from "./showUsersModal";
 import AddCommentModal from "./AddCommentModal";
 import ViewEditModal from "./ViewEditModal";
+import { timeAgo } from "../../Utils/Utils";
 import { BASE_URL, BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const ShowStatus = (props) => {
@@ -89,12 +90,11 @@ const ShowStatus = (props) => {
       });
   };
 
+
+
   return (
     <>
-      <div
-        key={props.item._id}
-        style={{ paddingTop: "8px", paddingLeft: "8px" }}
-      >
+      <div key={props.item._id} style={{ paddingTop: "8px" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <div class="smallCircle">
             <img
@@ -121,7 +121,8 @@ const ShowStatus = (props) => {
           </a>
           &nbsp;
           <Typography>
-            ({new Date(props.item.uploadTime).toLocaleString()})
+            {/* ({new Date(props.item.uploadTime).toLocaleString()}) */}
+            ({timeAgo(props.item.uploadTime)})
           </Typography>
           &nbsp; &nbsp;
           {props.item.isEdited ? (
@@ -197,8 +198,9 @@ const ShowStatus = (props) => {
             wordWrap: "break-word",
             textAlign: "start",
             cursor: "pointer",
-            fontSize: "18px",
-            paddingLeft: "69px",
+            fontSize: "20px",
+            paddingLeft: "10px",
+            paddingTop: "25px",
           }}
           onClick={(e) => {
             e.preventDefault();
@@ -207,8 +209,26 @@ const ShowStatus = (props) => {
         >
           {props.item.status}
         </Typography>
+        {props.item.statusImage && (
+          <div style={{ paddingTop: "10px", cursor: "pointer" }}>
+            <img
+              src={props.item.statusImage}
+              alt="statusPic"
+              class="statusImage"
+              onClick={(e) => {
+                e.preventDefault();
+                goToStatus(props.item._id);
+              }}
+            />
+          </div>
+        )}
         <div
-          style={{ display: "flex", alignItems: "center", paddingLeft: "57px" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            paddingLeft: "10px",
+            paddingTop: "10px",
+          }}
         >
           {props.item.likedBy?.includes(localStorage.getItem("profileId")) ? (
             <IconButton onClick={(e) => unLike(e, props.item._id)}>
