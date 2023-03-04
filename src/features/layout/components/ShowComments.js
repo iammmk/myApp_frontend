@@ -95,10 +95,10 @@ const ShowComments = (props) => {
     <>
       <div
         key={props.item._id}
-        style={{ paddingTop: "8px", paddingLeft: "8px" }}
+        style={{ paddingTop: "8px"}}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div class="smallCircle">
+          <div className="smallCircle">
             <img
               src={props.item.userImage}
               alt="dp"
@@ -205,13 +205,18 @@ const ShowComments = (props) => {
           style={{
             wordWrap: "break-word",
             textAlign: "start",
-            cursor: "pointer",
+            cursor: props.clickAble ? "pointer" : "default",
+            fontSize: "20px",
             paddingLeft: "69px",
           }}
-          onClick={(e) => {
-            e.preventDefault();
-            goToComment(props.item._id);
-          }}
+          onClick={
+            props.clickAble
+              ? (e) => {
+                  e.preventDefault();
+                  goToComment(props.item._id);
+                }
+              : undefined
+          }
         >
           {props.item.comment}
         </Typography>

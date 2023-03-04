@@ -157,12 +157,18 @@ const Navbar = (props) => {
           getAllStatus={props.getAllStatus}
           setIsLoading={props.setIsLoading}
         />
-        <ListItemButton sx={{ height: "50px",pl:"10px" }} onClick={handleClick}>
-          <div class="navCircle">
+        <ListItemButton
+          sx={{ height: "50px", pl: "10px" }}
+          onClick={handleClick}
+        >
+          <div className="navCircle">
             <img src={dp} alt="dp" />
           </div>
           &ensp;&ensp;&nbsp;
-          <ListItemText primary={localStorage.getItem("profileName")} />
+          {/* show only first name */}
+          <ListItemText
+            primary={localStorage.getItem("profileName").split(" ")[0]}
+          />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
         <Collapse in={!open} timeout="auto" unmountOnExit>

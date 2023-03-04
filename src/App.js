@@ -7,7 +7,7 @@ import Login from "../src/features/login_component";
 // import SignUp from "../src/features/signup_component";
 import UserDetails from "../src/features/userDetails";
 import Users from "../src/features/users";
-import Notifications from "../src/features/Notifications"
+import Notifications from "../src/features/Notifications";
 import Status from "../src/features/Status";
 import Comment from "../src/features/Comment";
 import Home from "../src/features/home";
@@ -18,11 +18,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route
-            exact
-            path="/"
-            element={isLoggedIn === "true" ? <Home /> : <Login />}
-          />
+          <Route exact path="/" element={isLoggedIn ? <Home /> : <Login />} />
           <Route path="/sign-in" element={<Login />} />
           {/* <Route path="/sign-up" element={<SignUp />} /> */}
           <Route path="/home" element={<Home />} />

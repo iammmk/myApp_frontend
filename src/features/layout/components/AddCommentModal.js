@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
+import AddEmoji from "../../Utils/AddEmoji";
 import { BASE_URL } from "../../../Services/helper";
 const style = {
   position: "absolute",
@@ -93,6 +94,20 @@ const AddCommentsModal = (props) => {
               minRows={3}
               maxRows={4}
             />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <AddEmoji
+                  newContent={newComment}
+                  setNewContent={setNewComment}
+                />
+              </div>
+            </div>
           </Box>
           <div
             style={{

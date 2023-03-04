@@ -1,7 +1,8 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
-import "../../Style/Style.css"
+import "../../Style/Style.css";
+import { timeAgo } from "../../Utils/Utils";
 import { BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const ShowNotifications = (props) => {
@@ -31,7 +32,7 @@ const ShowNotifications = (props) => {
             alignItems: "center",
           }}
         >
-          <div class="smallCircle">
+          <div className="smallCircle">
             <img
               src={props.notification.fromImage}
               alt="dp"
@@ -98,9 +99,7 @@ const ShowNotifications = (props) => {
           {props.isNew && <FiberNewIcon />}
         </div>
         <div>
-          <Typography>
-            ({new Date(props.notification.time).toLocaleString()})
-          </Typography>
+          <Typography>({timeAgo(props.notification.time)})</Typography>
         </div>
       </div>
       <hr

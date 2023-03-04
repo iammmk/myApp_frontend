@@ -13,9 +13,11 @@ import ShowComments from "./layout/components/ShowComments";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ArrowBack } from "@mui/icons-material";
 import Navbar from "./SideNav";
+import Tooltip from "@mui/material/Tooltip";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Headers from "./layout/components/Headers";
+import AddEmoji from "./Utils/AddEmoji";
 import { BASE_URL } from "../Services/helper";
 
 const Comment = () => {
@@ -87,10 +89,10 @@ const Comment = () => {
   };
 
   const updatePage = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     getParentComment();
     getComments();
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -110,11 +112,13 @@ const Comment = () => {
         <Headers title="Comments" />
       </div>
       <div style={{ width: "55%", margin: "0 auto", paddingTop: "50px" }}>
-        <ShowComments
-          item={parentComment}
-          setIsLoading={setIsLoading}
-          getAllStatus={updatePage}
-        />
+        <div style={{ paddingLeft: "8px" }}>
+          <ShowComments
+            item={parentComment}
+            setIsLoading={setIsLoading}
+            getAllStatus={updatePage}
+          />
+        </div>
         <Box
           component="form"
           sx={{
@@ -134,6 +138,17 @@ const Comment = () => {
             maxRows={4}
           />
         </Box>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <AddEmoji newContent={newComment} setNewContent={setNewComment} />
+          </div>
+        </div>
         <div style={{ paddingBottom: "15px" }}>
           <Button variant="contained" onClick={uploadComment}>
             Post
@@ -150,7 +165,7 @@ const Comment = () => {
           }}
         >
           <Typography variant="h5">Replies</Typography>
-          <IconButton>
+          <IconButton style={{ cursor: "default" }}>
             <ArrowForwardIosIcon />
           </IconButton>
         </div>
@@ -173,6 +188,7 @@ const Comment = () => {
                   item={item}
                   setIsLoading={setIsLoading}
                   getAllStatus={updatePage}
+                  clickAble={true}
                 />
               ))
           ) : (

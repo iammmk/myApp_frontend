@@ -16,6 +16,7 @@ const style = {
   boxShadow: 24,
   p: 4,
   backdropFilter: "blur(5px)",
+  borderRadius: 5,
 };
 
 // modal to show who liked status/ whom you are following etc
@@ -54,7 +55,7 @@ const showUsersModal = (props) => {
                       flex: "1",
                     }}
                   >
-                    <div class="smallCircle">
+                    <div className="smallCircle">
                       <img
                         src={item.pImage}
                         alt="dp"

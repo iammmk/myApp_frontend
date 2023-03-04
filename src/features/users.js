@@ -101,17 +101,30 @@ const Users = () => {
                     onClick={(e) => getUserProfile(e, user._id)}
                     style={{ textAlign: "start", textDecoration: "none" }}
                   >
-                    <div class="smallCircle">
+                    <div className="smallCircle">
                       <img src={user.pImage} alt="dp" />
                     </div>
                     <Typography
-                      sx={{ fontSize: 20 }}
+                      sx={{
+                        fontSize: 20,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
                       gutterBottom
                       color="black"
                     >
                       {user.name}
                     </Typography>
-                    <Typography sx={{ opacity: "0.8" }} color="black">
+                    <Typography
+                      sx={{
+                        opacity: "0.8",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      color="black"
+                    >
                       ({user.username})
                     </Typography>
                     <Typography

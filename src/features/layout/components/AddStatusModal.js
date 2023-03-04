@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import AddPhoto from "../../Utils/AddPhoto";
+import AddEmoji from "../../Utils/AddEmoji";
 import { BASE_URL } from "../../../Services/helper";
 
 const style = {
@@ -46,21 +45,11 @@ const AddStatusModal = (props) => {
         if (data.message === "Added new status !!") {
           // alert("Status updated !");
           setNewStatus("");
-          setPhotoAdd(false)
+          setPhotoAdd(false);
           props.getAllStatus();
           props.setIsLoading(false);
         }
       });
-  };
-
-  //handle and convert it in base 64
-  const handleStatusPic = async (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    await reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setStatusPic(reader.result);
-    };
   };
 
   return (
@@ -107,25 +96,14 @@ const AddStatusModal = (props) => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <Tooltip title="Add a photo" placement="top-start">
-                  <IconButton
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setPhotoAdd(!photoAdd)}
-                  >
-                    <AddAPhotoIcon />
-                  </IconButton>
-                </Tooltip>
-                {photoAdd && (
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="formupload"
-                    name="image"
-                    className="form-control"
-                    onChange={handleStatusPic}
-                    style={{ width: "300px", marginLeft: "10px" }}
-                  />
-                )}
+                {/* Photo add option */}
+                <AddPhoto
+                  photoAdd={photoAdd}
+                  setPhotoAdd={setPhotoAdd}
+                  setStatusPic={setStatusPic}
+                />
+                {/* Emoji add option */}
+                <AddEmoji newContent={newStatus} setNewContent={setNewStatus} />
               </div>
             </div>
           </Box>
@@ -153,7 +131,7 @@ const AddStatusModal = (props) => {
               onClick={() => {
                 props.setModalOpen(false);
                 setNewStatus("");
-                setPhotoAdd(false)
+                setPhotoAdd(false);
               }}
             >
               Close

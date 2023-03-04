@@ -4,10 +4,6 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import Nav from "./Nav";
 import ShowStatus from "./layout/components/ShowStatus";
 // import { Context } from "../Context";
 import Navbar from "./SideNav";
@@ -15,6 +11,8 @@ import { BASE_URL } from "../Services/helper";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Headers from "./layout/components/Headers";
+import AddPhoto from "./Utils/AddPhoto";
+import AddEmoji from "./Utils/AddEmoji";
 
 function Home() {
   const history = useNavigate();
@@ -63,21 +61,11 @@ function Home() {
           // alert("Status added !");
           getAllStatus();
           setNewStatus("");
-          setPhotoAdd(false)
+          setPhotoAdd(false);
           document.getElementById("formupload").value = "";
           setIsLoading(false);
         }
       });
-  };
-
-  //handle and convert it in base 64
-  const handleStatusPic = async (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    await reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setStatusPic(reader.result);
-    };
   };
 
   useEffect(() => {
@@ -129,25 +117,14 @@ function Home() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Tooltip title="Add a photo" placement="top-start">
-              <IconButton
-                style={{ cursor: "pointer" }}
-                onClick={() => setPhotoAdd(!photoAdd)}
-              >
-                <AddAPhotoIcon />
-              </IconButton>
-            </Tooltip>
-            {photoAdd && (
-              <input
-                type="file"
-                accept="image/*"
-                id="formupload"
-                name="image"
-                className="form-control"
-                onChange={handleStatusPic}
-                style={{ width: "300px", marginLeft: "10px" }}
-              />
-            )}
+            {/* Photo add option */}
+            <AddPhoto
+              photoAdd={photoAdd}
+              setPhotoAdd={setPhotoAdd}
+              setStatusPic={setStatusPic}
+            />
+            {/* Emoji add option */}
+            <AddEmoji newContent={newStatus} setNewContent={setNewStatus} />
           </div>
         </div>
         <div style={{ paddingBottom: "10px", paddingTop: "10px" }}>
@@ -169,6 +146,7 @@ function Home() {
                   item={item}
                   setIsLoading={setIsLoading}
                   getAllStatus={getAllStatus}
+                  clickAble={true}
                 />
               ))
           ) : (

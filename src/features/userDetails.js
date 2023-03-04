@@ -76,7 +76,7 @@ const UserProfile = (props) => {
         }}
       >
         {/* profile pic */}
-        <div class="circle">
+        <div className="circle">
           <img src={props.userData.pImage} alt="profilePic" />
         </div>
         <div>
@@ -104,6 +104,7 @@ const UserProfile = (props) => {
             setEditProfileModalOpen={setEditProfileModalOpen}
             setIsLoading={props.setIsLoading}
             getUserDetails={props.getUserDetails}
+            updatePage={props.updatePage}
             name={props.userData.name}
             bio={props.userData.bio}
             dob={props.userData.dob}
@@ -119,7 +120,12 @@ const UserProfile = (props) => {
           alignItems: "flex-start",
         }}
       >
-        <Typography variant="h4">{props.userData.name}</Typography>
+        <Typography
+          variant="h4"
+          style={{ wordWrap: "break-word", textAlign: "start" }}
+        >
+          {props.userData.name}
+        </Typography>
         <Typography
           style={{ opacity: "70%", textAlign: "start" }}
           onClick={() => console.log(props.userData._id)}
@@ -288,6 +294,7 @@ const UserProfile = (props) => {
                 setIsLoading={props.setIsLoading}
                 // getAllStatus={props.getStatusByUser(item.userId) props.getUserDetails}
                 getAllStatus={props.updatePage}
+                clickAble={true}
               />
             ))
         ) : showLikedStatus && props.likedStatus.length ? (
@@ -300,12 +307,14 @@ const UserProfile = (props) => {
                   setIsLoading={props.setIsLoading}
                   // getAllStatus={props.getStatusByUser(item.userId) props.getUserDetails}
                   getAllStatus={props.updatePage}
+                  clickAble={true}
                 />
               ) : (
                 <ShowComments
                   item={item}
                   setIsLoading={props.setIsLoading}
                   getAllStatus={props.updatePage}
+                  clickAble={true}
                 />
               )
             )

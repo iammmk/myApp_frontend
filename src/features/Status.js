@@ -14,8 +14,10 @@ import { ArrowBack } from "@mui/icons-material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Navbar from "./SideNav";
 import Headers from "./layout/components/Headers";
-import { Backdrop} from "@mui/material";
+import { Backdrop } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import Tooltip from "@mui/material/Tooltip";
+import AddEmoji from "./Utils/AddEmoji";
 import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 const Status = () => {
@@ -25,6 +27,7 @@ const Status = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showEmojis, setShowEmojis] = useState(false);
 
   const getStatus = () => {
     setIsLoading(true);
@@ -36,7 +39,7 @@ const Status = () => {
       .then((data) => {
         if (data.message === "Status Fetched" && data.data) {
           setStatus(data.data);
-          setIsLoading(false)
+          setIsLoading(false);
         } else {
           window.location.href = `${BASE_URL_FRONTEND}/home`;
         }
@@ -54,7 +57,7 @@ const Status = () => {
       .then((data) => {
         if (data.message === "Fetched comments") {
           setComments(data.data);
-            setIsLoading(false);
+          setIsLoading(false);
         }
       })
       .catch((error) => console.error(error));
@@ -80,16 +83,16 @@ const Status = () => {
           // alert("Status added !");
           updatePage();
           setNewComment("");
-          setIsLoading(false)
+          setIsLoading(false);
         }
       });
   };
 
   const updatePage = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     getStatus();
     getComments();
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -99,7 +102,7 @@ const Status = () => {
 
   return (
     <>
-      <Navbar setIsLoading={setIsLoading}  />
+      <Navbar setIsLoading={setIsLoading} />
       <div
         style={{
           width: "55%",
@@ -108,12 +111,20 @@ const Status = () => {
       >
         <Headers title="Status" />
       </div>
-      <div style={{ width: "55%", margin: "0 auto", paddingTop: "50px" }}>
-        <ShowStatus
-          item={status}
-          setIsLoading={setIsLoading}
-          getAllStatus={updatePage}
-        />
+      <div
+        style={{
+          width: "55%",
+          margin: "0 auto",
+          paddingTop: "50px",
+        }}
+      >
+        <div style={{ paddingLeft: "8px" }}>
+          <ShowStatus
+            item={status}
+            setIsLoading={setIsLoading}
+            getAllStatus={updatePage}
+          />
+        </div>
         <Box
           component="form"
           sx={{
@@ -133,6 +144,36 @@ const Status = () => {
             maxRows={4}
           />
         </Box>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {/* <Tooltip title="Add a photo" placement="top-start">
+              <IconButton
+                style={{ cursor: "pointer" }}
+                onClick={() => setPhotoAdd(!photoAdd)}
+              >
+                <AddAPhotoIcon />
+              </IconButton>
+            </Tooltip> */}
+            {/* {photoAdd && (
+              <input
+                type="file"
+                accept="image/*"
+                id="formupload"
+                name="image"
+                className="form-control"
+                onChange={handleStatusPic}
+                style={{ width: "300px", marginLeft: "10px" }}
+              />
+            )} */}
+            <AddEmoji newContent={newComment} setNewContent={setNewComment} />
+          </div>
+        </div>
         <div style={{ paddingBottom: "15px" }}>
           <Button variant="contained" onClick={uploadComment}>
             Post
@@ -149,7 +190,7 @@ const Status = () => {
           }}
         >
           <Typography variant="h5">Replies</Typography>
-          <IconButton>
+          <IconButton style={{ cursor: "default" }}>
             <ArrowForwardIosIcon />
           </IconButton>
         </div>
@@ -172,6 +213,7 @@ const Status = () => {
                   item={item}
                   setIsLoading={setIsLoading}
                   getAllStatus={updatePage}
+                  clickAble={true}
                 />
               ))
           ) : (

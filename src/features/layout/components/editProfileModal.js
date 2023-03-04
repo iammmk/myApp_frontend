@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { Edit } from "@mui/icons-material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { BASE_URL } from "../../../Services/helper";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import ResetPhotoModal from "./ResetPhotoModal";
+import { defaultCoverPhoto, defaultProfilePhoto } from "../../Utils/Utils";
 
 const style = {
   position: "absolute",
@@ -12,7 +18,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 500,
-  height: 550,
+  height: 485,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -22,7 +28,6 @@ const style = {
 };
 
 const EditProfileModal = (props) => {
-  // const defaultDP = "https://cdn-icons-png.flaticon.com/128/552/552721.png";
   const [editedName, setEditedName] = useState("");
   const [editedBio, setEditedBio] = useState("");
   const [isNameEdited, setIsNameEdited] = useState(false);
@@ -31,10 +36,55 @@ const EditProfileModal = (props) => {
   const [editedDOB, setEditedDOB] = useState("");
   const [profilePic, setProfilePic] = useState(null);
   const [coverPic, setCoverPic] = useState(null);
+  const [resetPhotoModalOpen, setResetPhotoModalOpen] = useState(false);
+  const [profilePicSelected, setProfilePicSelected] = useState(false);
+  const [editCoverPic, setEditCoverPic] = useState(false);
+  const [editProfilePic, setEditProfilePic] = useState(false);
+
+  // const handleSave = () => {
+  //   props.setEditProfileModalOpen(false);
+  //   props.setIsLoading(true);
+  //   fetch(`${BASE_URL}/user/myProfile`, {
+  //     method: "PUT",
+  //     credentials: "include",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       name: isNameEdited ? editedName : props.name,
+  //       pImage: profilePic || props.pImage,
+  //       bio: isBioEdited ? editedBio : props.bio,
+  //       dob: isDOBEdited ? editedDOB : props.dob,
+  //       coverPhoto: coverPic || props.coverPhoto,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.message === "User updated successfully !") {
+  //         // alert("Profile updated !");
+  //         props.getUserDetails();
+  //         props.setIsLoading(false);
+  //         setEditProfilePic(false);
+  //         setEditCoverPic(false);
+  //       } else {
+  //         alert("Error occured");
+  //       }
+  //     });
+  // };
 
   const handleSave = () => {
     props.setEditProfileModalOpen(false);
     props.setIsLoading(true);
+
+    const reqBody = {
+      ...(isNameEdited && { name: editedName }),
+      ...(isBioEdited && { bio: editedBio }),
+      ...(isDOBEdited && { dob: editedDOB }),
+      ...(profilePic && { pImage: profilePic }),
+      ...(coverPic && { coverPhoto: coverPic }),
+    };
+
     fetch(`${BASE_URL}/user/myProfile`, {
       method: "PUT",
       credentials: "include",
@@ -42,19 +92,22 @@ const EditProfileModal = (props) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({
-        name: isNameEdited ? editedName : props.name,
-        pImage: profilePic || props.pImage,
-        bio: isBioEdited ? editedBio : props.bio,
-        dob: isDOBEdited ? editedDOB : props.dob,
-        coverPhoto: coverPic || props.coverPhoto,
-      }),
+      body: JSON.stringify(reqBody),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.message === "User updated successfully !") {
           // alert("Profile updated !");
-          props.getUserDetails();
+          // props.getUserDetails();
+          profilePic ? props.updatePage() : props.getUserDetails();
+          isNameEdited && window.localStorage.setItem("profileName", data.data.name);
+          setIsNameEdited(false);
+          setIsBioEdited(false);
+          setIsDOBEdited(false);
+          setProfilePic(null);
+          setCoverPic(null);
+          setEditProfilePic(false);
+          setEditCoverPic(false);
           props.setIsLoading(false);
         } else {
           alert("Error occured");
@@ -108,6 +161,107 @@ const EditProfileModal = (props) => {
             autoComplete="off"
           >
             <div>
+              {/* cover photo */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "7px",
+                }}
+              >
+                <Typography> Cover Pic :</Typography>
+                <Tooltip title="Edit Cover Pic" placement="top">
+                  <IconButton
+                    onClick={() => {
+                      setEditCoverPic(!editCoverPic);
+                    }}
+                  >
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                {editCoverPic && (
+                  <div className="form-outline " style={{ width: "305px" }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="formupload"
+                      name="image"
+                      className="form-control"
+                      onChange={handleCoverPic}
+                    />
+                  </div>
+                )}
+                {!editCoverPic && (
+                  <Tooltip title="Reset Cover Pic" placement="top">
+                    <IconButton
+                      onClick={() => {
+                        props.setEditProfileModalOpen(false);
+                        setProfilePicSelected(false);
+                        setResetPhotoModalOpen(true);
+                        setEditedName(props.name);
+                        setEditedBio(props.bio);
+                        setEditedDOB(props.dob);
+                        setEditProfilePic(false);
+                        setEditCoverPic(false);
+                      }}
+                      disabled={props.coverPhoto === defaultCoverPhoto}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </div>
+              {/* profile photo */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "7px",
+                }}
+              >
+                <Typography> Profile Pic: </Typography>
+                <Tooltip title="Edit Profile Pic" placement="top-end">
+                  <IconButton
+                    onClick={() => {
+                      setEditProfilePic(!editProfilePic);
+                    }}
+                  >
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                {editProfilePic && (
+                  <div className="form-outline " style={{ width: "305px" }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="formupload"
+                      name="image"
+                      className="form-control"
+                      onChange={handleProfilePic}
+                    />
+                  </div>
+                )}
+                {!editProfilePic && (
+                  <Tooltip title="Reset Profile Pic" placement="top-end">
+                    <IconButton
+                      onClick={() => {
+                        props.setEditProfileModalOpen(false);
+                        setProfilePicSelected(true);
+                        setResetPhotoModalOpen(true);
+                        setEditedName(props.name);
+                        setEditedBio(props.bio);
+                        setEditedDOB(props.dob);
+                        setEditProfilePic(false);
+                        setEditCoverPic(false);
+                      }}
+                      disabled={props.pImage === defaultProfilePhoto}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </div>
+              {/* name */}
               <TextField
                 id="editName"
                 label="Edit Name"
@@ -120,32 +274,7 @@ const EditProfileModal = (props) => {
                 multiline
                 rows={1}
               />
-              <div className="form-outline " style={{ width: "440px" }}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="formupload"
-                  name="image"
-                  className="form-control"
-                  onChange={handleCoverPic}
-                />
-                <label htmlFor="formupload" className="custom-file-upload">
-                  Cover Pic
-                </label>
-              </div>
-              <div className="form-outline " style={{ width: "440px" }}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="formupload"
-                  name="image"
-                  className="form-control"
-                  onChange={handleProfilePic}
-                />
-                <label htmlFor="formupload" className="custom-file-upload">
-                  Profile Pic
-                </label>
-              </div>
+              {/* bio */}
               <TextField
                 id="editBio"
                 label="Edit Bio"
@@ -158,6 +287,7 @@ const EditProfileModal = (props) => {
                 multiline
                 rows={2}
               />
+              {/* dob */}
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DesktopDatePicker
                   label="Date desktop"
@@ -195,6 +325,8 @@ const EditProfileModal = (props) => {
                 setEditedName(props.name);
                 setEditedBio(props.bio);
                 setEditedDOB(props.dob);
+                setEditProfilePic(false);
+                setEditCoverPic(false);
               }}
             >
               Close
@@ -202,6 +334,14 @@ const EditProfileModal = (props) => {
           </div>
         </Box>
       </Modal>
+      <ResetPhotoModal
+        type={profilePicSelected ? "Profile Pic" : "Cover Pic"}
+        modalOpen={resetPhotoModalOpen}
+        setModalOpen={setResetPhotoModalOpen}
+        setIsLoading={props.setIsLoading}
+        getUserDetails={props.getUserDetails}
+        updatePage={props.updatePage}
+      />
     </div>
   );
 };

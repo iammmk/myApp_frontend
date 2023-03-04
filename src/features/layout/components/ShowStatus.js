@@ -90,13 +90,11 @@ const ShowStatus = (props) => {
       });
   };
 
-
-
   return (
     <>
       <div key={props.item._id} style={{ paddingTop: "8px" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div class="smallCircle">
+          <div className="smallCircle">
             <img
               src={props.item.userImage}
               alt="dp"
@@ -121,8 +119,8 @@ const ShowStatus = (props) => {
           </a>
           &nbsp;
           <Typography>
-            {/* ({new Date(props.item.uploadTime).toLocaleString()}) */}
-            ({timeAgo(props.item.uploadTime)})
+            {/* ({new Date(props.item.uploadTime).toLocaleString()}) */}(
+            {timeAgo(props.item.uploadTime)})
           </Typography>
           &nbsp; &nbsp;
           {props.item.isEdited ? (
@@ -197,28 +195,41 @@ const ShowStatus = (props) => {
           style={{
             wordWrap: "break-word",
             textAlign: "start",
-            cursor: "pointer",
+            cursor: props.clickAble ? "pointer" : "default",
             fontSize: "20px",
             paddingLeft: "10px",
             paddingTop: "25px",
           }}
-          onClick={(e) => {
-            e.preventDefault();
-            goToStatus(props.item._id);
-          }}
+          onClick={
+            props.clickAble
+              ? (e) => {
+                  e.preventDefault();
+                  goToStatus(props.item._id);
+                }
+              : undefined
+          }
         >
           {props.item.status}
         </Typography>
         {props.item.statusImage && (
-          <div style={{ paddingTop: "10px", cursor: "pointer" }}>
+          <div
+            style={{
+              paddingTop: "10px",
+              cursor: props.clickAble ? "pointer" : "default",
+            }}
+          >
             <img
               src={props.item.statusImage}
               alt="statusPic"
-              class="statusImage"
-              onClick={(e) => {
-                e.preventDefault();
-                goToStatus(props.item._id);
-              }}
+              className="statusImage"
+              onClick={
+                props.clickAble
+                  ? (e) => {
+                      e.preventDefault();
+                      goToStatus(props.item._id);
+                    }
+                  : undefined
+              }
             />
           </div>
         )}
