@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
+import AddEmoji from "../../Utils/AddEmoji";
 import { BASE_URL } from "../../../Services/helper";
 
 const style = {
@@ -95,7 +96,23 @@ const EditStatusModal = (props) => {
               minRows={3}
               maxRows={4}
             />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {/* Emoji add option */}
+                <AddEmoji
+                  newContent={editedStatus}
+                  setNewContent={setEditedStatus}
+                />
+              </div>
+            </div>
           </Box>
+
           <div
             style={{
               display: "flex",

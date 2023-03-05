@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Nav from "./Nav";
 import { Backdrop, Button } from "@mui/material";
 import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -19,6 +21,7 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { ownerId, setOwnerId } = useContext(Context);
+  const [searchText, setSearchText] = useState("");
 
   const getUserProfile = (e, uId) => {
     e.preventDefault();
@@ -27,8 +30,9 @@ const Users = () => {
 
   // suggestion for users( whom user is not following)
   const getAllUsers = () => {
+    console.log(searchText);
     setIsLoading(true);
-    fetch(`${BASE_URL}/user`, {
+    fetch(`${BASE_URL}/user?search=${searchText}`, {
       method: "GET",
       credentials: "include",
     })
@@ -42,9 +46,14 @@ const Users = () => {
       .catch((error) => console.error(error));
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchText(e.target.search.value);
+  };
+
   useEffect(() => {
     getAllUsers();
-  }, []);
+  }, [searchText]);
 
   return (
     <div style={{ width: "100%" }}>
@@ -60,21 +69,46 @@ const Users = () => {
       <div
         style={{
           width: "55%",
+          paddingTop: "60px",
+          margin: "0 auto",
+        }}
+      >
+        <form
+          class="form-inline my-2 my-lg-0"
+          style={{
+            float: "right",
+            paddingRight: "10px",
+          }}
+          onSubmit={handleSearch}
+        >
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Search user.."
+            aria-label="Search"
+            name="search"
+          />
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
+
+      <div
+        style={{
+          width: "55%",
           margin: "0px auto",
           paddingLeft: "10px",
           paddingRight: "10px",
           paddingTop: "50px",
         }}
       >
-        {/* <Typography
-          variant="h4"
-          // style={{
-          //   marginTop: "80px",
-          // }}
-        >
-          People You May Follow
-        </Typography> */}
-        {/* <Divider variant="middle" /> */}
+        {searchText && (
+          <Typography>
+            <SearchIcon />
+            Search results for:&nbsp;<b>{searchText}</b>
+          </Typography>
+        )}
         <div
           style={{
             paddingTop: "20px",
@@ -150,8 +184,6 @@ const Users = () => {
                   }}
                   variant="middle"
                 />
-
-                {/* follow btn */}
                 <CardActions
                   sx={{
                     position: "absolute",

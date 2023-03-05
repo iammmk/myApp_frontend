@@ -21,11 +21,12 @@ import SendIcon from "@mui/icons-material/Send";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
-import { WindowRounded } from "@mui/icons-material";
+import { Search, WindowRounded } from "@mui/icons-material";
 import AddStatusModal from "./layout/components/AddStatusModal";
 import { Backdrop } from "@mui/material";
 import "../../src/features/Style/Style.css";
 import CircularProgress from "@mui/material/CircularProgress";
+import SearchModal from "./layout/components/SearchModal";
 import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 const Navbar = (props) => {
@@ -33,6 +34,7 @@ const Navbar = (props) => {
   const [notificationCount, setNotificationCount] = useState(0);
   const [image, setImage] = useState("");
   const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const newNotificationCount = () => {
@@ -117,17 +119,6 @@ const Navbar = (props) => {
         <ListItemButton
           sx={{ height: "50px" }}
           onClick={() => {
-            window.location.href = `${BASE_URL_FRONTEND}/users`;
-          }}
-        >
-          <ListItemIcon>
-            <GroupIcon />
-          </ListItemIcon>
-          <ListItemText primary="Users" />
-        </ListItemButton>
-        <ListItemButton
-          sx={{ height: "50px" }}
-          onClick={() => {
             window.location.href = `${BASE_URL_FRONTEND}/notifications`;
           }}
         >
@@ -139,7 +130,28 @@ const Navbar = (props) => {
             style={{ color: count !== "0" ? "blue" : "inherit" }}
           />
         </ListItemButton>
-
+        <ListItemButton
+          sx={{ height: "50px" }}
+          onClick={() => {
+            setSearchModalOpen(true);
+          }}
+        >
+          <ListItemIcon>
+            <Search />
+          </ListItemIcon>
+          <ListItemText primary="Search" />
+        </ListItemButton>
+        <ListItemButton
+          sx={{ height: "50px" }}
+          onClick={() => {
+            window.location.href = `${BASE_URL_FRONTEND}/users`;
+          }}
+        >
+          <ListItemIcon>
+            <GroupIcon />
+          </ListItemIcon>
+          <ListItemText primary="Suggestions" />
+        </ListItemButton>
         <ListItemButton
           sx={{ height: "50px" }}
           onClick={() => {
@@ -223,6 +235,10 @@ const Navbar = (props) => {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
+      <SearchModal
+        modalOpen={searchModalOpen}
+        setModalOpen={setSearchModalOpen}
+      />
     </>
   );
 };

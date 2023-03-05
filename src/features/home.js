@@ -150,7 +150,16 @@ function Home() {
                 />
               ))
           ) : (
-            <Typography>No status to show.</Typography>
+            <div style={{ paddingTop: "15px" }}>
+              <Typography variant="h5">No status to show...</Typography>
+              <Typography variant="h5">
+                Follow{" "}
+                <a href="users" style={{ textDecoration: "none" }}>
+                  people
+                </a>{" "}
+                to see what's happening !!
+              </Typography>
+            </div>
           )}
         </div>
       </div>
