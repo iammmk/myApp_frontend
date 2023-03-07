@@ -124,7 +124,11 @@ const EditStatusModal = (props) => {
               bottom: "0",
             }}
           >
-            <Button variant="contained" onClick={handleSave}>
+            <Button
+              variant="contained"
+              onClick={handleSave}
+              disabled={!editedStatus}
+            >
               Save
             </Button>{" "}
             &nbsp;

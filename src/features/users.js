@@ -32,7 +32,7 @@ const Users = () => {
   const getAllUsers = () => {
     console.log(searchText);
     setIsLoading(true);
-    fetch(`${BASE_URL}/user?search=${searchText}`, {
+    fetch(`${BASE_URL}/user/suggestions?search=${searchText}`, {
       method: "GET",
       credentials: "include",
     })

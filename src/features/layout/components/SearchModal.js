@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { Box, Typography, Button, TextField } from "@mui/material";
-import AddEmoji from "../../Utils/AddEmoji";
-import { BASE_URL } from "../../../Services/helper";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import Divider from "@mui/material/Divider";
+import { Backdrop, CircularProgress } from "@mui/material";
+import { BASE_URL, BASE_URL_FRONTEND } from "../../../Services/helper";
 
 const style = {
   position: "absolute",
@@ -20,6 +22,33 @@ const style = {
 };
 
 const SearchModal = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  const getUserProfile = (uId) => {
+    window.location.href = `${BASE_URL_FRONTEND}/userDetails/${uId}`;
+  };
+
+  // suggestion from search
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const searchText = e.target.search.value;
+    fetch(`${BASE_URL}/user?search=${searchText}`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Got all suggestions !") {
+          setUsers(data.data);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+
   return (
     <div>
       <Modal
@@ -28,10 +57,7 @@ const SearchModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form
-            class="form-inline my-2 my-lg-0"
-            // onSubmit={handleSearch}
-          >
+          <form class="form-inline my-2 my-lg-0" onSubmit={handleSearch}>
             <input
               class="form-control mr-sm-2"
               type="search"
@@ -45,6 +71,66 @@ const SearchModal = (props) => {
             </button>
           </form>
 
+          <div style={{ maxHeight: "calc(100% - 60px)", overflowY: "auto" }}>
+            {users.length ? (
+              users.map((user) => (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "80px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "45px",
+                        flex: "1",
+                      }}
+                    >
+                      <div className="smallCircle">
+                        <img
+                          src={user.pImage}
+                          alt="dp"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            getUserProfile(user._id);
+                          }}
+                        />
+                      </div>
+                      <Typography
+                        onClick={(e) => {
+                          e.preventDefault();
+                          getUserProfile(user._id);
+                        }}
+                        style={{
+                          textDecoration: "none",
+                          cursor: "pointer",
+                          color: "blue",
+                          flex: "1",
+                        }}
+                      >
+                        {user.name}({user.username})
+                      </Typography>
+                    </div>
+                  </div>
+                  <Divider variant="middle" />
+                </>
+              ))
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <PersonSearchIcon style={{ width: "50%", height: "50%" }} />
+              </div>
+            )}
+          </div>
           <div
             style={{
               display: "flex",
@@ -58,13 +144,25 @@ const SearchModal = (props) => {
           >
             <Button
               variant="contained"
-              onClick={() => props.setModalOpen(false)}
+              onClick={() => {
+                props.setModalOpen(false);
+                document.querySelector('input[name="search"]').value = "";
+                setUsers([]);
+              }}
             >
               Close
             </Button>
           </div>
         </Box>
       </Modal>
+      {isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1000 }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </div>
   );
 };

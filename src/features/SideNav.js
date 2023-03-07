@@ -91,7 +91,7 @@ const Navbar = (props) => {
           width: "22.4%",
           //   maxWidth: 360,
           // bgcolor: "#faf2f2",
-          bgcolor: "#ffffff",
+          // bgcolor: "#ffffff",
           zIndex: 1,
         }}
         component="nav"
@@ -106,7 +106,9 @@ const Navbar = (props) => {
           <ListItemText primary={<Typography variant="h5">myApp</Typography>} />
         </ListItemButton>
         <ListItemButton
-          sx={{ height: "50px" }}
+          sx={{
+            height: "50px",
+          }}
           onClick={() => {
             window.location.href = `${BASE_URL_FRONTEND}/home`;
           }}
