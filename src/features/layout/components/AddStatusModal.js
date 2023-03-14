@@ -4,6 +4,7 @@ import { Box, Typography, Button, TextField } from "@mui/material";
 import AddPhoto from "../../Utils/AddPhoto";
 import AddEmoji from "../../Utils/AddEmoji";
 import { BASE_URL } from "../../../Services/helper";
+import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 
 const style = {
   position: "absolute",
@@ -58,6 +59,7 @@ const AddStatusModal = (props) => {
         open={props.modalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        disableScrollLock
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" component="h2">
@@ -129,6 +131,11 @@ const AddStatusModal = (props) => {
             <Button
               variant="contained"
               onClick={() => {
+                sessionStorage.setItem(
+                  "selectedItem",
+                  sessionStorage.getItem("prevItem")
+                );
+                sessionStorage.setItem("prevItem", "");
                 props.setModalOpen(false);
                 setNewStatus("");
                 setPhotoAdd(false);

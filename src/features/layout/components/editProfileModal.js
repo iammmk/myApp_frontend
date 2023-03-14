@@ -100,7 +100,10 @@ const EditProfileModal = (props) => {
           // alert("Profile updated !");
           // props.getUserDetails();
           profilePic ? props.updatePage() : props.getUserDetails();
-          isNameEdited && window.localStorage.setItem("profileName", data.data.name);
+          isNameEdited &&
+            window.localStorage.setItem("profileName", data.data.name);
+          profilePic &&
+            window.localStorage.setItem("profilePic", data.data.pImage);
           setIsNameEdited(false);
           setIsBioEdited(false);
           setIsDOBEdited(false);
@@ -143,6 +146,7 @@ const EditProfileModal = (props) => {
         open={props.editProfileModalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        disableScrollLock
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" component="h2">

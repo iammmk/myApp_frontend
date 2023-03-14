@@ -52,6 +52,7 @@ const Users = () => {
   };
 
   useEffect(() => {
+    sessionStorage.setItem("selectedItem", "suggestions");
     getAllUsers();
   }, [searchText]);
 

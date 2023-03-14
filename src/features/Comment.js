@@ -96,6 +96,7 @@ const Comment = () => {
   };
 
   useEffect(() => {
+    sessionStorage.setItem("selectedItem", "");
     getParentComment();
     getComments();
   }, []);

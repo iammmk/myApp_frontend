@@ -31,6 +31,7 @@ const showUsersModal = (props) => {
         open={props.showUsersModalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        disableScrollLock
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" component="h2">

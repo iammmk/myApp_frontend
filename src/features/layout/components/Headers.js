@@ -19,11 +19,15 @@ const Headers = (props) => {
       }}
     >
       {props.isHome ? (
-        <IconButton onClick={() => (window.location.href = `${BASE_URL_FRONTEND}/home`)}>
+        <IconButton
+          sx={{ color: "white" }}
+          onClick={() => (window.location.href = `${BASE_URL_FRONTEND}/home`)}
+        >
           <Home />
         </IconButton>
       ) : (
         <IconButton
+          sx={{ color: "white" }}
           onClick={() => (window.location.href = "javascript:history.back()")}
         >
           <ArrowBack />

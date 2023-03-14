@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import CakeIcon from "@mui/icons-material/Cake";
 import CelebrationIcon from "@mui/icons-material/Celebration";
+import Tooltip from "@mui/material/Tooltip";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+// import EmailIcon from "@mui/icons-material/Email";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Divider from "@mui/material/Divider";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -82,11 +85,25 @@ const UserProfile = (props) => {
         <div>
           {/* follow btn or edit profile btn */}
           {props.userData._id !== localStorage.getItem("profileId") ? (
-            <FollowButton
-              userData={props.userData}
-              updatePage={props.updatePage}
-              setIsLoading={props.setIsLoading}
-            />
+            <>
+              <Tooltip title="Message" placement="top-start">
+                <IconButton
+                  sx={{
+                    backgroundColor: "#1976d2",
+                    color: "white",
+                    ":hover": { backgroundColor: "#1976d2" },
+                  }}
+                >
+                  <MailOutlineIcon />
+                </IconButton>
+              </Tooltip>
+              &ensp;
+              <FollowButton
+                userData={props.userData}
+                updatePage={props.updatePage}
+                setIsLoading={props.setIsLoading}
+              />
+            </>
           ) : (
             <Button
               variant="contained"
@@ -393,6 +410,9 @@ const UserDetails = () => {
 
   useEffect(() => {
     getUserDetails();
+    uId === localStorage.getItem("profileId")
+      ? sessionStorage.setItem("selectedItem", "profile")
+      : sessionStorage.setItem("selectedItem", "");
     getStatusByUser(uId);
     getStatusLikedByUser(uId);
   }, []);

@@ -41,6 +41,8 @@ const ResetPhotoModal = (props) => {
       .then((data) => {
         if (data.message === "User photo updated successfully !") {
           // alert("Profile updated !");
+          props.type === "Profile Pic" &&
+            window.localStorage.setItem("profilePic", data.data.pImage);
           props.type === "Profile Pic"
             ? props.updatePage()
             : props.getUserDetails();
@@ -57,6 +59,7 @@ const ResetPhotoModal = (props) => {
         open={props.modalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        disableScrollLock
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" component="h2">

@@ -51,11 +51,11 @@ const SignupModal = (props) => {
   // signup
   const handleCreate = () => {
     props.setModalOpen(false);
-    props.setIsLoading(true)
+    props.setIsLoading(true);
     fetch(`${BASE_URL}/signup`, {
       method: "POST",
       credentials: "include",
-    //   crossDomain: true,
+      //   crossDomain: true,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -75,7 +75,7 @@ const SignupModal = (props) => {
           alert("Registration Successful");
           // window.location.href = "./sign-in";
           setAllFieldsClear();
-          props.setIsLoading(false)
+          props.setIsLoading(false);
         } else {
           alert("Something went wrong");
         }
@@ -96,6 +96,7 @@ const SignupModal = (props) => {
         open={props.modalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        disableScrollLock
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h5" component="h2">

@@ -55,6 +55,7 @@ const SearchModal = (props) => {
         open={props.modalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        disableScrollLock
       >
         <Box sx={style}>
           <form class="form-inline my-2 my-lg-0" onSubmit={handleSearch}>
@@ -145,6 +146,11 @@ const SearchModal = (props) => {
             <Button
               variant="contained"
               onClick={() => {
+                sessionStorage.setItem(
+                  "selectedItem",
+                  sessionStorage.getItem("prevItem")
+                );
+                sessionStorage.setItem("prevItem", "");
                 props.setModalOpen(false);
                 document.querySelector('input[name="search"]').value = "";
                 setUsers([]);

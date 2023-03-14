@@ -11,6 +11,8 @@ import { BASE_URL } from "../Services/helper";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Headers from "./layout/components/Headers";
+import { timeAgo } from "../../src/features/Utils/Utils";
+import socket from "../Services/Socket";
 import AddPhoto from "./Utils/AddPhoto";
 import AddEmoji from "./Utils/AddEmoji";
 
@@ -20,6 +22,7 @@ function Home() {
   // const { ownerId, setOwnerId } = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
   const [newStatus, setNewStatus] = useState("");
+  const [followingList, setFollowingList] = useState([]);
   const [statusPic, setStatusPic] = useState(null);
   const [photoAdd, setPhotoAdd] = useState(false);
 
@@ -40,8 +43,37 @@ function Home() {
       .catch((error) => console.error(error));
   };
 
+  const getFollowingList = () => {
+    fetch(`${BASE_URL}/user/${localStorage.getItem("profileId")}/followings`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFollowingList(data.data);
+      });
+  };
+
   const uploadStatus = (e) => {
     e.preventDefault();
+
+    // send status to socket server
+    const uploadedStatus = {
+      userId: localStorage.getItem("profileId"),
+      uploadedBy: localStorage.getItem("username"),
+      userImage: localStorage.getItem("profilePic"),
+      status: newStatus,
+      statusImage: statusPic,
+      childCommentIds: [],
+      totalLikes: 0,
+      totalComments: 0,
+      isEdited: false,
+      likedBy: [],
+      uploadTime: Date.now(),
+    };
+    socket.emit("upload-status", uploadedStatus);
+
+    // send status to db
     setIsLoading(true);
     fetch(`${BASE_URL}/status`, {
       method: "POST",
@@ -62,19 +94,34 @@ function Home() {
           getAllStatus();
           setNewStatus("");
           setPhotoAdd(false);
-          document.getElementById("formupload").value = "";
+          if (document.getElementById("formupload")) {
+            document.getElementById("formupload").value = "";
+          }
           setIsLoading(false);
         }
       });
   };
+  useEffect(() => {
+    socket.on("receive-status", (data) => {
+      if (followingList.some((user) => user._id === data.userId)) {
+        console.log(data);
+        setStatus([...status, data]);
+      }
+    });
+
+    // return () => {
+    //   socket.off("receive-status");
+    // };
+  }, []);
 
   useEffect(() => {
+    sessionStorage.setItem("selectedItem", "home");
     getAllStatus();
+    getFollowingList();
   }, []);
 
   return (
     <div style={{ width: "100%" }}>
-      {/* <Nav /> */}
       <Navbar setIsLoading={setIsLoading} getAllStatus={getAllStatus} />
       <div
         style={{

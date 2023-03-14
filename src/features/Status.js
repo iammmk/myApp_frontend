@@ -96,6 +96,7 @@ const Status = () => {
   };
 
   useEffect(() => {
+    sessionStorage.setItem("selectedItem", "");
     getStatus();
     getComments();
   }, []);

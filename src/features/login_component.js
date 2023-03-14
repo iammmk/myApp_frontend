@@ -64,7 +64,11 @@ const Login = () => {
           window.localStorage.setItem("token", data.data);
           window.localStorage.setItem("loggedIn", true);
           window.localStorage.setItem("profileId", data.data._id);
+          window.localStorage.setItem("username", data.data.username);
           window.localStorage.setItem("profileName", data.data.name);
+          window.localStorage.setItem("profilePic", data.data.pImage);
+          sessionStorage.setItem("selectedItem", "home");
+
           // history(`/home`);
           window.location.href = `${BASE_URL_FRONTEND}/home`;
           setIsLoading(false);

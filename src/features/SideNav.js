@@ -10,6 +10,7 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
+import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PostAddIcon from "@mui/icons-material/PostAdd";
@@ -35,6 +36,7 @@ const Navbar = (props) => {
   const [image, setImage] = useState("");
   const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   const newNotificationCount = () => {
@@ -88,7 +90,7 @@ const Navbar = (props) => {
           left: 0,
           top: 0,
           bottom: 0,
-          width: "22.4%",
+          width: "22.5%",
           //   maxWidth: 360,
           // bgcolor: "#faf2f2",
           // bgcolor: "#ffffff",
@@ -106,61 +108,155 @@ const Navbar = (props) => {
           <ListItemText primary={<Typography variant="h5">myApp</Typography>} />
         </ListItemButton>
         <ListItemButton
+          className={
+            sessionStorage.getItem("selectedItem") === "home" ? "selected" : ""
+          }
           sx={{
             height: "50px",
           }}
           onClick={() => {
+            sessionStorage.setItem("selectedItem", "home");
             window.location.href = `${BASE_URL_FRONTEND}/home`;
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon
+            className={
+              sessionStorage.getItem("selectedItem") === "home"
+                ? "selectedIcon"
+                : ""
+            }
+          >
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItemButton>
         <ListItemButton
+          className={
+            sessionStorage.getItem("selectedItem") === "notifications"
+              ? "selected"
+              : ""
+          }
           sx={{ height: "50px" }}
           onClick={() => {
+            sessionStorage.setItem("selectedItem", "notifications");
             window.location.href = `${BASE_URL_FRONTEND}/notifications`;
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon
+            className={
+              sessionStorage.getItem("selectedItem") === "notifications"
+                ? "selectedIcon"
+                : ""
+            }
+          >
             <NotificationsNoneIcon />
           </ListItemIcon>
           <ListItemText
             primary={`Notifications${count !== "0" ? ` (${count})` : ""}`}
-            style={{ color: count !== "0" ? "blue" : "inherit" }}
+            style={{
+              color:
+                count !== "0" &&
+                sessionStorage.getItem("selectedItem") !== "notifications"
+                  ? "blue"
+                  : "inherit",
+            }}
           />
         </ListItemButton>
         <ListItemButton
+          className={
+            sessionStorage.getItem("selectedItem") === "search"
+              ? "selected"
+              : ""
+          }
           sx={{ height: "50px" }}
           onClick={() => {
+            sessionStorage.setItem(
+              "prevItem",
+              sessionStorage.getItem("selectedItem")
+            );
+            sessionStorage.setItem("selectedItem", "search");
             setSearchModalOpen(true);
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon
+            className={
+              sessionStorage.getItem("selectedItem") === "search"
+                ? "selectedIcon"
+                : ""
+            }
+          >
             <Search />
           </ListItemIcon>
           <ListItemText primary="Search" />
         </ListItemButton>
         <ListItemButton
+          className={
+            sessionStorage.getItem("selectedItem") === "chatroom"
+              ? "selected"
+              : ""
+          }
           sx={{ height: "50px" }}
           onClick={() => {
+            sessionStorage.setItem("selectedItem", "chatroom");
+          }}
+        >
+          <ListItemIcon
+            className={
+              sessionStorage.getItem("selectedItem") === "chatroom"
+                ? "selectedIcon"
+                : ""
+            }
+          >
+            <EmailIcon />
+          </ListItemIcon>
+          <ListItemText primary="Chatroom" />
+        </ListItemButton>
+        <ListItemButton
+          className={
+            sessionStorage.getItem("selectedItem") === "suggestions"
+              ? "selected"
+              : ""
+          }
+          sx={{ height: "50px" }}
+          onClick={() => {
+            sessionStorage.setItem("selectedItem", "suggestions");
             window.location.href = `${BASE_URL_FRONTEND}/users`;
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon
+            className={
+              sessionStorage.getItem("selectedItem") === "suggestions"
+                ? "selectedIcon"
+                : ""
+            }
+          >
             <GroupIcon />
           </ListItemIcon>
           <ListItemText primary="Suggestions" />
         </ListItemButton>
         <ListItemButton
+          className={
+            sessionStorage.getItem("selectedItem") === "add status"
+              ? "selected"
+              : ""
+          }
           sx={{ height: "50px" }}
           onClick={() => {
+            sessionStorage.setItem(
+              "prevItem",
+              sessionStorage.getItem("selectedItem")
+            );
+            sessionStorage.setItem("selectedItem", "add status");
             setAddStatusModalOpen(true);
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon
+            className={
+              sessionStorage.getItem("selectedItem") === "add status"
+                ? "selectedIcon"
+                : ""
+            }
+          >
             <PostAddIcon />
           </ListItemIcon>
           <ListItemText primary="Add Status" />
@@ -172,8 +268,15 @@ const Navbar = (props) => {
           setIsLoading={props.setIsLoading}
         />
         <ListItemButton
+          className={
+            sessionStorage.getItem("selectedItem") === "profile"
+              ? "selected"
+              : ""
+          }
           sx={{ height: "50px", pl: "10px" }}
-          onClick={handleClick}
+          onClick={() => {
+            handleClick();
+          }}
         >
           <div className="navCircle">
             <img src={dp} alt="dp" />
@@ -190,6 +293,7 @@ const Navbar = (props) => {
             <ListItemButton
               sx={{ pl: 4, height: "50px" }}
               onClick={() => {
+                sessionStorage.setItem("selectedItem", "profile");
                 window.location.href = `${BASE_URL_FRONTEND}/userDetails/${localStorage.getItem(
                   "profileId"
                 )}`;
@@ -211,22 +315,22 @@ const Navbar = (props) => {
       </List>
       <div
         style={{
-          width: "1px",
+          // width: "1px",
           position: "fixed",
           top: 0,
           left: "22.5%",
           bottom: 0,
-          borderRight: "1px solid #ccc",
+          borderLeft: "1px solid #ccc",
         }}
       ></div>
       <div
         style={{
-          width: "1px",
+          // width: "1px",
           position: "fixed",
           top: 0,
           right: "22.5%",
           bottom: 0,
-          borderLeft: "1px solid #ccc",
+          borderRight: "1px solid #ccc",
         }}
       ></div>
       {isLoading && (

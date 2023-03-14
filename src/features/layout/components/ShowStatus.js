@@ -242,11 +242,17 @@ const ShowStatus = (props) => {
           }}
         >
           {props.item.likedBy?.includes(localStorage.getItem("profileId")) ? (
-            <IconButton onClick={(e) => unLike(e, props.item._id)}>
+            <IconButton
+              sx={{ color: "#f91880" }}
+              onClick={(e) => unLike(e, props.item._id)}
+            >
               <FavoriteIcon />
             </IconButton>
           ) : (
-            <IconButton onClick={(e) => addLike(e, props.item._id)}>
+            <IconButton
+              sx={{ ":hover": { backgroundColor: "#f91880" } }}
+              onClick={(e) => addLike(e, props.item._id)}
+            >
               <FavoriteBorderIcon />
             </IconButton>
           )}

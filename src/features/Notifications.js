@@ -80,6 +80,7 @@ const Notifications = () => {
   };
 
   useEffect(() => {
+    sessionStorage.setItem("selectedItem", "notifications");
     getNotifications();
     newNotificationCount();
   }, []);

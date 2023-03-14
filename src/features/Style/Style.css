@@ -1,5 +1,5 @@
 .followBtn::before {
-    content: "Following";
+  content: "Following";
 }
 .followBtn:hover {
   background-color: rgb(241, 40, 40) !important;
@@ -10,6 +10,15 @@
   content: "Unfollow";
 }
 
+.selected {
+  background-color: #1976d2 !important;
+  color: white !important;
+  border-radius: 5px !important;
+}
+
+.selectedIcon {
+  color: white !important;
+}
 
 .circle {
   width: 150px; /* set the width and height of the div to match the size of your image */
@@ -23,8 +32,6 @@
   height: 100%;
   object-fit: cover; /* use object-fit to scale the image without distorting its aspect ratio */
 }
-
-
 
 .smallCircle {
   width: 60px; /* set the width and height of the div to match the size of your image */
@@ -54,7 +61,6 @@
   object-fit: cover; /* use object-fit to scale the image without distorting its aspect ratio */
 }
 
-
 .statusImage {
   display: block; /* This ensures the image is a block element and takes up the full width of its container */
   max-width: 95%; /* This ensures the image doesn't exceed the width of its container */
@@ -63,8 +69,3 @@
   border-radius: 5px; /* This adds a rounded border to the image */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* This adds a subtle shadow to the image */
 }
-
-
-
-
-
