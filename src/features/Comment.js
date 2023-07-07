@@ -12,7 +12,7 @@ import ShowStatus from "./layout/components/ShowStatus";
 import ShowComments from "./layout/components/ShowComments";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ArrowBack } from "@mui/icons-material";
-import Navbar from "./SideNav";
+import Navbar from "./Navbar";
 import Tooltip from "@mui/material/Tooltip";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";

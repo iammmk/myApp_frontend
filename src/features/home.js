@@ -6,13 +6,13 @@ import TextField from "@mui/material/TextField";
 import Divider from "@mui/material/Divider";
 import ShowStatus from "./layout/components/ShowStatus";
 // import { Context } from "../Context";
-import Navbar from "./SideNav";
+import Navbar from "./Navbar";
 import { BASE_URL } from "../Services/helper";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Headers from "./layout/components/Headers";
 import { timeAgo } from "../../src/features/Utils/Utils";
-import socket from "../Services/Socket";
+// import socket from "../Services/Socket";
 import AddPhoto from "./Utils/AddPhoto";
 import AddEmoji from "./Utils/AddEmoji";
 
@@ -58,20 +58,20 @@ function Home() {
     e.preventDefault();
 
     // send status to socket server
-    const uploadedStatus = {
-      userId: localStorage.getItem("profileId"),
-      uploadedBy: localStorage.getItem("username"),
-      userImage: localStorage.getItem("profilePic"),
-      status: newStatus,
-      statusImage: statusPic,
-      childCommentIds: [],
-      totalLikes: 0,
-      totalComments: 0,
-      isEdited: false,
-      likedBy: [],
-      uploadTime: Date.now(),
-    };
-    socket.emit("upload-status", uploadedStatus);
+    // const uploadedStatus = {
+    //   userId: localStorage.getItem("profileId"),
+    //   uploadedBy: localStorage.getItem("username"),
+    //   userImage: localStorage.getItem("profilePic"),
+    //   status: newStatus,
+    //   statusImage: statusPic,
+    //   childCommentIds: [],
+    //   totalLikes: 0,
+    //   totalComments: 0,
+    //   isEdited: false,
+    //   likedBy: [],
+    //   uploadTime: Date.now(),
+    // };
+    // socket.emit("upload-status", uploadedStatus);
 
     // send status to db
     setIsLoading(true);
@@ -101,18 +101,18 @@ function Home() {
         }
       });
   };
-  useEffect(() => {
-    socket.on("receive-status", (data) => {
-      if (followingList.some((user) => user._id === data.userId)) {
-        console.log(data);
-        setStatus([...status, data]);
-      }
-    });
+  // useEffect(() => {
+  //   socket.on("receive-status", (data) => {
+  //     if (followingList.some((user) => user._id === data.userId)) {
+  //       console.log(data);
+  //       setStatus([...status, data]);
+  //     }
+  //   });
 
-    // return () => {
-    //   socket.off("receive-status");
-    // };
-  }, []);
+  //   // return () => {
+  //   //   socket.off("receive-status");
+  //   // };
+  // }, []);
 
   useEffect(() => {
     sessionStorage.setItem("selectedItem", "home");

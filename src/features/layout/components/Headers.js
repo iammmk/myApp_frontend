@@ -1,40 +1,63 @@
-import React from "react";
-import { Typography, IconButton } from "@mui/material";
-import { ArrowBack, Home } from "@mui/icons-material";
+import React, { useState } from "react";
+import { Button, Grid, Typography, IconButton } from "@mui/material";
+import { ArrowBack, Home, Search } from "@mui/icons-material";
 import { BASE_URL_FRONTEND } from "../../../Services/helper";
+import SearchModal from "./SearchModal";
 
 const Headers = (props) => {
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
   return (
-    <div
-      style={{
-        position: "fixed",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        width: "55%",
-        backgroundColor: "#1976d2",
-        color: "#fff",
-        zIndex: "100",
-        padding: "5px",
-      }}
-    >
-      {props.isHome ? (
-        <IconButton
-          sx={{ color: "white" }}
-          onClick={() => (window.location.href = `${BASE_URL_FRONTEND}/home`)}
-        >
-          <Home />
-        </IconButton>
-      ) : (
-        <IconButton
-          sx={{ color: "white" }}
-          onClick={() => (window.location.href = "javascript:history.back()")}
-        >
-          <ArrowBack />
-        </IconButton>
-      )}
-      <Typography>{props.title}</Typography>
-    </div>
+    <>
+      <Grid
+        container
+        style={{
+          position: "fixed",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "55%",
+          backgroundColor: "#1976d2",
+          color: "#fff",
+          zIndex: "100",
+          padding: "5px",
+        }}
+      >
+        <Grid item>
+          <Grid container alignItems={"center"}>
+            <Grid item>
+              <IconButton
+                sx={{ color: "white" }}
+                onClick={() =>
+                  props.title === "Home"
+                    ? (window.location.href = `${BASE_URL_FRONTEND}/home`)
+                    : (window.location.href = "javascript:history.back()")
+                }
+              >
+                {props.title === "Home" ? <Home /> : <ArrowBack />}
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <Typography>{props.title}</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            size="small"
+            startIcon={<Search />}
+            style={{ textTransform: "none" }}
+            onClick={() => setSearchModalOpen(true)}
+          >
+            Find User
+          </Button>
+        </Grid>
+      </Grid>
+      <SearchModal
+        modalOpen={searchModalOpen}
+        setModalOpen={setSearchModalOpen}
+      />
+    </>
   );
 };
 

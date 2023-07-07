@@ -1,42 +1,29 @@
 import React, { useState, useEffect } from "react";
-import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
-import MenuIcon from "@mui/icons-material/Menu";
-import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
-import EmailIcon from "@mui/icons-material/Email";
-import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PostAddIcon from "@mui/icons-material/PostAdd";
+// import PostAddIcon from "@mui/icons-material/PostAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import SendIcon from "@mui/icons-material/Send";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
-import { Search, WindowRounded } from "@mui/icons-material";
-import AddStatusModal from "./layout/components/AddStatusModal";
+// import AddStatusModal from "./layout/components/AddStatusModal";
 import { Backdrop } from "@mui/material";
 import "../../src/features/Style/Style.css";
 import CircularProgress from "@mui/material/CircularProgress";
-import SearchModal from "./layout/components/SearchModal";
 import { BASE_URL, BASE_URL_FRONTEND } from "../Services/helper";
 
 const Navbar = (props) => {
   const [open, setOpen] = useState(true);
   const [notificationCount, setNotificationCount] = useState(0);
   const [image, setImage] = useState("");
-  const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState();
+  // const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const newNotificationCount = () => {
@@ -91,9 +78,6 @@ const Navbar = (props) => {
           top: 0,
           bottom: 0,
           width: "22.5%",
-          //   maxWidth: 360,
-          // bgcolor: "#faf2f2",
-          // bgcolor: "#ffffff",
           zIndex: 1,
         }}
         component="nav"
@@ -164,55 +148,6 @@ const Navbar = (props) => {
         </ListItemButton>
         <ListItemButton
           className={
-            sessionStorage.getItem("selectedItem") === "search"
-              ? "selected"
-              : ""
-          }
-          sx={{ height: "50px" }}
-          onClick={() => {
-            sessionStorage.setItem(
-              "prevItem",
-              sessionStorage.getItem("selectedItem")
-            );
-            sessionStorage.setItem("selectedItem", "search");
-            setSearchModalOpen(true);
-          }}
-        >
-          <ListItemIcon
-            className={
-              sessionStorage.getItem("selectedItem") === "search"
-                ? "selectedIcon"
-                : ""
-            }
-          >
-            <Search />
-          </ListItemIcon>
-          <ListItemText primary="Search" />
-        </ListItemButton>
-        <ListItemButton
-          className={
-            sessionStorage.getItem("selectedItem") === "chatroom"
-              ? "selected"
-              : ""
-          }
-          sx={{ height: "50px" }}
-          onClick={() => {
-            sessionStorage.setItem("selectedItem", "chatroom");
-          }}
-        >
-          <ListItemIcon
-            className={
-              sessionStorage.getItem("selectedItem") === "chatroom"
-                ? "selectedIcon"
-                : ""
-            }
-          >
-            <EmailIcon />
-          </ListItemIcon>
-          <ListItemText primary="Chatroom" />
-        </ListItemButton>
-        <ListItemButton
-          className={
             sessionStorage.getItem("selectedItem") === "suggestions"
               ? "selected"
               : ""
@@ -234,7 +169,7 @@ const Navbar = (props) => {
           </ListItemIcon>
           <ListItemText primary="Suggestions" />
         </ListItemButton>
-        <ListItemButton
+        {/* <ListItemButton
           className={
             sessionStorage.getItem("selectedItem") === "add status"
               ? "selected"
@@ -266,7 +201,7 @@ const Navbar = (props) => {
           setModalOpen={setAddStatusModalOpen}
           getAllStatus={props.getAllStatus}
           setIsLoading={props.setIsLoading}
-        />
+        /> */}
         <ListItemButton
           className={
             sessionStorage.getItem("selectedItem") === "profile"
@@ -335,16 +270,15 @@ const Navbar = (props) => {
       ></div>
       {isLoading && (
         <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
           open={isLoading}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      <SearchModal
-        modalOpen={searchModalOpen}
-        setModalOpen={setSearchModalOpen}
-      />
     </>
   );
 };

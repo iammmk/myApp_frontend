@@ -6,7 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
-import Navbar from "./SideNav";
+import Navbar from "./Navbar";
 import Headers from "./layout/components/Headers";
 import { BASE_URL } from "../Services/helper";
 import ShowNotifications from "./layout/components/ShowNotifications";

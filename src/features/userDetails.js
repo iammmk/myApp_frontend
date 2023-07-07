@@ -7,21 +7,21 @@ import CelebrationIcon from "@mui/icons-material/Celebration";
 import Tooltip from "@mui/material/Tooltip";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import EmailIcon from "@mui/icons-material/Email";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
+// import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Divider from "@mui/material/Divider";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
-import Nav from "./Nav";
 import FollowButton from "./layout/components/FollowButton";
 import ShowStatus from "./layout/components/ShowStatus";
 import ShowComments from "./layout/components/ShowComments";
 import EditProfileModal from "./layout/components/editProfileModal";
 import ShowUsersModal from "./layout/components/showUsersModal";
-import Navbar from "./SideNav";
+import Navbar from "./Navbar";
 import "../../src/features/Style/Style.css";
 import Headers from "./layout/components/Headers";
 import { BASE_URL } from "../Services/helper";
+import ChatModal from "./layout/components/ChatModal";
 
 const UserProfile = (props) => {
   const profileId = localStorage.getItem("profileId");
@@ -31,6 +31,7 @@ const UserProfile = (props) => {
   const [followersListByUser, setFollowersListByUser] = useState([]);
   const [followingModalOpen, setFollowingModalOpen] = useState(false);
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
+  const [chatModalOpen, setChatModalOpen] = useState(false);
   const [showAllStatus, setShowAllStatus] = useState(true);
   const [showLikedStatus, setShowLikedStatus] = useState(false);
 
@@ -86,18 +87,19 @@ const UserProfile = (props) => {
           {/* follow btn or edit profile btn */}
           {props.userData._id !== localStorage.getItem("profileId") ? (
             <>
-              <Tooltip title="Message" placement="top-start">
+              {/* <Tooltip title="Message" placement="top-start">
                 <IconButton
                   sx={{
                     backgroundColor: "#1976d2",
                     color: "white",
                     ":hover": { backgroundColor: "#1976d2" },
                   }}
+                  onClick={() => setChatModalOpen(true)}
                 >
                   <MailOutlineIcon />
                 </IconButton>
               </Tooltip>
-              &ensp;
+              &ensp; */}
               <FollowButton
                 userData={props.userData}
                 updatePage={props.updatePage}
@@ -341,6 +343,13 @@ const UserProfile = (props) => {
           </>
         )}
       </div>
+      <ChatModal
+        modalOpen={chatModalOpen}
+        setModalOpen={setChatModalOpen}
+        receiverName={props.userData.name}
+        receiverId={props.userData._id}
+        setIsLoading={props.setIsLoading}
+      />
     </div>
   );
 };

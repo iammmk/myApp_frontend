@@ -72,6 +72,9 @@ const Login = () => {
           // history(`/home`);
           window.location.href = `${BASE_URL_FRONTEND}/home`;
           setIsLoading(false);
+        } else {
+          alert("Login error");
+          setIsLoading(false);
         }
       });
   };

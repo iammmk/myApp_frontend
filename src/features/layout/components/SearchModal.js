@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
-import { Box, Typography, Button, TextField } from "@mui/material";
+import { Typography, Button, TextField, Grid } from "@mui/material";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import Divider from "@mui/material/Divider";
 import { Backdrop, CircularProgress } from "@mui/material";
@@ -23,6 +23,7 @@ const style = {
 
 const SearchModal = (props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [users, setUsers] = useState([]);
 
   const getUserProfile = (uId) => {
@@ -30,11 +31,11 @@ const SearchModal = (props) => {
   };
 
   // suggestion from search
-  const handleSearch = (e) => {
-    e.preventDefault();
+  const handleSearch = () => {
+    // e.preventDefault();
     setIsLoading(true);
 
-    const searchText = e.target.search.value;
+    // const searchText = e.target.search.value;
     fetch(`${BASE_URL}/user?search=${searchText}`, {
       method: "GET",
       credentials: "include",
@@ -50,15 +51,15 @@ const SearchModal = (props) => {
   };
 
   return (
-    <div>
+    <>
       <Modal
         open={props.modalOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         disableScrollLock
       >
-        <Box sx={style}>
-          <form class="form-inline my-2 my-lg-0" onSubmit={handleSearch}>
+        <Grid sx={style}>
+          {/* <form class="form-inline my-2 my-lg-0" onSubmit={handleSearch}>
             <input
               class="form-control mr-sm-2"
               type="search"
@@ -70,8 +71,24 @@ const SearchModal = (props) => {
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
               Search
             </button>
-          </form>
-
+          </form> */}
+          <Grid container spacing={1} alignItems="center">
+            <Grid item xs={10}>
+              <TextField
+                label="Search User"
+                variant="outlined"
+                placeholder="Type user name to search..."
+                value={searchText}
+                fullWidth
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={2} justifyContent="flex-end">
+              <Button variant="contained" size="small" onClick={handleSearch}>
+                Search
+              </Button>
+            </Grid>
+          </Grid>
           <div style={{ maxHeight: "calc(100% - 60px)", overflowY: "auto" }}>
             {users.length ? (
               users.map((user) => (
@@ -159,7 +176,7 @@ const SearchModal = (props) => {
               Close
             </Button>
           </div>
-        </Box>
+        </Grid>
       </Modal>
       {isLoading && (
         <Backdrop
@@ -169,7 +186,7 @@ const SearchModal = (props) => {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-    </div>
+    </>
   );
 };
 

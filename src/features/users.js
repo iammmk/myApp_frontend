@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Nav from "./Nav";
 import { Backdrop, Button } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
@@ -12,7 +11,7 @@ import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Context } from "../Context";
 import FollowButton from "./layout/components/FollowButton";
-import Navbar from "./SideNav";
+import Navbar from "./Navbar";
 import Headers from "./layout/components/Headers";
 import { BASE_URL } from "../Services/helper";
 
