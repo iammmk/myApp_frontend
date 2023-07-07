@@ -59,19 +59,6 @@ const SearchModal = (props) => {
         disableScrollLock
       >
         <Grid sx={style}>
-          {/* <form class="form-inline my-2 my-lg-0" onSubmit={handleSearch}>
-            <input
-              class="form-control mr-sm-2"
-              type="search"
-              placeholder="Search user.."
-              aria-label="Search"
-              name="search"
-              style={{ width: "350px" }}
-            />
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-              Search
-            </button>
-          </form> */}
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={10}>
               <TextField

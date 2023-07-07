@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { Button, IconButton } from "@mui/material";
 import CakeIcon from "@mui/icons-material/Cake";
+import EditIcon from "@mui/icons-material/Edit";
 import CelebrationIcon from "@mui/icons-material/Celebration";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 import Tooltip from "@mui/material/Tooltip";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import EmailIcon from "@mui/icons-material/Email";
@@ -22,10 +24,13 @@ import "../../src/features/Style/Style.css";
 import Headers from "./layout/components/Headers";
 import { BASE_URL } from "../Services/helper";
 import ChatModal from "./layout/components/ChatModal";
+import AddStatusModal from "./layout/components/AddStatusModal";
+import { Refresh } from "@mui/icons-material";
 
 const UserProfile = (props) => {
   const profileId = localStorage.getItem("profileId");
   const { ownerId, setOwnerId } = useContext(Context);
+  const [addStatusModalOpen, setAddStatusModalOpen] = useState(false);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
   const [followingListByUser, setFollowingListByUser] = useState([]);
   const [followersListByUser, setFollowersListByUser] = useState([]);
@@ -87,7 +92,7 @@ const UserProfile = (props) => {
           {/* follow btn or edit profile btn */}
           {props.userData._id !== localStorage.getItem("profileId") ? (
             <>
-              {/* <Tooltip title="Message" placement="top-start">
+              {/* <Tooltip title="Add Status" placement="top-">
                 <IconButton
                   sx={{
                     backgroundColor: "#1976d2",
@@ -107,17 +112,35 @@ const UserProfile = (props) => {
               />
             </>
           ) : (
-            <Button
-              variant="contained"
-              style={{ float: "right", height: "35px", width: "133px" }}
-              onClick={(e) => {
-                e.preventDefault(); //wont redirect to href
-                setEditProfileModalOpen(true);
-              }}
-            >
-              Edit profile
-            </Button>
+            <>
+              <Button
+                variant="outlined"
+                startIcon={<PostAddIcon />}
+                style={{ textTransform: "none" }}
+                onClick={() => setAddStatusModalOpen(true)}
+              >
+                Status
+              </Button>
+              &ensp;
+              <Button
+                variant="contained"
+                startIcon={<EditIcon />}
+                style={{ textTransform: "none" }}
+                onClick={(e) => {
+                  e.preventDefault(); //wont redirect to href
+                  setEditProfileModalOpen(true);
+                }}
+              >
+                Profile
+              </Button>
+            </>
           )}
+          <AddStatusModal
+            modalOpen={addStatusModalOpen}
+            setModalOpen={setAddStatusModalOpen}
+            getAllStatus={props.updatePage}
+            setIsLoading={props.setIsLoading}
+          />
           <EditProfileModal
             editProfileModalOpen={editProfileModalOpen}
             setEditProfileModalOpen={setEditProfileModalOpen}
